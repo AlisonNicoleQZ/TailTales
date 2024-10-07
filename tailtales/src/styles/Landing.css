@@ -19,17 +19,40 @@ img{
   height: 10rem;
 }
 
-.App {
-  background-image: url(../img/landing-img-1.png);
-  background-size: cover;
-  background-position: center;
-  height: 100vh;
-  width: 100vw;
+.carrusel {
   position: absolute;
-  top: 0;
-  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
 }
 
+.carrusel-inner {
+  position: relative;
+  height: 100%;
+  white-space: nowrap; /* Evita que las imágenes se desplacen verticalmente */
+  transition: transform 1s; /* Agrega una transición para el desplazamiento */
+}
+
+.carrusel-item {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100vw;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.carrusel-item.active {
+  opacity: 1;
+}
+
+.carrusel-item:not(.active) {
+  opacity: 0;
+}
+
+.carrusel-inner::-webkit-scrollbar {
+  display: none; /* Oculta la barra de desplazamiento horizontal */
+}
 .logo {
   position: absolute;
   left: 5%;
