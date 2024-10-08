@@ -29,30 +29,17 @@ img{
 .carrusel-inner {
   position: relative;
   height: 100%;
-  white-space: nowrap; /* Evita que las imágenes se desplacen verticalmente */
-  transition: transform 1s; /* Agrega una transición para el desplazamiento */
+  display: flex;
+  transition: transform 1.25s; /* Transición para la animación de desplazamiento */
 }
 
 .carrusel-item {
-  position: absolute;
-  top: 0;
-  height: 100%;
-  width: 100vw;
-  opacity: 0;
-  transition: opacity 0.5s;
+  flex: 0 0 100vw; /* Cada imagen ocupa el 100% del ancho de la ventana */
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
 }
 
-.carrusel-item.active {
-  opacity: 1;
-}
-
-.carrusel-item:not(.active) {
-  opacity: 0;
-}
-
-.carrusel-inner::-webkit-scrollbar {
-  display: none; /* Oculta la barra de desplazamiento horizontal */
-}
 .logo {
   position: absolute;
   left: 5%;
