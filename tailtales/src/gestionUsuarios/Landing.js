@@ -8,27 +8,43 @@ import imagen4 from '../img/landing-img-4.png';
 
 function App() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(true);
   const images = [imagen1, imagen2, imagen3, imagen4];
+
+  // Agregamos una imagen "clonada" de la primera al final para hacer un bucle
+  const totalImages = [...images, images[0]];
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setActiveIndex((prevIndex) => (prevIndex + 1) % images.length);
+      // Si estamos en la última imagen (la imagen clonada)
+      if (activeIndex === totalImages.length - 1) {
+        // Desactiva la animación y vuelve al inicio
+        setTimeout(() => {
+          setIsAnimating(false);
+          setActiveIndex(0); // Vuelve a la primera imagen original
+        }, 500); // Espera a que termine la transición a la imagen clonada
+
+        // Activa la animación y avanza normalmente para las otras imágenes
+      } else {
+        setIsAnimating(true);
+        setActiveIndex((prevIndex) => prevIndex + 1);
+      }
     }, 5000); // Cambia la imagen cada 5 segundos
 
     return () => clearInterval(intervalId);
-  }, [images.length]);
+  }, [activeIndex, totalImages.length]);
 
   return (
     <div className="App">
       <div className="carrusel">
         <div
-          className="carrusel-inner"
+          className={`carrusel-inner ${isAnimating ? 'animating' : ''}`}
           style={{
-            width: `${images.length * 100}vw`,
-            transform: `translateX(-${activeIndex * 100}vw)`, // Desplaza el carrusel hacia la izquierda
+            width: `${totalImages.length * 100}vw`,
+            transform: `translateX(-${activeIndex * 100}vw)`,
           }}
         >
-          {images.map((image, index) => (
+          {totalImages.map((image, index) => (
             <div
               key={index}
               className="carrusel-item"

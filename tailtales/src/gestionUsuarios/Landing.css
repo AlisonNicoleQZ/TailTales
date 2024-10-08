@@ -30,7 +30,11 @@ img{
   position: relative;
   height: 100%;
   display: flex;
-  transition: transform 1.25s; /* Transición para la animación de desplazamiento */
+  /* El comportamiento por defecto no tiene animación */
+}
+
+.carrusel-inner.animating {
+  transition: transform 1s ease-in-out; /* Solo animar cuando sea necesario */
 }
 
 .carrusel-item {
