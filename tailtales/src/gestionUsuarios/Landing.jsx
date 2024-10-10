@@ -35,7 +35,7 @@ function App() {
   }, [activeIndex, totalImages.length]);
 
   return (
-    <div className="App">
+    <>
       <div className="carrusel">
         <div
           className={`carrusel-inner ${isAnimating ? 'animating' : ''}`}
@@ -57,7 +57,7 @@ function App() {
           ))}
         </div>
       </div>
-      <a href='./Landing.js'><img src={logo} className="logo" alt="logo" /></a>
+      <a href='./Landing.jsx'><img src={logo} className="logo" alt="logo" /></a>
       <h1 className='titulo-bienvenida'>Bienvenid@ a TailTales</h1>
       <p className='texto'>Lorem ipsum dolor sit amet,<br/> 
       consectetur adipiscing elit. Proin <br/>
@@ -70,7 +70,7 @@ function App() {
       <button className='boton-registro'><a href='#'>Registra tu mascota</a></button>
       <p className='login'>¿Ya tienes una cuenta? <br/>
       <a href='#'>Inicia Sesión</a></p>
-    </div>
+    </>
   );
 }
 

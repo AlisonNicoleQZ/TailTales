@@ -1,0 +1,19 @@
+*{
+    font-family: "IBM Plex Sans", sans-serif;
+}
+
+
+.logo {
+    position: absolute;
+    left: 5%;
+}
+
+.menu-nav{
+    position: absolute;
+    margin-left: 1.5rem;
+}
+
+img{
+ width: 3%;
+ height: 1.5rem;   
+}
