@@ -1,5 +1,8 @@
 *{
     font-family: "IBM Plex Sans", sans-serif;
+  /**  color: #000; **/
+    font-weight: 400;
+    font-style: normal;
 }
 
 
@@ -8,12 +11,80 @@
     left: 5%;
 }
 
-.menu-nav{
+.menu-nav img{
     position: absolute;
-    margin-left: 1.5rem;
+    margin-left: 3.1rem;
+    width: 8%;
+    height: 3rem;  
+    margin-top: 8rem;
 }
 
-img{
- width: 3%;
- height: 1.5rem;   
+.logo img{
+    width: 15%;
+    height: 10rem;  
+}
+
+.gap-icon img{
+    gap: 10px;
+}
+
+.foto-perfil{
+    margin-left: 13rem;
+    margin-top: 2.6rem;
+    position: absolute;
+    width: 12%;
+    height: 8rem;
+}
+
+.foto-perfil img{
+    
+}
+
+.username{
+    position: absolute;
+    margin-left: 26rem;
+    margin-top: 2.6rem;
+}
+
+.boton-editar-perfil{
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    background-color: #9F86C0;
+    position: absolute;
+    margin-left: 34.5rem;
+    margin-top: 2.5rem;
+    padding: 6px 12px;
+    border-radius: 5px;
+    border:none;
+}
+
+.bio {
+    margin-left: 26rem;
+    margin-top: 5.9rem;
+    position: absolute;
+}
+
+.especie-y-raza {
+    margin-left: 26rem;
+    margin-top: 8.7rem;
+    position: absolute;
+}
+
+.nacimiento {
+    margin-left: 35.2rem;
+    margin-top: 8.7rem;
+    position: absolute;
+}
+
+.ubicacion{
+    margin-left: 26rem;
+    margin-top: 11.5rem;
+    position: absolute;
+}
+
+.union{
+    margin-left: 26rem;
+    margin-top: 14.3rem;
+    position: absolute;
 }
