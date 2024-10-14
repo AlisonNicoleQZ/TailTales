@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import logo from '../img/logo.svg';
 import './Landing.css';
+
 import imagen1 from '../img/landing-img-1.png';
 import imagen2 from '../img/landing-img-2.png';
 import imagen3 from '../img/landing-img-3.png';
@@ -36,6 +37,7 @@ function App() {
 
   return (
     <>
+      <title>TailTales</title>
       <div className="carrusel">
         <div
           className={`carrusel-inner ${isAnimating ? 'animating' : ''}`}
