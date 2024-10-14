@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
-import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -28,6 +28,15 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
+// Función para formatear la fecha
+function formatDate(timestamp) {
+  if (timestamp && timestamp.seconds) {
+    const date = new Date(timestamp.seconds * 1000);
+    return date.toLocaleDateString('es-ES'); 
+  }
+  return "Fecha no disponible";
+}
+
 // Función para cargar el perfil del usuario
 async function loadUserProfile(uid) {
   try {
@@ -39,10 +48,10 @@ async function loadUserProfile(uid) {
       document.getElementById('profile-name').innerText = userData.name;
       document.getElementById('profile-species').innerText = userData.species;
       document.getElementById('profile-breed').innerText = userData.breed;
-      document.getElementById('profile-age').innerText = userData.age + " años";
       document.getElementById('profile-bio').innerText = userData.bio;
       document.getElementById('profile-location').innerText = userData.location;
       document.getElementById('profile-pic').src = userData.profilePic || '../img/default-profile-image.jpg';
+      document.getElementById('profile-birth').innerText = formatDate(userData.birth); 
     } else {
       console.warn('No se encontraron datos del usuario con UID:', uid);
       alert('No se encontraron datos del usuario.');
@@ -64,6 +73,7 @@ document.getElementById('logout-btn').addEventListener('click', function() {
   });
 });
 
+// Navegación a otras páginas
 document.getElementById('feed-btn').addEventListener('click', function() {
   window.location.href = '../feed/feed.html';
 });
@@ -80,8 +90,8 @@ document.getElementById('notifications-btn').addEventListener('click', function(
   window.location.href = '../notifications/notifications.html'; 
 });
 
-document.getElementById('likes-btn').addEventListener('click', function() {
-  window.location.href = '../likes/likes.html'; 
+document.getElementById('follow-btn').addEventListener('click', function() {
+  window.location.href = '../follow/follow.html'; 
 });
 
 document.getElementById('new-post-btn').addEventListener('click', function() {

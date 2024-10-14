@@ -8,15 +8,38 @@
 <body>
     <header>
         <h1>Feed</h1>
-        <button id="logout-btn">Cerrar Sesión</button>
-        <button id="profile-btn">Profile</button>
     </header>
-    <main>
-        <section id="users-list">
-            <h2>Recomendados</h2>
-            <div id="profiles-container"></div>
-        </section>
-    </main>
+    <div class="container">
+        <!-- Barra de navegación a la izquierda -->
+        <nav class="nav-bar">
+            <button id="feed-btn">Feed</button>
+            <button id="search-btn">Search</button>
+            <button id="notifications-btn">Notifications</button>
+            <button id="follow-btn">Follow</button>
+            <button id="new-post-btn">New Post</button>
+            <button id="profile-btn">Profile</button>
+        </nav>
+
+        <!-- Feed principal -->
+        <div class="main-feed">
+            <!-- Estados de amigos -->
+            <section id="friend-stories" class="friend-stories">
+                <h2>Estados de Amigos</h2>
+                <div id="stories-container">
+                    <!-- Aquí se cargarán los estados de amigos -->
+                </div>
+            </section>
+
+            <!-- Publicaciones -->
+            <section id="posts-feed" class="posts-feed">
+                <h2>Publicaciones</h2>
+                <div id="posts-container">
+                    <!-- Aquí se cargarán las publicaciones -->
+                </div>
+            </section>
+        </div>
+    </div>
+
     <script type="module" src="feed.js"></script>
 </body>
 </html>

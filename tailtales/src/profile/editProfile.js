@@ -29,6 +29,15 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
+// Función para formatear la fecha
+function formatDate(timestamp) {
+    if (timestamp && timestamp.seconds) {
+        const date = new Date(timestamp.seconds * 1000);
+        return date.toLocaleDateString('es-ES'); // Formato de fecha en español
+    }
+    return "Fecha no disponible";
+}
+
 // Función para cargar el perfil del usuario
 async function loadUserProfile(uid) {
     try {
@@ -38,8 +47,15 @@ async function loadUserProfile(uid) {
             document.getElementById('name').value = userData.name;
             document.getElementById('species').value = userData.species;
             document.getElementById('breed').value = userData.breed;
-            document.getElementById('age').value = userData.age;
             document.getElementById('location').value = userData.location;
+
+            // Formatear la fecha para el campo de tipo date
+            if (userData.birth && userData.birth.seconds) {
+                const birthDate = new Date(userData.birth.seconds * 1000);
+                const formattedDate = birthDate.toISOString().split('T')[0]; // Convertir a formato 'YYYY-MM-DD'
+                document.getElementById('birth').value = formattedDate;
+            }
+
             document.getElementById('bio').value = userData.bio;
             document.getElementById('profile-pic').src = userData.profilePic || '../img/default-profile-image.jpg';
         } else {
@@ -58,14 +74,14 @@ document.getElementById('edit-profile-form').addEventListener('submit', async fu
     const name = document.getElementById('name').value;
     const species = document.getElementById('species').value;
     const breed = document.getElementById('breed').value;
-    const age = document.getElementById('age').value;
+    const birth = document.getElementById('birth').value; // Obtener el valor del campo de fecha
     const location = document.getElementById('location').value;
     const bio = document.getElementById('bio').value;
 
     try {
-        let profilePicUrl = `../img/default-profile-image.jpg`; // Usar imagen predeterminada por defecto
         const fileInput = document.getElementById('profile-pic-input');
-        
+        let profilePicUrl = document.getElementById('profile-pic').src; // Usar la URL existente por defecto
+
         if (fileInput.files.length > 0) {
             const file = fileInput.files[0];
             const storageRef = ref(storage, `profilePics/${user.uid}/${file.name}`);
@@ -73,14 +89,16 @@ document.getElementById('edit-profile-form').addEventListener('submit', async fu
             profilePicUrl = await getDownloadURL(storageRef); // Obtener URL de la nueva imagen
         }
 
+        // Guardar la fecha como un Timestamp en Firestore
+        const birthTimestamp = new Date(birth).getTime() / 1000; // Convertir a Timestamp
         await updateDoc(doc(db, "users", user.uid), {
             name,
             species,
             breed,
-            age,
+            birth: { seconds: birthTimestamp }, // Asegúrate de que aquí estés enviando un Timestamp.
             location,
             bio,
-            profilePic: profilePicUrl // Usar la nueva imagen o la predeterminada
+            profilePic: profilePicUrl 
         });
         
         alert("Perfil actualizado exitosamente.");
@@ -90,7 +108,6 @@ document.getElementById('edit-profile-form').addEventListener('submit', async fu
         alert("Hubo un error al actualizar el perfil.");
     }
 });
-
 
 // Funciones para los botones
 document.getElementById('logout-btn').addEventListener('click', function() {
@@ -103,4 +120,7 @@ document.getElementById('logout-btn').addEventListener('click', function() {
     });
 });
 
-
+// Botón de regresar
+document.getElementById('back-btn').addEventListener('click', function() {
+    window.location.href = '../profile/profile.html'; // Redirigir al perfil sin guardar cambios
+});
