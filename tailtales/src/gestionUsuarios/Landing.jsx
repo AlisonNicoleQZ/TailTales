@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import logo from '../img/logo.svg';
 import './Landing.css';
+
 import imagen1 from '../img/landing-img-1.png';
 import imagen2 from '../img/landing-img-2.png';
 import imagen3 from '../img/landing-img-3.png';
@@ -35,7 +36,8 @@ function App() {
   }, [activeIndex, totalImages.length]);
 
   return (
-    <div className="App">
+    <>
+      <title>TailTales</title>
       <div className="carrusel">
         <div
           className={`carrusel-inner ${isAnimating ? 'animating' : ''}`}
@@ -57,7 +59,7 @@ function App() {
           ))}
         </div>
       </div>
-      <a href='./Landing.js'><img src={logo} className="logo" alt="logo" /></a>
+      <a href='./Landing.jsx'><img src={logo} className="logo" alt="logo" /></a>
       <h1 className='titulo-bienvenida'>Bienvenid@ a TailTales</h1>
       <p className='texto'>Lorem ipsum dolor sit amet,<br/> 
       consectetur adipiscing elit. Proin <br/>
@@ -67,13 +69,10 @@ function App() {
       placerat consectetur, ipsum ligula<br/>  
       rutrum felis, sed blandit sem eros non<br/> 
       metus.</p>
-      <button className='boton-registro'>
-        <a href='#'>Registra tu mascota</a>  
-      </button>
+      <button className='boton-registro'><a href='#'>Registra tu mascota</a></button>
       <p className='login'>¿Ya tienes una cuenta? <br/>
-        <a href='#'>Inicia Sesión</a>  
-      </p>
-    </div>
+      <a href='#'>Inicia Sesión</a></p>
+    </>
   );
 }
 
