@@ -67,9 +67,12 @@ function App() {
       placerat consectetur, ipsum ligula<br/>  
       rutrum felis, sed blandit sem eros non<br/> 
       metus.</p>
-      <button className='boton-registro'><a href='#'>Registra tu mascota</a></button>
+      <button className='boton-registro'>
+        <a href='#'>Registra tu mascota</a>  
+      </button>
       <p className='login'>¿Ya tienes una cuenta? <br/>
-      <a href='#'>Inicia Sesión</a></p>
+        <a href='#'>Inicia Sesión</a>  
+      </p>
     </div>
   );
 }

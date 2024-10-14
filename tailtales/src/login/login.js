@@ -41,7 +41,7 @@ document.getElementById('login-form').addEventListener('submit', function(event)
     .then((userCredential) => {
       const user = userCredential.user;
       alert('Inicio de sesión exitoso');
-      window.location.href = '/home'; // Cambia esto a la ruta adecuada
+      window.location.href = '/tailtales/src/profile/profile.html'; 
     })
     .catch((error) => {
       if (error.code === 'auth/user-not-found') {
@@ -49,7 +49,7 @@ document.getElementById('login-form').addEventListener('submit', function(event)
       } else {
         alert('Usuario o contraseña inválido, por favor inténtelo de nuevo');
       }
-      resetLoginForm(); // Limpiar el formulario después de un error
+      resetLoginForm(); 
     });
 });
 
@@ -84,7 +84,7 @@ document.getElementById('google-login').addEventListener('click', function(event
     .then((result) => {
       const user = result.user;
       alert('Inicio de sesión con Google exitoso');
-      window.location.href = '/home'; // Cambia esto a la ruta adecuada
+      window.location.href = '/tailtales/src/profile/profile.html'; 
     })
     .catch((error) => {
       alert('Error al iniciar sesión con Google: ' + error.message);
@@ -152,7 +152,7 @@ document.getElementById('register-form').addEventListener('submit', function(eve
     .then(() => {
       alert("Usuario registrado exitosamente y datos guardados en Firestore.");
       // Redirigir a la página de inicio de sesión o a la página principal
-      window.location.href = '/login'; // Cambia esto a la ruta adecuada
+      window.location.href = '../login/login.html'; 
     })
     .catch((error) => {
       console.error("Error al registrar el usuario: ", error);
