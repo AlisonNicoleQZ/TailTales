@@ -139,3 +139,22 @@ color: #fff;
     margin-top: 14.3rem;
     position: absolute;
 }
+
+.publicaciones{
+    position: absolute;
+    margin-left: 15rem;
+    margin-top: 19rem;
+    display: flex;
+    justify-content: space-around; /* Espacio alrededor de cada imagen */
+    align-items: center; /* Alinea verticalmente en el centro */
+}
+
+.publicacion{
+    margin-left: 3rem;
+}
+
+
+.publicaciones img{
+    width: 40%;
+    height: 16rem;
+}

@@ -8,12 +8,15 @@ import notif from '../img/campana.svg';
 import amistades from '../img/amistades.svg';
 import publicar from '../img/camara.svg';
 import perfil from '../img/perfil.svg';
-import fotoDePerfil from '../img/profile-pic.png';
 import nacimiento from '../img/nacimiento.svg';
 import apariencia from '../img/especie-y-raza.svg';
 import ubicacion from '../img/ubicacion.svg';
 import calendario from '../img/calendario.svg';
 
+import fotoDePerfil from '../img/profile-pic.png';
+import publicacion1 from '../img/publicacion-1.png';
+import publicacion2 from '../img/publicacion-2.png';
+import publicacion3 from '../img/publicacion-3.png';
 export const Perfil = () => {
   return (
     <>
@@ -47,7 +50,9 @@ export const Perfil = () => {
     </div>
     
     <div className='publicaciones'>
-    
+    <img src={publicacion3} className='publicacion'/>
+    <img src={publicacion2} className='publicacion'/>
+    <img src={publicacion1} className='publicacion'/>
     </div>
     </>
   )
