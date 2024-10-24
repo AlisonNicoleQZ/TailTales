@@ -1,0 +1,59 @@
+.logo {
+    position: absolute;
+    margin-left: 3rem;
+    width: 15%;
+    height: 10rem;  
+}
+
+.menu-nav img{
+    position: absolute;
+    margin-left: 2rem;
+    width: 8%;
+    height: 2rem;  
+}
+
+.feed{
+    margin-top: 11rem;
+}
+
+.buscar{
+    margin-top: 15rem;
+}
+
+.notif{
+    margin-top: 19rem;
+}
+
+.amistades{
+    margin-top: 23rem;
+}
+
+.publicar{
+    margin-top: 27rem;
+    left: 0.1rem;
+}
+
+.perfil{
+    margin-top: 31rem;
+}
+
+.foto-perfil{
+    margin-left: 16rem;
+    margin-top: 2.6rem;
+    position: absolute;
+    width: 10.5%;
+    height: 8rem;
+}
+
+#profile-pic-input {
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    background-color: #9F86C0;
+    position: absolute;
+    margin-left: 34.5rem;
+    margin-top: 2.5rem;
+    padding: 6px 12px;
+    border-radius: 5px;
+    border:none;
+}
