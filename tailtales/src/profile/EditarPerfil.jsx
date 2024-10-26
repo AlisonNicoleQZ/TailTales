@@ -15,6 +15,7 @@ export const EditarPerfil = () => {
     <>
     <a href='#'><img src={logo} className="logo" alt="logo" /></a>
     <main>
+        <title>Editar Perfil - TailTales</title>
     <div className="menu-nav">
     
     <a href='#'><img src={feed} className="feed" alt="Feed" /></a>
@@ -27,36 +28,35 @@ export const EditarPerfil = () => {
     </div>
 
         <form id="edit-profile-form">
-            <div>
             <img src={fotoDePerfil} className='foto-perfil' alt='Foto de perfil'/>
                 <input type="file" id="profile-pic-input" accept="image/*"/>
-            </div>
+                <div className='editar-info'>
             <div>
-                <label for="name">Nombre:</label>
+                <label for="name">Nombre: </label>
                 <input type="text" id="name" required/>
             </div>
-            <div>
-                <label for="species">Especie:</label>
+            <div className='textBox'>
+                <label for="species">Especie: </label>
                 <input type="text" id="species" required/>
             </div>
-            <div>
-                <label for="breed">Raza:</label>
+            <div className='textBox'>
+                <label for="breed">Raza: </label>
                 <input type="text" id="breed" required/>
             </div>
-            <div>
-                <label for="birth">Cumpleaños:</label>
+            <div className='textBox'>
+                <label for="birth">Cumpleaños: </label>
                 <input type="date" id="birth" required/>
             </div>
-            <div>
-                <label for="location">Ubicación:</label>
+            <div className='textBox'>
+                <label for="location">Ubicación: </label>
                 <input type="text" id="location" required/>
             </div>
-            <div>
-                <label for="bio">Biografía:</label>
-                <textarea id="bio" rows="5"></textarea>
+            <div className='textBox'>
+                <label for="bio">Biografía: </label>
+                <textarea id="bio" rows="3"></textarea>
             </div>
-            <button type="submit">Actualizar Perfil</button>
-            <button id="profile-btn">Profile</button>
+            </div>
+            <button className='btn-actualizar' type="submit">Actualizar Perfil</button>
         </form>
     </main>
     </>
