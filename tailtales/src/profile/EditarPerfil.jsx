@@ -11,9 +11,13 @@ import perfil from '../img/perfil.svg';
 import fotoDePerfil from '../img/profile-pic.png';
 
 export const EditarPerfil = () => {
+    const handleLogoClick = () => {
+        window.location.href = '../gestionUsuarios/Landing.jsx'; 
+    }
+
   return (
     <>
-    <a href='#'><img src={logo} className="logo" alt="logo" /></a>
+    <a onClick={handleLogoClick}><img src={logo} className="logo" alt="logo" /></a>
     <main>
         <title>Editar Perfil - TailTales</title>
     <div className="menu-nav">

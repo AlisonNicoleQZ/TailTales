@@ -79,6 +79,10 @@ body::-webkit-scrollbar-thumb {
     border:none;
 }
 
+button:hover{
+    background-color: #786197;
+}
+
 .editar-info{
     position: absolute;
     margin-left: 32rem;
@@ -96,7 +100,7 @@ input, textarea{
 }
 
 .btn-actualizar{
-    margin-top: 36rem;
+    margin-top: 37rem;
     margin-left: 36rem;
     margin-bottom: 1rem;
 }
