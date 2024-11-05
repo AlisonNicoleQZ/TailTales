@@ -4,12 +4,13 @@ import './index.css';
 //import Landing from './gestionUsuarios/Landing';
 import reportWebVitals from './reportWebVitals';
 //import {Perfil} from './profile/Perfil';
-import { EditarPerfil } from './profile/EditarPerfil';
+//import { EditarPerfil } from './profile/EditarPerfil';
+import  {Feed} from './feed/Feed';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <EditarPerfil/>
+    <Feed/>
   </React.StrictMode>
 );
 
