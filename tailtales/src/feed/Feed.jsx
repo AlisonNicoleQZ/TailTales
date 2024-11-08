@@ -8,6 +8,8 @@ import amistades from '../img/amistades.svg';
 import publicar from '../img/camara.svg';
 import perfil from '../img/perfil.svg';
 import fotoPerfil from '../img/profile-pic.png';
+import fotoPublicacion from '../img/publicacion_feed.png';
+import iconLike from '../img/paw-like.svg';
 
 export const Feed = () => {
   return (
@@ -26,12 +28,34 @@ export const Feed = () => {
        <div class="main-feed">
             <section id="friend-stories" class="friend-stories">
                 <div id="stories-container">
+                  <div className='story-individual'>
+                    <img className='story' src={fotoPerfil} alt="Imagen de perfil"/><br/>
+                    <p className='story-username'>@hcocoa</p>
+                    </div>
+                    <div className='story-individual'>
                     <img className='story' src={fotoPerfil} alt="Imagen de perfil"/>
+                    <p className='story-username'>@hcocoa</p>
+                    </div>
+                    <div className='story-individual'>
                     <img className='story' src={fotoPerfil} alt="Imagen de perfil"/>
+                    <p className='story-username'>@hcocoa</p>
+                    </div>
+                    <div className='story-individual'>
                     <img className='story' src={fotoPerfil} alt="Imagen de perfil"/>
+                    <p className='story-username'>@hcocoa</p>
+                    </div>
+                    <div className='story-individual'>
                     <img className='story' src={fotoPerfil} alt="Imagen de perfil"/>
+                    <p className='story-username'>@hcocoa</p>
+                    </div>
+                    <div className='story-individual'>
                     <img className='story' src={fotoPerfil} alt="Imagen de perfil"/>
+                    <p className='story-username'>@hcocoa</p>
+                    </div>
+                    <div className='story-individual'>
                     <img className='story' src={fotoPerfil} alt="Imagen de perfil"/>
+                    <p className='story-username'>@hcocoa</p>
+                    </div>
                  </div>
             </section>
             <div className='perfil-container'>
@@ -39,9 +63,42 @@ export const Feed = () => {
             <h3 className='username'>@tigritothecat</h3>
             </div>
             <section id="posts-feed" class="posts-feed">
-               <div id="posts-container">
-               <img className='foto-perfil-publicacion' src={fotoPerfil} alt="Imagen de perfil"/> <p>@hcocoa</p>
-                 </div>
+            <div id="posts-container">
+                  <div className='post'>
+               <img className='foto-perfil-publicacion' src={fotoPerfil} alt="Imagen de perfil post"/>
+               <p className='username-post'>@hcocoa</p>
+               <p className='texto-post'>Una foto mía durmiendo bien a gusto.</p>
+               <div className='frame'>
+               <img className='foto-post' src={fotoPublicacion} alt="Foto post"/>
+               </div>
+               <img className='icon-like' src={iconLike} alt="Icono like"/>
+               <p className='numero-likes'> 50</p>
+               </div>
+                </div>
+                <div id="posts-container">
+                  <div className='post'>
+               <img className='foto-perfil-publicacion' src={fotoPerfil} alt="Imagen de perfil"/>
+               <p className='username-post'>@hcocoa</p>
+               <p className='texto-post'>Una foto mía durmiendo bien a gusto.</p>
+               <div className='frame'>
+               <img className='foto-post' src={fotoPublicacion} alt="Imagen de perfil"/>
+               </div>
+               <img className='icon-like' src={iconLike} alt="Icono like"/>
+               <p className='numero-likes'> 50</p>
+               </div>
+                </div>
+                <div id="posts-container">
+                  <div className='post'>
+               <img className='foto-perfil-publicacion' src={fotoPerfil} alt="Imagen de perfil"/>
+               <p className='username-post'>@hcocoa</p>
+               <p className='texto-post'>Una foto mía durmiendo bien a gusto.</p>
+               <div className='frame'>
+               <img className='foto-post' src={fotoPublicacion} alt="Imagen de perfil"/>
+               </div>
+               <img className='icon-like' src={iconLike} alt="Icono like"/>
+               <p className='numero-likes'> 50</p>
+               </div>
+                </div>
             </section>
         </div>
     </div>

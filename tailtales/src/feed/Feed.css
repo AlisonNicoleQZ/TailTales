@@ -65,11 +65,17 @@ body::-webkit-scrollbar-thumb {
 }
 
 .story{
-    width: 20%;
     height: 4rem;
     border: 0.2rem solid #BE95C4;
     border-radius: 50rem;
     margin-left: 1.25rem;
+}
+
+.story-username{
+    margin-top: 0rem;
+    margin-left: 1.65rem;
+    position: absolute;
+    font-size: 12px;
 }
 
 .perfil-container{
@@ -90,8 +96,55 @@ body::-webkit-scrollbar-thumb {
 .posts-feed{
     margin-top: 15rem;
     position: absolute;
+    margin-left: 24rem;
+}
+
+#posts-container{
+    margin-top: -5rem;
+    margin-left: 4rem;
+    font-size: 14px;
+}
+
+.post{
+    margin-bottom: 8rem;
+}
+
+.frame{
+    background-color: #D9D9D9;
+    height: 25rem;
+    margin-top: 2rem;
+    padding-right: 1rem;
 }
 
 .foto-perfil-publicacion{
-   
+    height: 3rem;
+}
+
+.username-post{
+    margin-top: -2.5rem;
+    margin-left: 3.5rem;
+    font-weight: bold;
+}
+
+.texto-post{
+    margin-top: -2rem;
+    margin-left: 8rem;
+}
+
+.foto-post{
+    height: 23rem;
+    margin-top: 1rem;
+    margin-left: 1rem;
+}
+
+.icon-like{
+    height: 1.3rem;
+    margin-top: 0.7rem;
+    margin-left: 1.2rem;
+}
+
+.numero-likes{
+    margin-top: -1.35rem;
+    margin-left: 3.3rem;
+    position: absolute;
 }
