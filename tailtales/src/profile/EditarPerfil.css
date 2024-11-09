@@ -24,9 +24,8 @@ body::-webkit-scrollbar-thumb {
     height: 10rem;  
 }
 
-
 .menu-nav img{
-    position: absolute;
+    position: fixed;
     margin-left: 2rem;
     width: 8%;
     height: 2rem;  
