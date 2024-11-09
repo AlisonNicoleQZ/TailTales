@@ -10,6 +10,7 @@ import perfil from '../img/perfil.svg';
 import fotoPerfil from '../img/profile-pic.png';
 import fotoPublicacion from '../img/publicacion_feed.png';
 import iconLike from '../img/paw-like.svg';
+import iconComentarios from '../img/icon-comentarios.svg';
 
 export const Feed = () => {
   return (
@@ -73,6 +74,8 @@ export const Feed = () => {
                </div>
                <img className='icon-like' src={iconLike} alt="Icono like"/>
                <p className='numero-likes'> 50</p>
+               <p className='numero-comentarios'>30 </p>
+               <img className='icon-comentarios' src={iconComentarios} alt="Icono Comentarios"/>
                </div>
                 </div>
                 <div id="posts-container">
@@ -85,6 +88,8 @@ export const Feed = () => {
                </div>
                <img className='icon-like' src={iconLike} alt="Icono like"/>
                <p className='numero-likes'> 50</p>
+               <p className='numero-comentarios'>30 </p>
+               <img className='icon-comentarios' src={iconComentarios} alt="Icono Comentarios"/>
                </div>
                 </div>
                 <div id="posts-container">
@@ -97,6 +102,8 @@ export const Feed = () => {
                </div>
                <img className='icon-like' src={iconLike} alt="Icono like"/>
                <p className='numero-likes'> 50</p>
+               <p className='numero-comentarios'>30 </p>
+               <img className='icon-comentarios' src={iconComentarios} alt="Icono Comentarios"/>
                </div>
                 </div>
             </section>

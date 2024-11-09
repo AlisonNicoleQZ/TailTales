@@ -148,3 +148,16 @@ body::-webkit-scrollbar-thumb {
     margin-left: 3.3rem;
     position: absolute;
 }
+
+.numero-comentarios{
+    margin-top: -1.35rem;
+    margin-left: 18.8rem;
+    position: absolute;
+}
+
+.icon-comentarios{
+    height: 1.7rem;
+    margin-top: 0.6rem;
+    position: absolute;
+    margin-left: 17.8rem
+}
