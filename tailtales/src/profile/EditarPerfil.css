@@ -1,0 +1,115 @@
+*{
+    font-family: "IBM Plex Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body::-webkit-scrollbar {
+    width: 10px; /* Width of the scrollbar */
+}
+  
+body::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Color of the track */
+}
+  
+body::-webkit-scrollbar-thumb {
+    background: #9F86C0; /* Color of the thumb */
+    border-radius: 6px; /* Rounded corners for the thumb */
+}
+
+.logo {
+    position: absolute;
+    margin-left: 3rem;
+    width: 15%;
+    height: 10rem;  
+}
+
+.menu-nav img{
+    position: fixed;
+    margin-left: 2rem;
+    width: 8%;
+    height: 2rem;  
+}
+
+.feed{
+    margin-top: 11rem;
+}
+
+.buscar{
+    margin-top: 15rem;
+}
+
+.notif{
+    margin-top: 19rem;
+}
+
+.amistades{
+    margin-top: 23rem;
+}
+
+.publicar{
+    margin-top: 27rem;
+    left: 0.1rem;
+}
+
+.perfil{
+    margin-top: 31rem;
+}
+
+.foto-perfil{
+    margin-left: 30rem;
+    margin-top: 2.6rem;
+    position: absolute;
+    width: 10.5%;
+    height: 8rem;
+}
+
+#profile-pic-input {
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    background-color: #9F86C0;
+    position: absolute;
+    margin-left: 39.5rem;
+    margin-top: 5.5rem;
+    padding: 6px 12px;
+    border-radius: 5px;
+    color: #fff;
+    border:none;
+}
+
+button:hover{
+    background-color: #786197;
+}
+
+.editar-info{
+    position: absolute;
+    margin-left: 32rem;
+    margin-top: 13rem;
+}
+
+input, textarea{
+    border: solid 1px #000;
+    border-radius: 5px;
+    padding: 5px 3px;
+}
+
+.textBox{
+    margin-top: 1.5rem;
+}
+
+.btn-actualizar{
+    margin-top: 37rem;
+    margin-left: 36rem;
+    margin-bottom: 1rem;
+}
+
+button{
+    font-weight: 400;
+    font-style: normal;
+    background-color: #9F86C0;
+    padding: 6px 12px;
+    border-radius: 5px;
+    border:none;
+    color: #fff;
+}
