@@ -91,7 +91,7 @@ const LoginRegister = () => {
       .then((userCredential) => {
         const user = userCredential.user;
         alert('Inicio de sesión exitoso');
-        window.location.href = '/home';
+        window.location.href = '/feed';
       })
       .catch((error) => {
         alert('Error al iniciar sesión: ' + error.message);
@@ -161,7 +161,7 @@ const LoginRegister = () => {
       .then((result) => {
         const user = result.user;
         alert('Inicio de sesión con Google exitoso');
-        window.location.href = '/home';
+        window.location.href = '/feed';
       })
       .catch((error) => {
         alert('Error al iniciar sesión con Google: ' + error.message);
@@ -178,7 +178,7 @@ const LoginRegister = () => {
     <div className="container">
       {isLogin ? (
           <div id="login-container">
-            <h1>Iniciar Sesión en Taitales</h1>
+            <h1>Iniciar Sesión en TailTales</h1>
             <form id="login-form" onSubmit={handleLoginSubmit}>
               <div className="input-group">
                 <label htmlFor="login-email">Correo Electrónico</label>
@@ -334,10 +334,10 @@ const LoginRegister = () => {
                 <option value="2">Privado</option>
               </select>
             </div>
-            <button type="submit" className="btn">Registrarse</button>
+            <button type="submit" href="/perfil" className="btn">Registrarse</button>
           </form>
           <div className="login-link">
-            <p>¿Ya tienes una cuenta? <a href="#" onClick={() => setIsLogin(true)}>Inicia sesión aquí</a></p>
+            <p>¿Ya tienes una cuenta? <a href="/login-register" onClick={() => setIsLogin(true)}>Inicia sesión aquí</a></p>
           </div>
         </div>
       )}

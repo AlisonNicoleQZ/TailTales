@@ -69,9 +69,9 @@ export const Landing = () => {
       placerat consectetur, ipsum ligula<br/>  
       rutrum felis, sed blandit sem eros non<br/> 
       metus.</p>
-      <button className={styles.botonRegistro}><a className='anchor' href='/perfil'>Registra tu mascota</a></button>
+      <button className={styles.botonRegistro}><a className='anchor' href='/login-register'>Registra tu mascota</a></button>
       <p className={styles.login}>¿Ya tienes una cuenta? <br/>
-      <a className='anchor' href=''>Inicia Sesión</a></p>
+      <a className='anchor' href='/login-register'>Inicia Sesión</a></p>
     </>
   )
 }

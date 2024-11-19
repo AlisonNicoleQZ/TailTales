@@ -2,14 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './index.css';
-import Landing from './gestionUsuarios/Landing';
+import {Landing} from './gestionUsuarios/Landing';
 import LoginRegister from './login/LoginRegister';
 import reportWebVitals from './reportWebVitals';
 import {Perfil} from './profile/Perfil';
 import { EditarPerfil } from './profile/EditarPerfil';
 import  {Feed} from './feed/Feed.jsx';
 import { Follow } from './follow/Follow.jsx';
-import { Landing } from './gestionUsuarios/Landing.jsx';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -17,6 +16,7 @@ root.render(
    <Router>
       <Routes>
         <Route path="/" element={<Landing/>} />
+        <Route path="/login-register" element={<LoginRegister/>} />
         <Route path="/perfil" element={<Perfil/>} />
         <Route path="/editar-perfil" element={<EditarPerfil/>} />
         <Route path="/feed" element={<Feed/>} />
