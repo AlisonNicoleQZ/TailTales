@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 import logo from '../img/logo.svg';
 import styles from './Landing.module.css';
 
