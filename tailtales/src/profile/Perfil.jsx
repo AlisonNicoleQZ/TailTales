@@ -101,7 +101,6 @@ document.getElementById('logout-btn').addEventListener('click', function() {
     <>
     <a href='/perfil'><img src={logo} className={styles.logo} alt="logo" /></a>
     <title>Perfil - @tigritothecat</title>
-    <a className='salir' href='#'>Salir</a>
     <div className={styles.menuNav}>
     <a href='/feed'><img src={feed} className={styles.feed} alt="Feed" /></a>
           <a href='/buscar'><img src={buscar} className={styles.buscar} alt="Buscar" /></a>
@@ -113,7 +112,7 @@ document.getElementById('logout-btn').addEventListener('click', function() {
     <img src={fotoDePerfil} className={styles.fotoPerfil} alt='Foto de perfil'/>
     <div className={styles.infoUser}>
     <h3 className={styles.username}>@tigritothecat</h3>
-    <button className={styles.botonEditarPerfil}><a href='#'>Editar perfil</a></button>
+    <button className={styles.botonEditarPerfil}><a href='/editar-perfil'>Editar perfil</a></button>
       <p className={styles.bio}>Soy del 10% de gatos que hace un reguero cuando come</p>
       <img src={apariencia} className={`${styles.icon} ${styles.aparienciaIcon}`}/>
       <p className={styles.especieYRaza}>Gato atigrado</p>
