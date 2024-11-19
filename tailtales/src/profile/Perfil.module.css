@@ -20,7 +20,7 @@
     color: #000;
 }
 
-.menu-nav img{
+.menuNav img{
     position: absolute;
     margin-left: 2rem;
     width: 8%;
@@ -52,7 +52,7 @@
     margin-top: 31rem;
 }
 
-.foto-perfil{
+.fotoPerfil{
     margin-left: 16rem;
     margin-top: 2.6rem;
     position: absolute;
@@ -66,7 +66,7 @@
     margin-top: 2.7rem;
 }
 
-.boton-editar-perfil{
+.botonEditarPerfil{
     font-weight: 400;
     font-style: normal;
     font-size: 16px;
@@ -95,23 +95,23 @@ color: #fff;
     height: 1rem;
 }
 
-.info-user{
+.infoUser{
     margin-left: 1rem;
 }
 
-.apariencia-icon  {
+.aparienciaIcon  {
     margin-left: 23.9rem;
     margin-top: 8.8rem;
     position: absolute;
 }
 
-.especie-y-raza {
+.especieYRaza {
     margin-left: 26rem;
     margin-top: 8.7rem;
     position: absolute;
 }
 
-.nacimiento-icon{
+.nacimientoIcon{
     margin-left: 33.1rem;
     margin-top: 8.8rem;
     position: absolute;
@@ -123,7 +123,7 @@ color: #fff;
     position: absolute;
 }
 
-.ubicacion-icon{
+.ubicacionIcon{
     position: absolute;
     margin-left: 23.9rem;
     margin-top: 11.6rem;
@@ -135,7 +135,7 @@ color: #fff;
     position: absolute;
 }
 
-.calendario-icon{
+.calendarioIcon{
     margin-left: 23.9rem;
     margin-top: 14.4rem;
     position: absolute;

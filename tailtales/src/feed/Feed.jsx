@@ -1,5 +1,5 @@
 import React from 'react'
-import './Feed.css'
+import styles from './Feed.module.css'
 import logo from '../img/logo.svg';
 import feed from '../img/casa.svg';
 import buscar from '../img/lupa.svg';
@@ -16,94 +16,94 @@ export const Feed = () => {
   return (
     <>
     <title>Feed - TailTales</title>
-    <a><img src={logo} className="logo" alt="logo" /></a>
-    <div class="container">
-        <nav className="menu-nav">
-        <a href='#'><img src={feed} className="feed" alt="Feed" /></a>
-    <a href='#'><img src={buscar} className="buscar" alt="Buscar" /></a>
-    <a href='#'><img src={notif} className="notif" alt="Notificaciones" /></a>
-    <a href='#'><img src={amistades} className="amistades" alt="Amistades y Seguimientos" /></a>
-    <a href='#'><img src={publicar} className="publicar" alt="Publicar" /></a>
-    <a href='./Perfil.jsx'><img src={perfil} className="perfil" alt="Perfil" /></a>
+    <a href='/feed'><img src={logo} className={styles.logo} alt="logo" /></a>
+    <div className={styles.container}>
+        <nav className={styles.menuNav}>
+        <a href='/feed'><img src={feed} className={styles.feed} alt="Feed" /></a>
+          <a href='/buscar'><img src={buscar} className={styles.buscar} alt="Buscar" /></a>
+          <a href='/notificaciones'><img src={notif} className={styles.notif} alt="Notificaciones" /></a>
+          <a href='/solicitudes'><img src={amistades} className={styles.amistades} alt="Amistades y Seguimientos" /></a>
+          <a href='/publicar'><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
+          <a href='/perfil'><img src={perfil} className={styles.perfil} alt="Perfil" /></a>
         </nav>
-       <div class="main-feed">
-            <section id="friend-stories" class="friend-stories">
-                <div id="stories-container">
-                  <div className='story-individual'>
-                    <img className='story' src={fotoPerfil} alt="Imagen de perfil"/><br/>
-                    <p className='story-username'>@hcocoa</p>
+       <div className="main-feed">
+            <section id="friend-stories" className={styles.friendStories}>
+                <div id="stories-container" className={styles.storiesContainer}>
+                  <div className={styles.storyIndividual}>
+                    <img className={styles.story} src={fotoPerfil} alt="Imagen de perfil"/><br/>
+                    <p className={styles.storyUsername}>@hcocoa</p>
                     </div>
-                    <div className='story-individual'>
-                    <img className='story' src={fotoPerfil} alt="Imagen de perfil"/>
-                    <p className='story-username'>@hcocoa</p>
+                    <div className={styles.storyIndividual}>
+                    <img className={styles.story} src={fotoPerfil} alt="Imagen de perfil"/><br/>
+                    <p className={styles.storyUsername}>@hcocoa</p>
                     </div>
-                    <div className='story-individual'>
-                    <img className='story' src={fotoPerfil} alt="Imagen de perfil"/>
-                    <p className='story-username'>@hcocoa</p>
+                    <div className={styles.storyIndividual}>
+                    <img className={styles.story} src={fotoPerfil} alt="Imagen de perfil"/><br/>
+                    <p className={styles.storyUsername}>@hcocoa</p>
                     </div>
-                    <div className='story-individual'>
-                    <img className='story' src={fotoPerfil} alt="Imagen de perfil"/>
-                    <p className='story-username'>@hcocoa</p>
+                    <div className={styles.storyIndividual}>
+                    <img className={styles.story} src={fotoPerfil} alt="Imagen de perfil"/><br/>
+                    <p className={styles.storyUsername}>@hcocoa</p>
                     </div>
-                    <div className='story-individual'>
-                    <img className='story' src={fotoPerfil} alt="Imagen de perfil"/>
-                    <p className='story-username'>@hcocoa</p>
+                    <div className={styles.storyIndividual}>
+                    <img className={styles.story} src={fotoPerfil} alt="Imagen de perfil"/><br/>
+                    <p className={styles.storyUsername}>@hcocoa</p>
                     </div>
-                    <div className='story-individual'>
-                    <img className='story' src={fotoPerfil} alt="Imagen de perfil"/>
-                    <p className='story-username'>@hcocoa</p>
+                    <div className={styles.storyIndividual}>
+                    <img className={styles.story} src={fotoPerfil} alt="Imagen de perfil"/><br/>
+                    <p className={styles.storyUsername}>@hcocoa</p>
                     </div>
-                    <div className='story-individual'>
-                    <img className='story' src={fotoPerfil} alt="Imagen de perfil"/>
-                    <p className='story-username'>@hcocoa</p>
+                    <div className={styles.storyIndividual}>
+                    <img className={styles.story} src={fotoPerfil} alt="Imagen de perfil"/><br/>
+                    <p className={styles.storyUsername}>@hcocoa</p>
                     </div>
                  </div>
             </section>
-            <div className='perfil-container'>
-            <img className='foto-perfil' src={fotoPerfil} alt="Imagen de perfil"/>
-            <h3 className='username'>@tigritothecat</h3>
+            <div className={styles.perfilContainer}>
+            <img className={styles.fotoPerfil} src={fotoPerfil} alt="Imagen de perfil"/>
+            <h3 className={styles.username}>@tigritothecat</h3>
             </div>
-            <section id="posts-feed" class="posts-feed">
-            <div id="posts-container">
-                  <div className='post'>
-               <img className='foto-perfil-publicacion' src={fotoPerfil} alt="Imagen de perfil post"/>
-               <p className='username-post'>@hcocoa</p>
-               <p className='texto-post'>Una foto mía durmiendo bien a gusto.</p>
-               <div className='frame'>
-               <img className='foto-post' src={fotoPublicacion} alt="Foto post"/>
+            <section id="posts-feed" className={styles.postsFeed}>
+            <div id="posts-container" className={styles.postsContainer}>
+                  <div className={styles.post}>
+               <img className={styles.fotoPerfilPublicacion} src={fotoPerfil} alt="Imagen de perfil post"/>
+               <p className={styles.usernamePost}>@hcocoa</p>
+               <p className={styles.textoPost}>Una foto mía durmiendo bien a gusto.</p>
+               <div className={styles.frame}>
+               <img className={styles.fotoPost} src={fotoPublicacion} alt="Foto post"/>
                </div>
-               <img className='icon-like' src={iconLike} alt="Icono like"/>
-               <p className='numero-likes'> 50</p>
-               <p className='numero-comentarios'>30 </p>
-               <img className='icon-comentarios' src={iconComentarios} alt="Icono Comentarios"/>
-               </div>
-                </div>
-                <div id="posts-container">
-                  <div className='post'>
-               <img className='foto-perfil-publicacion' src={fotoPerfil} alt="Imagen de perfil"/>
-               <p className='username-post'>@hcocoa</p>
-               <p className='texto-post'>Una foto mía durmiendo bien a gusto.</p>
-               <div className='frame'>
-               <img className='foto-post' src={fotoPublicacion} alt="Imagen de perfil"/>
-               </div>
-               <img className='icon-like' src={iconLike} alt="Icono like"/>
-               <p className='numero-likes'> 50</p>
-               <p className='numero-comentarios'>30 </p>
-               <img className='icon-comentarios' src={iconComentarios} alt="Icono Comentarios"/>
+               <img className={styles.iconLike} src={iconLike} alt="Icono like"/>
+               <p className={styles.numeroLikes} > 50</p>
+               <p className={styles.numeroComentarios} >30 </p>
+               <img className={styles.iconComentarios}  src={iconComentarios} alt="Icono Comentarios"/>
                </div>
                 </div>
-                <div id="posts-container">
-                  <div className='post'>
-               <img className='foto-perfil-publicacion' src={fotoPerfil} alt="Imagen de perfil"/>
-               <p className='username-post'>@hcocoa</p>
-               <p className='texto-post'>Una foto mía durmiendo bien a gusto.</p>
-               <div className='frame'>
-               <img className='foto-post' src={fotoPublicacion} alt="Imagen de perfil"/>
+                <div id="posts-container" className={styles.postsContainer}>
+                  <div className={styles.post}>
+               <img className={styles.fotoPerfilPublicacion} src={fotoPerfil} alt="Imagen de perfil post"/>
+               <p className={styles.usernamePost}>@hcocoa</p>
+               <p className={styles.textoPost}>Una foto mía durmiendo bien a gusto.</p>
+               <div className={styles.frame}>
+               <img className={styles.fotoPost} src={fotoPublicacion} alt="Foto post"/>
                </div>
-               <img className='icon-like' src={iconLike} alt="Icono like"/>
-               <p className='numero-likes'> 50</p>
-               <p className='numero-comentarios'>30 </p>
-               <img className='icon-comentarios' src={iconComentarios} alt="Icono Comentarios"/>
+               <img className={styles.iconLike} src={iconLike} alt="Icono like"/>
+               <p className={styles.numeroLikes} > 50</p>
+               <p className={styles.numeroComentarios} >30 </p>
+               <img className={styles.iconComentarios}  src={iconComentarios} alt="Icono Comentarios"/>
+               </div>
+                </div>
+                <div id="posts-container" className={styles.postsContainer}>
+                  <div className={styles.post}>
+               <img className={styles.fotoPerfilPublicacion} src={fotoPerfil} alt="Imagen de perfil post"/>
+               <p className={styles.usernamePost}>@hcocoa</p>
+               <p className={styles.textoPost}>Una foto mía durmiendo bien a gusto.</p>
+               <div className={styles.frame}>
+               <img className={styles.fotoPost} src={fotoPublicacion} alt="Foto post"/>
+               </div>
+               <img className={styles.iconLike} src={iconLike} alt="Icono like"/>
+               <p className={styles.numeroLikes} > 50</p>
+               <p className={styles.numeroComentarios} >30 </p>
+               <img className={styles.iconComentarios}  src={iconComentarios} alt="Icono Comentarios"/>
                </div>
                 </div>
             </section>

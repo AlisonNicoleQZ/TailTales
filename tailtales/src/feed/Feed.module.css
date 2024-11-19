@@ -24,7 +24,7 @@ body::-webkit-scrollbar-thumb {
     height: 10rem;  
 }
 
-.menu-nav img{
+.menuNav img{
     position: fixed;
     margin-left: 2rem;
     width: 8%;
@@ -57,7 +57,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 
-#stories-container{
+.storiesContainer{
     margin-left: 17rem;
     margin-top: 1.6rem;
     position: absolute;
@@ -71,20 +71,20 @@ body::-webkit-scrollbar-thumb {
     margin-left: 1.25rem;
 }
 
-.story-username{
+.storyUsername{
     margin-top: 0rem;
     margin-left: 1.65rem;
     position: absolute;
     font-size: 12px;
 }
 
-.perfil-container{
+.perfilContainer{
     margin-left: 60rem;
     margin-top: 1.6rem;
     position: absolute;
 }
 
-.foto-perfil{
+.fotoPerfil{
     height: 5rem;
 }
 
@@ -93,13 +93,13 @@ body::-webkit-scrollbar-thumb {
     margin-top: -3.8rem;
 }
 
-.posts-feed{
+.postsFeed{
     margin-top: 15rem;
     position: absolute;
     margin-left: 24rem;
 }
 
-#posts-container{
+.postsContainer{
     margin-top: -5rem;
     margin-left: 4rem;
     font-size: 14px;
@@ -116,46 +116,46 @@ body::-webkit-scrollbar-thumb {
     padding-right: 1rem;
 }
 
-.foto-perfil-publicacion{
+.fotoPerfilPublicacion{
     height: 3rem;
 }
 
-.username-post{
+.usernamePost{
     margin-top: -2.5rem;
     margin-left: 3.5rem;
     font-weight: bold;
 }
 
-.texto-post{
+.textoPost{
     margin-top: -2rem;
     margin-left: 8rem;
 }
 
-.foto-post{
+.fotoPost{
     height: 23rem;
     margin-top: 1rem;
     margin-left: 1rem;
 }
 
-.icon-like{
+.iconLike{
     height: 1.3rem;
     margin-top: 0.7rem;
     margin-left: 1.2rem;
 }
 
-.numero-likes{
+.numeroLikes{
     margin-top: -1.35rem;
     margin-left: 3.3rem;
     position: absolute;
 }
 
-.numero-comentarios{
+.numeroComentarios{
     margin-top: -1.35rem;
     margin-left: 18.8rem;
     position: absolute;
 }
 
-.icon-comentarios{
+.iconComentarios{
     height: 1.7rem;
     margin-top: 0.6rem;
     position: absolute;

@@ -1,4 +1,4 @@
-import './Follow.css'
+import styles from './Follow.module.css'
 import logo from '../img/logo.svg';
 import feed from '../img/casa.svg';
 import buscar from '../img/lupa.svg';
@@ -16,34 +16,34 @@ export const Follow = () => {
     <>
     <header>
     <title>Follow - TailTales</title>
-    <a><img src={logo} className="logo" alt="logo" /></a>
-        <nav className="menu-nav">
-        <a href='#'><img src={feed} className="feed" alt="Feed" /></a>
-    <a href='#'><img src={buscar} className="buscar" alt="Buscar" /></a>
-    <a href='#'><img src={notif} className="notif" alt="Notificaciones" /></a>
-    <a href='#'><img src={amistades} className="amistades" alt="Amistades y Seguimientos" /></a>
-    <a href='#'><img src={publicar} className="publicar" alt="Publicar" /></a>
-    <a href='./Perfil.jsx'><img src={perfil} className="perfil" alt="Perfil" /></a>
+    <a href='/feed'><img src={logo} className={styles.logo} alt="logo" /></a>
+        <nav className={styles.menuNav}>
+        <a href='/feed'><img src={feed} className={styles.feed} alt="Feed" /></a>
+          <a href='/buscar'><img src={buscar} className={styles.buscar} alt="Buscar" /></a>
+          <a href='/notificaciones'><img src={notif} className={styles.notif} alt="Notificaciones" /></a>
+          <a href='/solicitudes'><img src={amistades} className={styles.amistades} alt="Amistades y Seguimientos" /></a>
+          <a href='/publicar'><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
+          <a href='/perfil'><img src={perfil} className={styles.perfil} alt="Perfil" /></a>
         </nav>
     </header>
     <main>
     <section>
-            <h2 className='titulo-solicitudes'>Solicitudes de seguimiento</h2>
+            <h2 className={styles.tituloSolicitudes}>Solicitudes de seguimiento</h2>
             <div id="profiles-request-container">
-                <div className='request'>
-                    <img className='profile-pic' src={fotoPerfil} alt="Imagen de perfil"/>
-                    <p className='texto-solicitud'>@nara0802 te mandó solicitud de seguimiento</p><br/>
-                    <button className='button-aceptar'>Aceptar</button>
-                    <button className='button-rechazar'>Rechazar</button>
+                <div className={styles.request}>
+                    <img className={styles.profilePic} src={fotoPerfil} alt="Imagen de perfil"/>
+                    <p className={styles.textoSolicitud}>@nara0802 te mandó solicitud de seguimiento</p><br/>
+                    <button className={styles.buttonAceptar}>Aceptar</button>
+                    <button className={styles.buttonRechazar}>Rechazar</button>
             </div>
             </div>
         </section>
         <section id="users-list">
-            <h3 className='titulo-recomendados'>Recomendados</h3>
+            <h3 className={styles.tituloRecomendados}>Recomendados</h3>
             <div id="profiles-container">
-            <img className='profile-pic-recomendados' src={fotoPerfil} alt="Imagen de perfil"/>
-            <p className='username-recomendado'>@nara0802</p><br/>
-            <button className='button-seguir'>Seguir</button>
+            <img className={styles.profilePicRecomendados} src={fotoPerfil} alt="Imagen de perfil"/>
+            <p className={styles.usernameRecomendado}>@nara0802</p><br/>
+            <button className={styles.buttonSeguir}>Seguir</button>
             </div>
         </section>
     </main>
