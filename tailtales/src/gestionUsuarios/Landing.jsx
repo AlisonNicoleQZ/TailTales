@@ -58,7 +58,7 @@ export const Landing = () => {
           ))}
         </div>
       </div>
-      <a className='anchor' href='./Landing.jsx'><img src={logo} className={styles.logo} alt="logo" /></a>
+      <a className='anchor' href='/'><img src={logo} className={styles.logo} alt="logo" /></a>
       <h1 className={styles.tituloBienvenida}>Bienvenid@ a TailTales</h1>
       <p className={styles.texto}>Lorem ipsum dolor sit amet,<br/> 
       consectetur adipiscing elit. Proin <br/>
@@ -68,9 +68,9 @@ export const Landing = () => {
       placerat consectetur, ipsum ligula<br/>  
       rutrum felis, sed blandit sem eros non<br/> 
       metus.</p>
-      <button className={styles.botonRegistro}><a className='anchor' href='#'>Registra tu mascota</a></button>
+      <button className={styles.botonRegistro}><a className='anchor' href='/perfil'>Registra tu mascota</a></button>
       <p className={styles.login}>¿Ya tienes una cuenta? <br/>
-      <a className='anchor' href='#'>Inicia Sesión</a></p>
+      <a className='anchor' href=''>Inicia Sesión</a></p>
     </>
   )
 }

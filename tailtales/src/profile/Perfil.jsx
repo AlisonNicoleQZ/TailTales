@@ -99,18 +99,16 @@ document.getElementById('logout-btn').addEventListener('click', function() {
 */}
   return (
     <>
-    <a href='#'><img src={logo} className={styles.logo} alt="logo" /></a>
+    <a href='/perfil'><img src={logo} className={styles.logo} alt="logo" /></a>
     <title>Perfil - @tigritothecat</title>
     <a className='salir' href='#'>Salir</a>
     <div className={styles.menuNav}>
-    
-    <a href='#'><img src={feed} className={styles.feed} alt="Feed" /></a>
-    <a href='#'><img src={buscar} className={styles.buscar} alt="Buscar" /></a>
-    <a href='#'><img src={notif} className={styles.notif} alt="Notificaciones" /></a>
-    <a href='#'><img src={amistades} className={styles.amistades} alt="Amistades y Seguimientos" /></a>
-    <a href='#'><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
-    <a href='./Perfil.jsx'><img src={perfil} className={styles.perfil} alt="Perfil" /></a>
-
+    <a href='/feed'><img src={feed} className={styles.feed} alt="Feed" /></a>
+          <a href='/buscar'><img src={buscar} className={styles.buscar} alt="Buscar" /></a>
+          <a href='/notificaciones'><img src={notif} className={styles.notif} alt="Notificaciones" /></a>
+          <a href='/solicitudes'><img src={amistades} className={styles.amistades} alt="Amistades y Seguimientos" /></a>
+          <a href='/publicar'><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
+          <a href='/perfil'><img src={perfil} className={styles.perfil} alt="Perfil" /></a>
     </div>
     <img src={fotoDePerfil} className={styles.fotoPerfil} alt='Foto de perfil'/>
     <div className={styles.infoUser}>

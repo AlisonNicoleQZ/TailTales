@@ -12,16 +12,16 @@ import fotoDePerfil from '../img/profile-pic.png';
 export const EditarPerfil = () => {
   return (
     <>
-      <a><img src={logo} className={styles.logo} alt="logo" /></a>
+      <a href='/feed'><img src={logo} className={styles.logo} alt="logo" /></a>
       <main>
         <title>Editar Perfil - TailTales</title>
         <div className={styles.menuNav}>
-          <a href='#'><img src={feed} className={styles.feed} alt="Feed" /></a>
-          <a href='#'><img src={buscar} className={styles.buscar} alt="Buscar" /></a>
-          <a href='#'><img src={notif} className={styles.notif} alt="Notificaciones" /></a>
-          <a href='#'><img src={amistades} className={styles.amistades} alt="Amistades y Seguimientos" /></a>
-          <a href='#'><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
-          <a href='./Perfil.jsx'><img src={perfil} className={styles.perfil} alt="Perfil" /></a>
+          <a href='/feed'><img src={feed} className={styles.feed} alt="Feed" /></a>
+          <a href='/buscar'><img src={buscar} className={styles.buscar} alt="Buscar" /></a>
+          <a href='/notificaciones'><img src={notif} className={styles.notif} alt="Notificaciones" /></a>
+          <a href='/solicitudes'><img src={amistades} className={styles.amistades} alt="Amistades y Seguimientos" /></a>
+          <a href='/publicar'><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
+          <a href='/perfil'><img src={perfil} className={styles.perfil} alt="Perfil" /></a>
         </div>
 
         <form id="edit-profile-form">

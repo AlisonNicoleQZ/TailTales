@@ -14,7 +14,11 @@ root.render(
   <React.StrictMode>
    <Router>
       <Routes>
-        <Route path="/" element={<Feed/>} />
+        <Route path="/" element={<Landing/>} />
+        <Route path="/perfil" element={<Perfil/>} />
+        <Route path="/editar-perfil" element={<EditarPerfil/>} />
+        <Route path="/feed" element={<Feed/>} />
+        <Route path="/solicitudes" element={<Follow/>} />
       </Routes>
     </Router>
   </React.StrictMode>
