@@ -18,13 +18,13 @@ body::-webkit-scrollbar-thumb {
 }
 
 .logo {
-    position: absolute;
+    position: fixed;
     margin-left: 3rem;
     width: 15%;
     height: 10rem;  
 }
 
-.menu-nav img{
+.menuNav img{
     position: fixed;
     margin-left: 2rem;
     width: 8%;
@@ -56,7 +56,7 @@ body::-webkit-scrollbar-thumb {
     margin-top: 31rem;
 }
 
-.foto-perfil{
+.fotoPerfil{
     margin-left: 30rem;
     margin-top: 2.6rem;
     position: absolute;
@@ -64,7 +64,7 @@ body::-webkit-scrollbar-thumb {
     height: 8rem;
 }
 
-#profile-pic-input {
+.inputFile {
     font-weight: 400;
     font-style: normal;
     font-size: 16px;
@@ -82,7 +82,7 @@ button:hover{
     background-color: #786197;
 }
 
-.editar-info{
+.editarInfo{
     position: absolute;
     margin-left: 32rem;
     margin-top: 13rem;
@@ -98,13 +98,10 @@ input, textarea{
     margin-top: 1.5rem;
 }
 
-.btn-actualizar{
+.btnActualizar{
     margin-top: 37rem;
     margin-left: 36rem;
     margin-bottom: 1rem;
-}
-
-button{
     font-weight: 400;
     font-style: normal;
     background-color: #9F86C0;

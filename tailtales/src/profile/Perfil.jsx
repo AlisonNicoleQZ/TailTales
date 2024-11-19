@@ -1,5 +1,5 @@
 import React from 'react'
-import './Perfil.css'
+import styles from './Perfil.module.css'
 import logo from '../img/logo.svg';
 import feed from '../img/casa.svg';
 import buscar from '../img/lupa.svg';
@@ -96,69 +96,41 @@ document.getElementById('logout-btn').addEventListener('click', function() {
   });
 });
 
-// Navegación a otras páginas
-document.getElementById('feed-btn').addEventListener('click', function() {
-  window.location.href = '../feed/feed.html';
-});
-
-document.getElementById('edit-profile-btn').addEventListener('click', function() {
-  window.location.href = '../profile/editProfile.html'; 
-});
-
-document.getElementById('search-btn').addEventListener('click', function() {
-  window.location.href = '../search/search.html'; 
-});
-
-document.getElementById('notifications-btn').addEventListener('click', function() {
-  window.location.href = '../notifications/notifications.html'; 
-});
-
-document.getElementById('follow-btn').addEventListener('click', function() {
-  window.location.href = '../follow/follow.html'; 
-});
-
-document.getElementById('new-post-btn').addEventListener('click', function() {
-  window.location.href = '../post/new-post.html'; 
-});
-
-document.getElementById('profile-btn').addEventListener('click', function() {
-  window.location.href = '../profile/profile.html'; 
-});
 */}
   return (
     <>
-    <a href='#'><img src={logo} className="logo" alt="logo" /></a>
+    <a href='#'><img src={logo} className={styles.logo} alt="logo" /></a>
     <title>Perfil - @tigritothecat</title>
     <a className='salir' href='#'>Salir</a>
-    <div className="menu-nav">
+    <div className={styles.menuNav}>
     
-    <a href='#'><img src={feed} className="feed" alt="Feed" /></a>
-    <a href='#'><img src={buscar} className="buscar" alt="Buscar" /></a>
-    <a href='#'><img src={notif} className="notif" alt="Notificaciones" /></a>
-    <a href='#'><img src={amistades} className="amistades" alt="Amistades y Seguimientos" /></a>
-    <a href='#'><img src={publicar} className="publicar" alt="Publicar" /></a>
-    <a href='./Perfil.jsx'><img src={perfil} className="perfil" alt="Perfil" /></a>
+    <a href='#'><img src={feed} className={styles.feed} alt="Feed" /></a>
+    <a href='#'><img src={buscar} className={styles.buscar} alt="Buscar" /></a>
+    <a href='#'><img src={notif} className={styles.notif} alt="Notificaciones" /></a>
+    <a href='#'><img src={amistades} className={styles.amistades} alt="Amistades y Seguimientos" /></a>
+    <a href='#'><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
+    <a href='./Perfil.jsx'><img src={perfil} className={styles.perfil} alt="Perfil" /></a>
 
     </div>
-    <img src={fotoDePerfil} className='foto-perfil' alt='Foto de perfil'/>
-    <div className='info-user'>
-    <h3 className='username'>@tigritothecat</h3>
-    <button className='boton-editar-perfil'><a href='#'>Editar perfil</a></button>
-      <p className='bio'>Soy del 10% de gatos que hace un reguero cuando come</p>
-      <img src={apariencia} className='icon apariencia-icon'/>
-      <p className='especie-y-raza'>Gato atigrado</p>
-      <img src={nacimiento} className='icon nacimiento-icon'/>
-      <p className='nacimiento'>Agosto 2022</p>
-      <img src={ubicacion} className='icon ubicacion-icon'/>
-      <p className='ubicacion'>Heredia, Costa Rica</p>
-      <img src={calendario} className='icon calendario-icon'/>
-      <p className='union'>Se unió en Septiembre del 2024</p>
+    <img src={fotoDePerfil} className={styles.fotoPerfil} alt='Foto de perfil'/>
+    <div className={styles.infoUser}>
+    <h3 className={styles.username}>@tigritothecat</h3>
+    <button className={styles.botonEditarPerfil}><a href='#'>Editar perfil</a></button>
+      <p className={styles.bio}>Soy del 10% de gatos que hace un reguero cuando come</p>
+      <img src={apariencia} className={`${styles.icon} ${styles.aparienciaIcon}`}/>
+      <p className={styles.especieYRaza}>Gato atigrado</p>
+      <img src={nacimiento} className={`${styles.icon} ${styles.nacimientoIcon}`}/>
+      <p className={styles.nacimiento}>Agosto 2022</p>
+      <img src={ubicacion} className={`${styles.icon} ${styles.ubicacionIcon}`}/>
+      <p className={styles.ubicacion}>Heredia, Costa Rica</p>
+      <img src={calendario} className={`${styles.icon} ${styles.calendarioIcon}`}/>
+      <p className={styles.union}>Se unió en Septiembre del 2024</p>
     </div>
     
-    <div className='publicaciones'>
-    <img src={publicacion3} className='publicacion'/>
-    <img src={publicacion2} className='publicacion'/>
-    <img src={publicacion1} className='publicacion'/>
+    <div className={styles.publicaciones}>
+    <img src={publicacion3} className={styles.publicacion}/>
+    <img src={publicacion2} className={styles.publicacion}/>
+    <img src={publicacion1} className={styles.publicacion}/>
     </div>
     </>
   )

@@ -1,17 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './index.css';
-import Landing from './gestionUsuarios/Landing';
 import reportWebVitals from './reportWebVitals';
 import {Perfil} from './profile/Perfil';
 import { EditarPerfil } from './profile/EditarPerfil';
 import  {Feed} from './feed/Feed.jsx';
 import { Follow } from './follow/Follow.jsx';
+import { Landing } from './gestionUsuarios/Landing.jsx';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Feed/>
+   <Router>
+      <Routes>
+        <Route path="/" element={<Feed/>} />
+      </Routes>
+    </Router>
   </React.StrictMode>
 );
 

@@ -1,6 +1,5 @@
 *{
   font-family: "IBM Plex Sans", sans-serif;
-  color: #fff;
 }
 
 h1{
@@ -8,14 +7,9 @@ h1{
   font-style: normal;
 }
 
-a{
+.anchor{
   text-decoration: none;
   color: #fff;
-}
-
-img{
-  width: 15%;
-  height: 10rem;
 }
 
 .carrusel {
@@ -25,18 +19,18 @@ img{
   overflow: hidden;
 }
 
-.carrusel-inner {
+.carruselInner {
   position: relative;
   height: 100%;
   display: flex;
   /* El comportamiento por defecto no tiene animación */
 }
 
-.carrusel-inner.animating {
+.carruselInner.animating {
   transition: transform 1s ease-in-out; /* Solo animar cuando sea necesario */
 }
 
-.carrusel-item {
+.carruselItem {
   flex: 0 0 100vw; /* Cada imagen ocupa el 100% del ancho de la ventana */
   height: 100vh;
   background-size: cover;
@@ -46,12 +40,15 @@ img{
 .logo {
   position: absolute;
   left: 5%;
+  width: 15%;
+  height: 10rem;
 }
 
-.titulo-bienvenida{
+.tituloBienvenida{
   position: absolute;
   left: 36%;
   margin-top: 2rem;
+  color: #fff;
 }
 
 .texto{
@@ -62,9 +59,10 @@ img{
   font-weight: 500;
   font-style: normal;
   font-size: 24px;
+  color: #fff;
 }
 
-.boton-registro{
+.botonRegistro{
   font-size: 20px;
   background-color: #9F86C0;
   font-weight: 600;
@@ -76,6 +74,7 @@ img{
   padding: 17px 10px;
   border-radius: 10px;
   border:none;
+  color: #fff;
 }
 
 .login{
@@ -83,4 +82,5 @@ img{
   position: absolute;
   margin-top: 33.5rem;
   left: 44%;
+  color: #fff;
 }

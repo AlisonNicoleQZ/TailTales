@@ -24,7 +24,7 @@ body::-webkit-scrollbar-thumb {
     height: 10rem;  
 }
 
-.menu-nav img{
+.menuNav img{
     position: fixed;
     margin-left: 2rem;
     width: 8%;
@@ -56,7 +56,7 @@ body::-webkit-scrollbar-thumb {
     margin-top: 31rem;
 }
 
-.titulo-solicitudes{
+.tituloSolicitudes{
     margin-left: 32rem;
     margin-top: 4rem;
     position: absolute;
@@ -68,21 +68,21 @@ body::-webkit-scrollbar-thumb {
     margin-top: 2rem;
 }
 
-.profile-pic{
+.profilePic{
     height: 6rem;
     margin-left: 26rem;
     margin-top: 8rem;
     position: absolute;
 }
 
-.texto-solicitud{
+.textoSolicitud{
     margin-left: 33rem;
     margin-top: 10rem;
     position: absolute;   
     font-size: 1.1rem;
 }
 
-.button-aceptar{
+.buttonAceptar{
     margin-left: 38.5rem;
     margin-top: 11rem;
     position: absolute; 
@@ -94,7 +94,7 @@ body::-webkit-scrollbar-thumb {
     font-size: 0.9rem;
 }
 
-.button-rechazar{
+.buttonRechazar{
     margin-left: 44rem;
     margin-top: 11rem;
     position: absolute; 
@@ -106,32 +106,32 @@ body::-webkit-scrollbar-thumb {
     font-size: 0.9rem;
 }
 
-.titulo-recomendados{
+.tituloRecomendados{
     margin-left: 67rem;
     margin-top: 2rem;
     position: absolute;  
     color: #9F86C0;
 }
 
-#profiles-container{
+.profilesContainer{
     margin-bottom: 2rem;
     position: absolute;
 }
 
-.profile-pic-recomendados{
+.profilePicRecomendados{
     height: 4rem;
     margin-left: 64rem;
     margin-top: 4.5rem;
     position: absolute;
 }
 
-.username-recomendado{
+.usernameRecomendado{
     margin-left: 69.3rem;
     margin-top: 5rem;
     position: absolute;
 }
 
-.button-seguir{
+.buttonSeguir{
     margin-left: 68.5rem;
     margin-top: 6rem;
     position: absolute; 
