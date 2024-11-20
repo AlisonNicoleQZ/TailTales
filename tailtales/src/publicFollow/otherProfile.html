@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Mascota</title>
+    <style>
+        /* Estilos básicos para el perfil */
+        .profile-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .profile-container img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+        }
+        .profile-container h2 {
+            margin: 10px 0;
+        }
+        .profile-container p {
+            font-size: 16px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Perfil de Mascota</h1>
+        <button id="back-btn">Regresar</button>
+    </header>
+    <main>
+        <div class="profile-container">
+            <img id="profile-photo" src="" alt="Foto de Mascota">
+            <h2 id="profile-name">Nombre de Mascota</h2>
+            <p id="profile-bio">Biografía no disponible</p>
+            <p id="profile-location">Ubicación no disponible</p>
+            <p id="profile-birth">Cumpleaños no disponible</p>
+        </div>
+    </main>
+    <script type="module" src="otherProfile.js"></script>
+</body>
+</html>
