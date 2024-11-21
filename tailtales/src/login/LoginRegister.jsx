@@ -66,6 +66,12 @@ export const LoginRegister = () => {
     'Perú', 'República Dominicana', 'Uruguay', 'Venezuela'
   ];
 
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const isRegistering = queryParams.get('register') === 'true';
+    setIsLogin(!isRegistering);
+  }, [location.search]);
+
   // Control de edad y validación
   useEffect(() => {
     if (age <= 0) {
@@ -279,7 +285,8 @@ export const LoginRegister = () => {
               <a href="#" id="forgot-password" onClick={handleForgotPassword}>Olvidé mi contraseña</a>
             </div>
             <div className="register-link">
-              <p className={styles.registerText}>¿No tienes una cuenta? <a href="#" id="go-to-register" className={styles.registerLink} onClick={() => setIsLogin(false)}>Regístrate aquí</a></p>
+              <p className={styles.registerText}>¿No tienes una cuenta? <a href="#" id="go-to-register" className={styles.registerLink} onClick={(e) => { e.preventDefault();
+                                  navigate('/login-register?register=true');}}>Regístrate aquí</a></p>
             </div>
       
             <div className="social-login">
@@ -454,7 +461,8 @@ export const LoginRegister = () => {
           <div className="login-link">
             <p>
               ¿Ya tienes una cuenta?{' '}
-              <a href="#" onClick={() => setIsLogin(true)}>
+              <a href="#" onClick={(e) => { e.preventDefault();
+                                  navigate('/login-register');}}>
                 Inicia sesión aquí
               </a>
             </p>
