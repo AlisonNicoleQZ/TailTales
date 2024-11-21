@@ -66,8 +66,9 @@ export const Feed = () => {
             <section id="posts-feed" className={styles.postsFeed}>
             <div id="posts-container" className={styles.postsContainer}>
                   <div className={styles.post}>
-               <img className={styles.fotoPerfilPublicacion} src={fotoPerfil} alt="Imagen de perfil post"/>
-               <p className={styles.usernamePost}>@hcocoa</p>
+                  <a href='/otro-perfil'>
+                  <img className={styles.fotoPerfilPublicacion} src={fotoPerfil} alt="Imagen de perfil post"/>
+               <p className={styles.usernamePost}>@hcocoa</p></a>
                <p className={styles.textoPost}>Una foto mía durmiendo bien a gusto.</p>
                <div className={styles.frame}>
                <img className={styles.fotoPost} src={fotoPublicacion} alt="Foto post"/>
@@ -80,8 +81,9 @@ export const Feed = () => {
                 </div>
                 <div id="posts-container" className={styles.postsContainer}>
                   <div className={styles.post}>
-               <img className={styles.fotoPerfilPublicacion} src={fotoPerfil} alt="Imagen de perfil post"/>
-               <p className={styles.usernamePost}>@hcocoa</p>
+                  <a href='/otro-perfil'>
+                  <img className={styles.fotoPerfilPublicacion} src={fotoPerfil} alt="Imagen de perfil post"/>
+               <p className={styles.usernamePost}>@hcocoa</p></a>
                <p className={styles.textoPost}>Una foto mía durmiendo bien a gusto.</p>
                <div className={styles.frame}>
                <img className={styles.fotoPost} src={fotoPublicacion} alt="Foto post"/>
@@ -94,8 +96,9 @@ export const Feed = () => {
                 </div>
                 <div id="posts-container" className={styles.postsContainer}>
                   <div className={styles.post}>
-               <img className={styles.fotoPerfilPublicacion} src={fotoPerfil} alt="Imagen de perfil post"/>
-               <p className={styles.usernamePost}>@hcocoa</p>
+                  <a href='/otro-perfil'>
+                <img className={styles.fotoPerfilPublicacion} src={fotoPerfil} alt="Imagen de perfil post"/>
+               <p className={styles.usernamePost}>@hcocoa</p></a>
                <p className={styles.textoPost}>Una foto mía durmiendo bien a gusto.</p>
                <div className={styles.frame}>
                <img className={styles.fotoPost} src={fotoPublicacion} alt="Foto post"/>

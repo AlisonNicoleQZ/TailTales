@@ -1,4 +1,4 @@
-import styles from './Follow.module.css'
+import styles from './PublicFollow.module.css'
 import logo from '../img/logo.svg';
 import feed from '../img/casa.svg';
 import buscar from '../img/lupa.svg';
