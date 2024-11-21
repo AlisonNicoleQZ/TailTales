@@ -148,11 +148,14 @@ document.getElementById('register-form').addEventListener('submit', async functi
       return;
     }
 
+    // Crear el documento del usuario en Firestore
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
+  // Generar un petId aleatorio
     const petId = Math.floor(Math.random() * 1000000);
 
+    // Crear el documento del usuario en Firestore
     await setDoc(doc(db, "users", user.uid), {
       petId: petId,
       mail: email,
