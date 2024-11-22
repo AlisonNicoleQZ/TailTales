@@ -36,7 +36,7 @@ export const LoginRegister = () => {
   const [username, setUsername] = useState('');
   const [species, setSpecies] = useState('');
   const [breed, setBreed] = useState('');
-  const [age, setAge] = useState(0);
+  const [age, setAge] = useState(1);
   const [ageFormat, setAgeFormat] = useState("years");
   const [ageError, setAgeError] = useState(false);
   const [profilePic, setProfilePic] = useState('');
@@ -282,7 +282,7 @@ export const LoginRegister = () => {
               </div>
               <button type="submit" className={styles.loginButton}>Iniciar Sesión</button>
               <div className={styles.forgotPassword}>
-              <a href="#" id="forgot-password" onClick={handleForgotPassword}>Olvidé mi contraseña</a>
+              <a href="#"  id="forgot-password" onClick={handleForgotPassword}>Olvidé mi contraseña</a>
             </div>
             <div className="register-link">
               <p className={styles.registerText}>¿No tienes una cuenta? <a href="#" id="go-to-register" className={styles.registerLink} onClick={(e) => { e.preventDefault();
@@ -298,11 +298,11 @@ export const LoginRegister = () => {
 
       ) : (
 
-        <div id="register-container">
-          <h1>Regístrate en Taitales</h1>
-          <form id="register-form" onSubmit={handleRegisterSubmit}>
-            <div className="input-group">
-              <label htmlFor="email">Correo Electrónico</label>
+        <div id="register-container" className={styles.registroContainer}>
+          <h1 className={styles.headingRegistro}>Regístrate en Taitales</h1>
+          <form id="register-form" onSubmit={handleRegisterSubmit} className={styles.registerForm}>
+            <div className={styles.inputsRegistro}>
+              <label className={styles.registroLabel} htmlFor="email">Correo Electrónico</label>
               <input
                 type="email"
                 id="email"
@@ -312,8 +312,8 @@ export const LoginRegister = () => {
                 required
               />
             </div>
-            <div className="input-group">
-              <label htmlFor="username">Nombre de Usuario</label>
+            <div className={styles.inputsRegistro}>
+              <label className={styles.registroLabel}  htmlFor="username">Nombre de Usuario</label>
               <input
                 type="text"
                 id="username"
@@ -323,8 +323,8 @@ export const LoginRegister = () => {
                 required
               />
             </div>
-            <div className="input-group">
-              <label htmlFor="password">Contraseña</label>
+            <div className={styles.inputsRegistro}>
+              <label className={styles.registroLabel} htmlFor="password">Contraseña</label>
               <input
                 type="password"
                 id="password"
@@ -339,8 +339,8 @@ export const LoginRegister = () => {
                 </span>
               )}
             </div>
-            <div className="input-group">
-              <label htmlFor="name">Nombre de la Mascota</label>
+            <div className={styles.inputsRegistro}>
+              <label className={styles.registroLabel} htmlFor="name">Nombre de la Mascota</label>
               <input
                 type="text"
                 id="name"
@@ -350,8 +350,8 @@ export const LoginRegister = () => {
                 required
               />
             </div>
-            <div className="input-group">
-              <label htmlFor="species">Especie</label>
+            <div className={styles.inputsRegistro}>
+              <label className={styles.registroLabel} htmlFor="species">Especie</label>
               <select
                 id="species"
                 value={species}
@@ -363,8 +363,8 @@ export const LoginRegister = () => {
                 <option value="Gato">Gato</option>
               </select>
             </div>
-            <div className="input-group">
-              <label htmlFor="breed">Raza</label>
+            <div className={styles.inputsRegistro}>
+              <label className={styles.registroLabel} htmlFor="breed">Raza</label>
               <select
                 id="breed"
                 value={breed}
@@ -379,22 +379,23 @@ export const LoginRegister = () => {
                 ))}
               </select>
             </div>
-            <div className="input-group">
-              <label htmlFor="age">Edad</label>
+            <div className={styles.inputsRegistro}>
+              <label className={styles.registroLabel} htmlFor="age">Edad</label>
               <input
                 type="number"
                 id="age"
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
                 placeholder="Ingresa la edad de tu mascota"
+                className={styles.edadInput}
                 required
               />
               {ageError && (
                 <span style={{ color: 'red' }}>La edad debe ser mayor a 0</span>
               )}
             </div>
-            <div className="input-group">
-              <label htmlFor="age_format">Formato de Edad</label>
+            <div className={styles.inputsRegistro}>
+              <label className={styles.registroLabel} htmlFor="age_format">Formato de Edad</label>
               <select
                 id="age_Format"
                 value={ageFormat}
@@ -405,8 +406,8 @@ export const LoginRegister = () => {
                 <option value="months">Meses</option>
               </select>
             </div>
-            <div className="input-group">
-              <label htmlFor="profilePic">URL de la Foto de Perfil</label>
+            <div className={styles.inputsRegistro}>
+              <label className={styles.registroLabel} htmlFor="profilePic">URL de la Foto de Perfil</label>
               <input
                 type="text"
                 id="profilePic"
@@ -416,8 +417,8 @@ export const LoginRegister = () => {
                 required
               />
             </div>
-            <div className="input-group">
-              <label htmlFor="bio">Biografía</label>
+            <div className={styles.inputsRegistro}>
+              <label className={styles.registroLabel} htmlFor="bio">Biografía</label>
               <textarea
                 id="bio"
                 value={bio}
@@ -426,8 +427,8 @@ export const LoginRegister = () => {
                 required
               />
             </div>
-            <div className="input-group">
-              <label htmlFor="location">Ubicación</label>
+            <div className={styles.inputsRegistro}>
+              <label className={styles.registroLabel} htmlFor="location">Ubicación</label>
               <select
                 id="location"
                 value={locationField}
@@ -442,8 +443,8 @@ export const LoginRegister = () => {
                 ))}
               </select>
             </div>
-            <div className="input-group">
-              <label htmlFor="privacySettings">Configuración de Privacidad</label>
+            <div className={styles.inputsRegistro}>
+              <label className={styles.registroLabel} htmlFor="privacySettings">Configuración de Privacidad</label>
               <select
                 id="privacySettings"
                 value={privacySettings}
@@ -454,19 +455,19 @@ export const LoginRegister = () => {
                 <option value="2">Privado</option>
               </select>
             </div>
-            <button type="submit" className="btn">
+            <button type="submit" className={styles.registroButton}>
               Registrarse
             </button>
-          </form>
-          <div className="login-link">
+            <div className={styles.loginText}>
             <p>
               ¿Ya tienes una cuenta?{' '}
-              <a href="#" onClick={(e) => { e.preventDefault();
+              <a href="#" className={styles.loginLink} onClick={(e) => { e.preventDefault();
                                   navigate('/login-register');}}>
                 Inicia sesión aquí
               </a>
             </p>
           </div>
+          </form>
         </div>
       )}
     </div>
