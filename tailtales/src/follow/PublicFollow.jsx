@@ -44,8 +44,8 @@ export const PublicFollow = () => {
                     
             </div>
             </div>
-
-            <div id="profiles-request-container">
+           {/**
+                       <div id="profiles-request-container">
                 <div className={styles.request}>
                     <img className={styles.profilePic} src={fotoTaco} alt="Imagen de perfil"/>
                     <p className={styles.textoSolicitud}>@tacotaco empezó a seguirte</p><br/>
@@ -62,6 +62,7 @@ export const PublicFollow = () => {
                     
             </div>
             </div>
+            */}
         </section>
         <section id="users-list">
             <h3 className={styles.tituloRecomendados}>Recomendaciones</h3>
@@ -70,7 +71,7 @@ export const PublicFollow = () => {
             <p className={styles.usernameRecomendado}>@galletitas_felices</p><br/>
             <button className={styles.buttonSeguir}>Seguir</button>
             </div>
-
+            {/**
             <div id="profiles-container">
             <img className={styles.profilePicRecomendados} src={fotoChispita} alt="Imagen de perfil"/>
             <p className={styles.usernameRecomendado}>@chispita34</p><br/>
@@ -88,6 +89,7 @@ export const PublicFollow = () => {
             <p className={styles.usernameRecomendado}>@pelusacute</p><br/>
             <button className={styles.buttonSeguir}>Seguir</button>
             </div>
+             */}
         </section>
     </main>
     </>
