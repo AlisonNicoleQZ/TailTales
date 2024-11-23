@@ -5,10 +5,11 @@ import './index.css';
 import {Landing} from './landing/Landing';
 import LoginRegister from './login/LoginRegister';
 import reportWebVitals from './reportWebVitals';
-import {Perfil} from './profile/Perfil';
+import { Perfil } from './profile/Perfil';
 import { EditarPerfil } from './profile/EditarPerfil';
-import  {Feed} from './feed/Feed.jsx';
+import { Feed } from './feed/Feed.jsx';
 import { Follow } from './follow/Follow.jsx';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
