@@ -1,0 +1,163 @@
+*{
+    font-family: "IBM Plex Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body::-webkit-scrollbar {
+    width: 10px; /* Width of the scrollbar */
+}
+  
+body::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Color of the track */
+  }
+  
+body::-webkit-scrollbar-thumb {
+    background: #9F86C0; /* Color of the thumb */
+    border-radius: 6px; /* Rounded corners for the thumb */
+}
+
+.logo {
+    position: fixed;
+    margin-left: 3rem;
+    width: 15%;
+    height: 10rem;  
+}
+
+.menuNav img{
+    position: fixed;
+    margin-left: 2rem;
+    width: 8%;
+    height: 2rem;  
+}
+
+.feed{
+    margin-top: 11rem;
+}
+
+.buscar{
+    margin-top: 15rem;
+}
+
+.notif{
+    margin-top: 19rem;
+}
+
+.amistades{
+    margin-top: 23rem;
+}
+
+.publicar{
+    margin-top: 27rem;
+    left: 0.1rem;
+}
+
+.perfil{
+    margin-top: 31rem;
+}
+
+
+.storiesContainer{
+    margin-left: 17rem;
+    margin-top: 1.6rem;
+    position: absolute;
+    display: flex;
+}
+
+.story{
+    height: 4rem;
+    border: 0.2rem solid #BE95C4;
+    border-radius: 50rem;
+    margin-left: 1.25rem;
+}
+
+.storyUsername{
+    margin-top: 0rem;
+    margin-left: 1.65rem;
+    position: absolute;
+    font-size: 12px;
+}
+
+.perfilContainer{
+    margin-left: 60rem;
+    margin-top: 1.6rem;
+    position: absolute;
+}
+
+.fotoPerfil{
+    height: 5rem;
+}
+
+.username{
+    margin-left: 6rem;
+    margin-top: -3.8rem;
+}
+
+.postsFeed{
+    margin-top: 15rem;
+    position: absolute;
+    margin-left: 24rem;
+}
+
+.postsContainer{
+    margin-top: -5rem;
+    margin-left: 4rem;
+    font-size: 14px;
+}
+
+.post{
+    margin-bottom: 8rem;
+}
+
+.frame{
+    background-color: #D9D9D9;
+    height: 25rem;
+    margin-top: 2rem;
+    padding-right: 1rem;
+}
+
+.fotoPerfilPublicacion{
+    height: 3rem;
+}
+
+.usernamePost{
+    margin-top: -2.5rem;
+    margin-left: 3.5rem;
+    font-weight: bold;
+}
+
+.textoPost{
+    margin-top: -2rem;
+    margin-left: 8rem;
+}
+
+.fotoPost{
+    height: 23rem;
+    margin-top: 1rem;
+    margin-left: 1rem;
+}
+
+.iconLike{
+    height: 1.3rem;
+    margin-top: 0.7rem;
+    margin-left: 1.2rem;
+}
+
+.numeroLikes{
+    margin-top: -1.35rem;
+    margin-left: 3.3rem;
+    position: absolute;
+}
+
+.numeroComentarios{
+    margin-top: -1.35rem;
+    margin-left: 18.8rem;
+    position: absolute;
+}
+
+.iconComentarios{
+    height: 1.7rem;
+    margin-top: 0.6rem;
+    position: absolute;
+    margin-left: 17.8rem
+}

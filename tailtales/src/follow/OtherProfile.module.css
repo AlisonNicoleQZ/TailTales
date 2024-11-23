@@ -1,0 +1,167 @@
+*{
+    font-family: "IBM Plex Sans", sans-serif;
+    color: #000; 
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+.logo {
+    position: absolute;
+    margin-left: 3rem;
+    width: 15%;
+    height: 10rem;  
+}
+
+.salir{
+    position: absolute;
+    margin-left: 73rem;
+    margin-top: 0.7rem;
+    color: #000;
+}
+
+.menuNav img{
+    position: absolute;
+    margin-left: 2rem;
+    width: 8%;
+    height: 2rem;  
+}
+
+.feed{
+    margin-top: 11rem;
+}
+
+.buscar{
+    margin-top: 15rem;
+}
+
+.notif{
+    margin-top: 19rem;
+}
+
+.amistades{
+    margin-top: 23rem;
+}
+
+.publicar{
+    margin-top: 27rem;
+    left: 0.1rem;
+}
+
+.perfil{
+    margin-top: 31rem;
+}
+
+.fotoPerfil{
+    margin-left: 16rem;
+    margin-top: 2.6rem;
+    position: absolute;
+    width: 10.5%;
+    height: 8rem;
+}
+
+.username{
+    position: absolute;
+    margin-left: 26rem;
+    margin-top: 2.7rem;
+}
+
+.botonEditarPerfil{
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    background-color: #9F86C0;
+    position: absolute;
+    margin-left: 34.5rem;
+    margin-top: 2.5rem;
+    padding: 6px 12px;
+    border-radius: 5px;
+    border:none;
+}
+
+a {
+color: #fff;
+    text-decoration: none;
+}
+
+.bio {
+    margin-left: 26rem;
+    margin-top: 5.6rem;
+    position: absolute;
+}
+
+.icon{
+    width: 3%;
+    height: 1rem;
+}
+
+.infoUser{
+    margin-left: 1rem;
+}
+
+.aparienciaIcon  {
+    margin-left: 23.9rem;
+    margin-top: 8.8rem;
+    position: absolute;
+}
+
+.especieYRaza {
+    margin-left: 26rem;
+    margin-top: 8.7rem;
+    position: absolute;
+}
+
+.nacimientoIcon{
+    margin-left: 33.1rem;
+    margin-top: 8.8rem;
+    position: absolute;
+}
+
+.nacimiento {
+    margin-left: 35.2rem;
+    margin-top: 8.7rem;
+    position: absolute;
+}
+
+.ubicacionIcon{
+    position: absolute;
+    margin-left: 23.9rem;
+    margin-top: 11.6rem;
+}
+
+.ubicacion{
+    margin-left: 26rem;
+    margin-top: 11.5rem;
+    position: absolute;
+}
+
+.calendarioIcon{
+    margin-left: 23.9rem;
+    margin-top: 14.4rem;
+    position: absolute;
+}
+
+.union{
+    margin-left: 26rem;
+    margin-top: 14.3rem;
+    position: absolute;
+}
+
+.publicaciones{
+    position: absolute;
+    margin-left: 15rem;
+    margin-top: 19rem;
+    display: flex;
+    justify-content: space-around; /* Espacio alrededor de cada imagen */
+    align-items: center; /* Alinea verticalmente en el centro */
+}
+
+.publicacion{
+    margin-left: 3rem;
+}
+
+
+.publicaciones img{
+    width: 40%;
+    height: 16rem;
+}
