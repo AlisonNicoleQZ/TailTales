@@ -12,6 +12,7 @@ export const Landing = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     const [isAnimating, setIsAnimating] = useState(true);
     const images = [imagen1, imagen2, imagen3, imagen4];
+
     const navigate = useNavigate();
   
     // Agregamos una imagen "clonada" de la primera al final para hacer un bucle
@@ -21,6 +22,9 @@ export const Landing = () => {
     const handleRegisterClick = () => {
       navigate('/login-register?register=true');
     };
+
+    // Agregamos una imagen "clonada" de la primera al final para hacer un bucle
+    const totalImages = [...images, images[0]];
   
     useEffect(() => {
       const intervalId = setInterval(() => {

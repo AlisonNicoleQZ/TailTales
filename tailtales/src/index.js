@@ -2,13 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './index.css';
+import {Landing} from './landing/Landing';
+import LoginRegister from './login/LoginRegister';
 import reportWebVitals from './reportWebVitals';
 import { Perfil } from './profile/Perfil';
 import { EditarPerfil } from './profile/EditarPerfil';
 import { Feed } from './feed/Feed.jsx';
 import { Follow } from './follow/Follow.jsx';
-import { Landing } from './gestionUsuarios/Landing.jsx';
-import { LoginRegister } from './login/LoginRegister.jsx';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
