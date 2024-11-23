@@ -6,9 +6,7 @@
     <title>Edit Profile - TailTales</title>
 </head>
 <body>
-    <header>
-        <h1>Edit Profile</h1>
-    </header>
+    <div id="header-container"></div>
     <main>
         <form id="edit-profile-form">
             <div>
@@ -21,15 +19,28 @@
             </div>
             <div>
                 <label for="species">Especie:</label>
-                <input type="text" id="species" required>
+                <select id="species" required>
+                    <option value="">Selecciona una especie</option>
+                    <option value="Perro">Perro</option>
+                    <option value="Gato">Gato</option>
+                </select>
             </div>
             <div>
                 <label for="breed">Raza:</label>
-                <input type="text" id="breed" required>
+                <select id="breed" required>
+                    <option value="">Selecciona una raza</option>
+                </select>
             </div>
             <div>
-                <label for="birth">Cumpleaños:</label>
-                <input type="date" id="birth" required>
+                <label for="age">Edad:</label>
+                <input type="number" id="age" placeholder="Edad de la mascota" required>
+            </div>
+            <div>
+                <label for="age_format">Formato de Edad:</label>
+                <select id="age_format" required>
+                    <option value="years">Años</option>
+                    <option value="months">Meses</option>
+                </select>
             </div>
             <div>
                 <label for="location">Ubicación:</label>
@@ -39,10 +50,30 @@
                 <label for="bio">Biografía:</label>
                 <textarea id="bio" rows="5"></textarea>
             </div>
+            <div>
+                <label for="privacySettings">Configuración de Privacidad:</label>
+                <select id="privacySettings" required>
+                    <option value="1">Público</option>
+                    <option value="2">Privado</option>
+                </select>
+            </div>
             <button type="submit">Actualizar Perfil</button>
-            <button id="profile-btn">Profile</button>
         </form>
+        
+        <!-- Hipervínculo para cambiar la contraseña -->
+        <p>
+            <a href="#" id="change-password-link">Cambiar contraseña</a>
+        </p>
+        <p id="disable-account-link" style="color: red; cursor: pointer;">Deshabilitar cuenta</p>
+
+        
+        <!-- Contenedor para mostrar el mensaje de autenticación -->
+        <div id="auth-provider-message"></div>
     </main>
+    <script type="module">
+        import { loadHeader } from '../headerLoader.js';
+        loadHeader("Editar Perfil");
+    </script>
     <script type="module" src="editProfile.js"></script>
 </body>
 </html>

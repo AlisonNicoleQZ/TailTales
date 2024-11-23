@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificaciones - TailTales</title>
+</head>
+<body>
+    <div id="header-container"></div> <!-- Contenedor para el header dinámico -->
+    <div class="container">
+        <div id="notifications-feed">
+            <h2>Notificaciones</h2>
+            <div id="notifications-container">
+                <!-- Aquí se cargarán las notificaciones -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { loadHeader } from '../headerLoader.js';
+        loadHeader("Notificaciones");
+    </script>
+    <script type="module" src="notifications.js"></script>
+</body>
+</html>

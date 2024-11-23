@@ -21,24 +21,30 @@
         .profile-card h3 {
             margin: 0;
         }
+        .pending-container, .recomendados-container {
+            margin-top: 20px;
+        }
+        .pending-card button {
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Follow</h1>
-        <button id="feed-btn">Feed</button>
-            <button id="search-btn">Search</button>
-            <button id="notifications-btn">Notifications</button>
-            <button id="follow-btn">Follow</button>
-            <button id="new-post-btn">New Post</button>
-            <button id="profile-btn">Profile</button>
-    </header>
+    <div id="header-container"></div> <!-- Contenedor para cargar el header dinámico -->
     <main>
-        <section id="users-list">
+        <section id="pending-list" class="pending-container">
+            <h2>Pending</h2>
+            <div id="pending-requests"></div>
+        </section>
+        <section id="users-list" class="recomendados-container">
             <h2>Recomendados</h2>
             <div id="profiles-container"></div>
         </section>
     </main>
+    <script type="module">
+        import { loadHeader } from '../headerLoader.js';
+        loadHeader("Follow"); // Carga el encabezado con el título "Follow"
+    </script>
     <script type="module" src="follow.js"></script>
 </body>
 </html>

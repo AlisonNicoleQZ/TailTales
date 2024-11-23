@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+import { getAuth, onAuthStateChanged, updatePassword } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-storage.js";
 
@@ -19,24 +19,42 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-// Detectar si el usuario ha iniciado sesión
+// Verificar proveedor de autenticación y proceder con cambio de contraseña si es Email/Password
+document.getElementById("change-password-link").addEventListener("click", async (event) => {
+    event.preventDefault();
+    
+    const user = auth.currentUser;
+    if (user) {
+        const providerId = user.providerData[0]?.providerId;
+        
+        if (providerId === "password") {
+            const newPassword = prompt("Ingresa tu nueva contraseña:");
+            if (newPassword) {
+                try {
+                    await updatePassword(user, newPassword);
+                    alert("Contraseña cambiada exitosamente.");
+                } catch (error) {
+                    console.error("Error al cambiar la contraseña:", error);
+                    alert("Hubo un error al cambiar la contraseña. Inténtalo nuevamente.");
+                }
+            }
+        } else {
+            alert("Este correo está registrado con Google. No puedes cambiar la contraseña.");
+        }
+    } else {
+        alert("No has iniciado sesión.");
+    }
+});
+
+// Detectar si el usuario ha iniciado sesión y cargar perfil
 onAuthStateChanged(auth, (user) => {
     if (user) {
         loadUserProfile(user.uid);
     } else {
-        alert('Debe iniciar sesión para editar su perfil.');
-        window.location.href = '../login/login.html';
+        alert("Debe iniciar sesión para editar su perfil.");
+        window.location.href = "../login/login.html";
     }
 });
-
-// Función para formatear la fecha
-function formatDate(timestamp) {
-    if (timestamp && timestamp.seconds) {
-        const date = new Date(timestamp.seconds * 1000);
-        return date.toLocaleDateString('es-ES'); // Formato de fecha en español
-    }
-    return "Fecha no disponible";
-}
 
 // Función para cargar el perfil del usuario
 async function loadUserProfile(uid) {
@@ -46,17 +64,13 @@ async function loadUserProfile(uid) {
             const userData = userDoc.data();
             document.getElementById('name').value = userData.name;
             document.getElementById('species').value = userData.species;
+            loadBreeds(userData.species); // Cargar razas según la especie
             document.getElementById('breed').value = userData.breed;
             document.getElementById('location').value = userData.location;
-
-            // Formatear la fecha para el campo de tipo date
-            if (userData.birth && userData.birth.seconds) {
-                const birthDate = new Date(userData.birth.seconds * 1000);
-                const formattedDate = birthDate.toISOString().split('T')[0]; // Convertir a formato 'YYYY-MM-DD'
-                document.getElementById('birth').value = formattedDate;
-            }
-
+            document.getElementById('age').value = userData.age;
+            document.getElementById('age_format').value = userData.age_format;
             document.getElementById('bio').value = userData.bio;
+            document.getElementById('privacySettings').value = userData.privacySettings;
             document.getElementById('profile-pic').src = userData.profilePic || '../img/default-profile-image.jpg';
         } else {
             alert('No se encontraron datos del usuario.');
@@ -67,6 +81,31 @@ async function loadUserProfile(uid) {
     }
 }
 
+// Configurar dropdown de especies y razas
+const speciesSelect = document.getElementById('species');
+const breedSelect = document.getElementById('breed');
+const breeds = {
+    'Perro': ['Labrador Retriever', 'Bulldog Francés', 'Golden Retriever', 'Pastor Alemán', 'Poodle', 'Bulldog Inglés', 'Beagle', 'Rottweiler', 'Yorkshire Terrier', 'Dachshund', 'Boxer', 'Shih Tzu', 'Border Collie', 'Cocker Spaniel', 'Chihuahua', 'Doberman', 'Pitbull', 'Husky Siberiano', 'San Bernardo', 'Akita'],
+    'Gato': ['Maine Coon', 'Persa', 'Siames', 'Siberiano', 'Bengala', 'Sphynx', 'Ragdoll', 'British Shorthair', 'Scottish Fold', 'Abyssinian', 'Birmano', 'Burmese', 'Oriental', 'Somalí', 'Cornish Rex', 'Angora', 'Siberiano', 'Toyger', 'Chausie', 'Manx']
+};
+
+// Cargar razas según especie seleccionada
+speciesSelect.addEventListener('change', (event) => {
+    loadBreeds(event.target.value);
+});
+
+function loadBreeds(species) {
+    breedSelect.innerHTML = '<option value="">Selecciona una raza</option>';
+    if (species && breeds[species]) {
+        breeds[species].forEach(breed => {
+            const option = document.createElement('option');
+            option.value = breed;
+            option.textContent = breed;
+            breedSelect.appendChild(option);
+        });
+    }
+}
+
 // Función para manejar la actualización del perfil
 document.getElementById('edit-profile-form').addEventListener('submit', async function(event) {
     event.preventDefault();
@@ -74,9 +113,11 @@ document.getElementById('edit-profile-form').addEventListener('submit', async fu
     const name = document.getElementById('name').value;
     const species = document.getElementById('species').value;
     const breed = document.getElementById('breed').value;
-    const birth = document.getElementById('birth').value; // Obtener el valor del campo de fecha
+    const age = document.getElementById('age').value;
+    const ageFormat = document.getElementById('age_format').value;
     const location = document.getElementById('location').value;
     const bio = document.getElementById('bio').value;
+    const privacySettings = document.getElementById('privacySettings').value;
 
     try {
         const fileInput = document.getElementById('profile-pic-input');
@@ -89,16 +130,17 @@ document.getElementById('edit-profile-form').addEventListener('submit', async fu
             profilePicUrl = await getDownloadURL(storageRef); // Obtener URL de la nueva imagen
         }
 
-        // Guardar la fecha como un Timestamp en Firestore
-        const birthTimestamp = new Date(birth).getTime() / 1000; // Convertir a Timestamp
+        // Actualizar los datos del perfil
         await updateDoc(doc(db, "users", user.uid), {
             name,
             species,
             breed,
-            birth: { seconds: birthTimestamp }, // Asegúrate de que aquí estés enviando un Timestamp.
+            age: parseInt(age),
+            age_format: ageFormat,
             location,
             bio,
-            profilePic: profilePicUrl 
+            privacySettings: parseInt(privacySettings),
+            profilePic: profilePicUrl
         });
         
         alert("Perfil actualizado exitosamente.");
@@ -109,18 +151,32 @@ document.getElementById('edit-profile-form').addEventListener('submit', async fu
     }
 });
 
-// Funciones para los botones
-document.getElementById('logout-btn').addEventListener('click', function() {
-    signOut(auth).then(() => {
-        alert('Sesión cerrada exitosamente.');
-        window.location.href = '../login/login.html';
-    }).catch((error) => {
-        console.error("Error al cerrar sesión: ", error);
-        alert('Error al cerrar sesión.');
-    });
+// Evento para manejar la deshabilitación de la cuenta
+document.getElementById("disable-account-link").addEventListener("click", async (event) => {
+    event.preventDefault();
+    
+    const confirmation = confirm("¿Está seguro que desea deshabilitar su cuenta?");
+    if (confirmation) {
+        const user = auth.currentUser;
+        if (user) {
+            try {
+                // Actualiza el campo 'status' a 'false' en Firestore
+                await updateDoc(doc(db, "users", user.uid), {
+                    status: false
+                });
+                
+                // Cerrar sesión
+                await auth.signOut();
+                
+                alert("Cuenta deshabilitada exitosamente.");
+                window.location.href = "../login/login.html"; // Redirigir al login después de deshabilitar
+            } catch (error) {
+                console.error("Error al deshabilitar la cuenta:", error);
+                alert("Hubo un error al deshabilitar la cuenta. Inténtalo nuevamente.");
+            }
+        } else {
+            alert("No has iniciado sesión.");
+        }
+    }
 });
 
-// Botón de regresar
-document.getElementById('back-btn').addEventListener('click', function() {
-    window.location.href = '../profile/profile.html'; // Redirigir al perfil sin guardar cambios
-});

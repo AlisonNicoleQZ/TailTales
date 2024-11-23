@@ -6,20 +6,8 @@
     <title>Feed - TailTales</title>
 </head>
 <body>
-    <header>
-        <h1>Feed</h1>
-    </header>
+    <div id="header-container"></div> <!-- Contenedor para el header dinámico -->
     <div class="container">
-        <!-- Barra de navegación a la izquierda -->
-        <nav class="nav-bar">
-            <button id="feed-btn">Feed</button>
-            <button id="search-btn">Search</button>
-            <button id="notifications-btn">Notifications</button>
-            <button id="follow-btn">Follow</button>
-            <button id="new-post-btn">New Post</button>
-            <button id="profile-btn">Profile</button>
-        </nav>
-
         <!-- Feed principal -->
         <div class="main-feed">
             <!-- Estados de amigos -->
@@ -40,6 +28,12 @@
         </div>
     </div>
 
+    <script type="module">
+        import { loadHeader } from '../headerLoader.js';
+        loadHeader("Feed");
+    </script>
     <script type="module" src="feed.js"></script>
 </body>
 </html>
+
+
