@@ -8,7 +8,7 @@ import reportWebVitals from './reportWebVitals';
 import {Perfil} from './profile/Perfil';
 import {OtherProfile} from './follow/OtherProfile.jsx';
 import { EditarPerfil } from './profile/EditarPerfil';
-import  {Feed} from './feed/Feed.jsx';
+import { Feed } from './feed/Feed.jsx';
 import { Follow } from './follow/Follow.jsx';
 import { PublicFollow } from './follow/PublicFollow.jsx';
 

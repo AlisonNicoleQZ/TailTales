@@ -12,7 +12,17 @@ export const Landing = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     const [isAnimating, setIsAnimating] = useState(true);
     const images = [imagen1, imagen2, imagen3, imagen4];
+
+    const navigate = useNavigate();
   
+    // Agregamos una imagen "clonada" de la primera al final para hacer un bucle
+    const totalImages = [...images, images[0]];
+
+  // Función para redirigir a la página de registro
+    const handleRegisterClick = () => {
+      navigate('/login-register?register=true');
+    };
+
     // Agregamos una imagen "clonada" de la primera al final para hacer un bucle
     const totalImages = [...images, images[0]];
   
@@ -69,7 +79,7 @@ export const Landing = () => {
       placerat consectetur, ipsum ligula<br/>  
       rutrum felis, sed blandit sem eros non<br/> 
       metus.</p>
-      <button className={styles.botonRegistro}><a className='anchor' href='/login-register'>Registra tu mascota</a></button>
+      <button className={styles.botonRegistro}><a className='anchor' onClick={handleRegisterClick}>Registra tu mascota</a></button>
       <p className={styles.login}>¿Ya tienes una cuenta? <br/>
       <a className='anchor' href='/login-register'>Inicia Sesión</a></p>
     </>
