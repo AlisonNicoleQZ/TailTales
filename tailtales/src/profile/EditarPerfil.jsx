@@ -81,13 +81,17 @@ export const EditarPerfil = () => {
       }
   });
   
+  const [name, setName] = useState("");
+
+  const handleNameChange = (event) => setName(event.target.value);
+
   // Función para cargar el perfil del usuario
   async function loadUserProfile(uid) {
       try {
           const userDoc = await getDoc(doc(db, "users", uid));
           if (userDoc.exists()) {
               const userData = userDoc.data();
-              document.getElementById('name').value = userData.name;
+              setName(userData.name);
               setSpecies(userData.species);
               document.getElementById('species').value = userData.species;
               setBreedsList(breeds[userData.species] || []); // Cargar razas según la especie
@@ -136,7 +140,7 @@ export const EditarPerfil = () => {
       const privacySettings = document.getElementById('privacySettings').value;
   
       try {
-          const fileInput = document.getElementById('profile-pic-input');
+        {/**          const fileInput = document.getElementById('profile-pic-input');
           let profilePicUrl = document.getElementById('profile-pic').src; // Usar la URL existente por defecto
   
           if (fileInput.files.length > 0) {
@@ -145,7 +149,8 @@ export const EditarPerfil = () => {
               await uploadBytes(storageRef, file);
               profilePicUrl = await getDownloadURL(storageRef); // Obtener URL de la nueva imagen
           }
-  
+   */}
+
           // Actualizar los datos del perfil
           await updateDoc(doc(db, "users", user.uid), {
               name,
@@ -156,7 +161,7 @@ export const EditarPerfil = () => {
               location,
               bio,
               privacySettings: parseInt(privacySettings),
-              profilePic: profilePicUrl
+           //   profilePic: profilePicUrl
           });
           
           alert("Perfil actualizado exitosamente.");
@@ -210,13 +215,19 @@ export const EditarPerfil = () => {
           <a href='/perfil'><img src={perfil} className={styles.perfil} alt="Perfil" /></a>
         </div>
 
-        <form id="edit-profile-form">
+        <form id="edit-profile-form" onSubmit={handleActualizarPerfil}>
           <img src={fotoDePerfil} className={styles.fotoPerfil} alt="Foto de perfil" />
           <input type="file" id="profile-pic-input" accept="image/*" className={styles.inputFile}/>
           <div className={styles.editarInfo}>
             <div>
-              <label htmlFor="name">Nombre: </label>
-              <input type="text" id="name" required/>
+            <label htmlFor="name">Nombre:</label>
+        <input
+          type="text"
+          id="name"
+          value={name}
+          onChange={handleNameChange}
+          required
+        />
             </div>
             <div className={styles.textBox}>
         <label htmlFor="species">Especie: </label>
@@ -268,7 +279,7 @@ export const EditarPerfil = () => {
                 </select>
             </div>
           </div>
-          <button className={styles.btnActualizar} type="submit" onSubmit={handleActualizarPerfil}>Actualizar Perfil</button>
+          <button className={styles.btnActualizar} type="submit">Actualizar Perfil</button>
         </form>
         <p>
             <a href="#" id="change-password-link">Cambiar contraseña</a>
