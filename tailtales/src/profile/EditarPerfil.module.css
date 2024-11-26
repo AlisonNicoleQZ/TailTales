@@ -110,3 +110,14 @@ input, textarea{
     border:none;
     color: #fff;
 }
+
+.privacity{
+    margin-top: 3rem;
+}
+
+.disableAccount{
+    color: red; 
+    cursor: pointer;
+    margin-top: -3rem;
+    margin-left: 35rem;
+}

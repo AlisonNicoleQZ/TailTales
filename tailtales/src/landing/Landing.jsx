@@ -14,10 +14,7 @@ export const Landing = () => {
     const images = [imagen1, imagen2, imagen3, imagen4];
 
     const navigate = useNavigate();
-  
-    // Agregamos una imagen "clonada" de la primera al final para hacer un bucle
-    const totalImages = [...images, images[0]];
-
+    
   // Función para redirigir a la página de registro
     const handleRegisterClick = () => {
       navigate('/login-register?register=true');
