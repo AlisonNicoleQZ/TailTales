@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Mascota</title>
+    <style>
+        /* Estilos básicos del perfil */
+        .profile-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .profile-container img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+        }
+        .profile-container h2 {
+            margin: 10px 0;
+        }
+        .profile-container p {
+            font-size: 16px;
+            color: #555;
+        }
+        /* Estilos para la cuadrícula de publicaciones */
+        #posts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .post-item {
+            position: relative;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column; /* Organiza la imagen y descripción en columna */
+            align-items: center;
+            justify-content: center;
+        }
+        .carousel-preview {
+            width: 100%;
+        }
+        .carousel-preview img {
+            width: 100%;
+            height: auto;
+            cursor: pointer;
+        }
+        /* Estilos para el modal de visualización de publicación */
+        #view-post-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        #view-post-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+        }
+        /* Controles del carrusel */
+        .carousel-control {
+            position: absolute;
+            top: 50%;
+            font-size: 2em;
+            color: black;
+            cursor: pointer;
+            user-select: none;
+        }
+        .prev {
+            left: 10px;
+        }
+        .next {
+            right: 10px;
+        }
+        .friends-info {
+        margin-top: 10px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+    #friends-count:hover {
+        text-decoration: none;
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Perfil de Mascota</h1>
+        <button id="back-btn">Regresar</button>
+    </header>
+    <main>
+        <div class="profile-container">
+            <img id="profile-photo" src="" alt="Foto de Mascota">
+            <div class="friends-info">
+                <span id="friends-count" style="cursor: pointer; color: blue; text-decoration: underline;">Friends: 0</span>
+            </div>
+            <h2 id="profile-name">Nombre de Mascota</h2>
+            <p id="profile-username" style="color: #555; font-size: 14px;">@username</p>
+            <p id="profile-bio">Biografía no disponible</p>
+            <p id="profile-location">Ubicación no disponible</p>
+            <p id="profile-age">Edad no disponible</p>
+            <div class="action-buttons">
+                <button id="follow-btn">Follow</button>
+                <button id="block-btn">Block</button>
+            </div>
+            
+        </div>
+        <!-- Sección de publicaciones en cuadrícula -->
+        <section id="posts-section"></section>
+
+        <!-- Modal para ver una publicación -->
+        <div id="view-post-modal">
+            <div id="view-post-content">
+                <span class="carousel-control prev" id="prev">&lt;</span>
+                <img id="view-post-image" src="" alt="Imagen de la publicación">
+                <span class="carousel-control next" id="next">&gt;</span>
+                <p id="view-post-description"></p>
+                <button id="close-view-modal">Cerrar</button>
+            </div>
+        </div>
+    </main>
+    <script type="module" src="otherProfile.js"></script>
+</body>
+</html>

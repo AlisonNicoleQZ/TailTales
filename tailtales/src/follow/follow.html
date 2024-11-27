@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Follow - TailTales</title>
+    <style>
+        /* Estilos básicos para los perfiles */
+        .profile-card {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        .profile-card img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .profile-card h3 {
+            margin: 0;
+        }
+        .pending-container, .recomendados-container {
+            margin-top: 20px;
+        }
+        .pending-card button {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-container"></div> <!-- Contenedor para cargar el header dinámico -->
+    <main>
+        <section id="pending-list" class="pending-container">
+            <h2>Pending</h2>
+            <div id="pending-requests"></div>
+        </section>
+        <section id="users-list" class="recomendados-container">
+            <h2>Recomendados</h2>
+            <div id="profiles-container"></div>
+        </section>
+    </main>
+    <script type="module">
+        import { loadHeader } from '../headerLoader.js';
+        loadHeader("Follow"); // Carga el encabezado con el título "Follow"
+    </script>
+    <script type="module" src="follow.js"></script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario - TailTales</title>
+    <style>
+        /* Estilos básicos para mostrar publicaciones en cuadrícula */
+        #posts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .post-item {
+            position: relative;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .post-item img {
+            width: 100%;
+            height: auto;
+            cursor: pointer;
+        }
+        .post-item p {
+            margin: 5px;
+            font-size: 0.9em;
+        }
+        .post-item button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px;
+            font-size: 0.8em;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .post-item .edit-btn {
+            top: 5px;
+            left: 5px;
+            background-color: blue;
+            color: white;
+        }
+        /* Estilos para el modal de visualización de publicación */
+        #view-post-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        #view-post-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+        }
+        /* Controles del carrusel */
+        .carousel-control {
+            position: absolute;
+            top: 50%;
+            font-size: 2em;
+            color: black;
+            cursor: pointer;
+            user-select: none;
+        }
+        .prev {
+            left: 10px;
+        }
+        .next {
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-container"></div>
+    <main>
+        <section class="profile-section">
+            <img id="profile-pic" src="../img/default-profile-image.jpg" alt="Foto de perfil" class="profile-img">
+            <h2 id="profile-name"></h2>
+            <p><strong></strong> <span id="profile-username"></span></p>
+            <p id="friends-info" style="cursor: pointer; color: blue; text-decoration: underline;">Friends: 0</p>
+            <button id="edit-profile-btn">Edit Profile</button> 
+            <p><strong>Especie:</strong> <span id="profile-species"></span></p>
+            <p><strong>Raza:</strong> <span id="profile-breed"></span></p>
+            <p><strong>Edad:</strong> <span id="profile-age"></span></p>
+            <p><strong>Ubicación:</strong> <span id="profile-location"></span></p>
+            <p><strong>Biografía:</strong> <span id="profile-bio"></span></p>
+            <button id="new-post-btn">New Post</button>
+        </section>
+
+        <!-- Modal para crear o editar una publicación -->
+        <div id="new-post-modal" style="display:none;">
+            <div>
+                <h2 id="post-modal-title">Nueva Publicación</h2>
+                <textarea id="post-description" placeholder="Escribe una descripción (opcional)"></textarea>
+                <div id="media-urls-container"></div>
+                <input type="text" id="post-media-url" placeholder="Ingresa la URL de la imagen">
+                <button id="add-media-url">+ Agregar otra imagen</button>
+                <button id="publish-post">Publicar</button>
+                <button id="close-modal">Cancelar</button>
+            </div>
+        </div>
+
+        <!-- Modal para ver una publicación -->
+        <div id="view-post-modal">
+            <div id="view-post-content">
+                <span class="carousel-control prev" id="prev">&lt;</span>
+                <img id="view-post-image" src="" alt="Imagen de la publicación">
+                <span class="carousel-control next" id="next">&gt;</span>
+                <p id="view-post-description"></p>
+                <button id="close-view-modal">Cerrar</button>
+            </div>
+        </div>
+
+        <!-- Contenedor para publicaciones -->
+        <section id="posts-section"></section>
+    </main>
+    <script type="module">
+        import { loadHeader } from '../headerLoader.js';
+        loadHeader("Perfil de la Mascota");
+    </script>
+    <script type="module" src="profile.js"></script>
+</body>
+</html>
