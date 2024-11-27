@@ -183,7 +183,6 @@ export const EditarPerfil = () => {
           <img src={fotoDePerfil} className={styles.fotoPerfil} alt="Foto de perfil" />
           <input type="file" id="profile-pic-input" accept="image/*" className={styles.inputFile}/>
           <div className={styles.editarInfo}>
-            <div>
             <label htmlFor="name">Nombre:</label>
         <input
           type="text"
@@ -192,7 +191,6 @@ export const EditarPerfil = () => {
           onChange={(e) => setProfile({ ...profile, name: e.target.value })}
           required
         />
-            </div>
             <div className={styles.textBox}>
         <label htmlFor="species">Especie: </label>
         <select id="species" value={species} onChange={handleSpeciesChange} required>
@@ -202,8 +200,8 @@ export const EditarPerfil = () => {
           <option value="Perro">Perro</option>
           <option value="Gato">Gato</option>
         </select>
-      </div>
-      <div className={styles.textBox}>
+            </div>
+        <div className={styles.textBox}>
         <label htmlFor="breed">Raza: </label>
         <select value={profile.breed}
           onChange={(e) => setProfile({ ...profile, breed: e.target.value })} required>
@@ -214,7 +212,7 @@ export const EditarPerfil = () => {
             </option>
           ))}
         </select>
-      </div>
+        </div>
             <div className={styles.textBox}>
                 <label htmlFor="age">Edad: </label>
                 <input type="number" id="age"
@@ -258,10 +256,10 @@ export const EditarPerfil = () => {
           <button className={styles.btnActualizar} type="submit">Actualizar Perfil</button>
         </form>
         <p>
-            <a href="#" id="change-password-link" onClick={handlePasswordChange}>Cambiar contraseña</a>
+            <a href="#" id="change-password-link" className={styles.cambiarContrasenia} onClick={handlePasswordChange}>Cambiar contraseña</a>
         </p>
         <p id="disable-account-link" className={styles.disableAccount} onClick={handleDeshabilitarPerfil}>Deshabilitar cuenta</p>
-  <div id="auth-provider-message"></div>
+        <div div id="auth-provider-message"></div>
       </main>
     </>
   );

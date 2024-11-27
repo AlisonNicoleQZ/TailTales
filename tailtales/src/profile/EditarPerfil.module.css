@@ -99,7 +99,7 @@ input, textarea{
 }
 
 .btnActualizar{
-    margin-top: 37rem;
+    margin-top: 40rem;
     margin-left: 36rem;
     margin-bottom: 1rem;
     font-weight: 400;
@@ -111,13 +111,17 @@ input, textarea{
     color: #fff;
 }
 
-.privacity{
-    margin-top: 3rem;
+.cambiarContrasenia{
+    color: #000;
+    margin-top: -1rem;
+    position: absolute;
+    margin-left: 35rem;
 }
 
 .disableAccount{
     color: red; 
     cursor: pointer;
-    margin-top: -3rem;
+    margin-top: 1.5rem;
+    position: absolute;
     margin-left: 35rem;
 }
