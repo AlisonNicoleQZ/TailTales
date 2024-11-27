@@ -180,7 +180,7 @@ export const EditarPerfil = () => {
         </div>
 
         <form id="edit-profile-form" onSubmit={handleActualizarPerfil}>
-          <img src={fotoDePerfil} className={styles.fotoPerfil} alt="Foto de perfil" />
+          <img src={profile.profilePic} className={styles.fotoPerfil} alt="Foto de perfil" />
           <input type="file" id="profile-pic-input" accept="image/*" className={styles.inputFile}/>
           <div className={styles.editarInfo}>
             <label htmlFor="name">Nombre:</label>

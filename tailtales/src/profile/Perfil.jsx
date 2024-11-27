@@ -328,7 +328,7 @@ export const Perfil = () => {
           <a href='/publicar'><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
           <a href='/perfil'><img src={perfil} className={styles.perfil} alt="Perfil" /></a>
     </div>
-    <img src={fotoDePerfil} id='profile-pic' className={styles.fotoPerfil} alt='Foto de perfil'/>
+    <img id='profile-pic' className={styles.fotoPerfil} alt='Foto de perfil'/>
     <div className={styles.infoUser}>
     <h3 className={styles.username} id='profile-username'></h3>
     <h4 className={styles.name} id='profile-name'></h4>
