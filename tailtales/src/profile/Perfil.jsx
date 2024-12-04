@@ -39,6 +39,7 @@ export const Perfil = () => {
   const [currentEditPostId, setCurrentEditPostId] = useState(null);
   const [currentPost, setCurrentPost] = useState({});
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+  const [imageInputUrl, setImageInputUrl] = useState("");
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -88,16 +89,22 @@ export const Perfil = () => {
   };
 
   const handlePostSubmit = async () => {
+    const updatedMediaUrls = [...mediaUrls];
+    
+    if (imageInputUrl) {
+      updatedMediaUrls.push(imageInputUrl);
+    }
+  
     const postData = {
       petId: userUid,
       content: { text: currentPost.description || '' },
-      mediaUrls,
+      mediaUrls: updatedMediaUrls,
       createdAt: new Date(), // Cambiar a serverTimestamp si usas Firebase
       visibility: 1,
       likesCount: 0,
       sharesCount: 0,
     };
-
+  
     try {
       if (isEditing) {
         await updateDoc(doc(db, "posts", currentEditPostId), postData);
@@ -108,6 +115,7 @@ export const Perfil = () => {
       }
       handlePostModalClose();
       loadUserPosts(userUid);
+      setImageInputUrl(""); // Limpia el campo de entrada después de publicar
     } catch (error) {
       console.error("Error al publicar:", error);
     }
@@ -144,25 +152,28 @@ export const Perfil = () => {
         <button onClick={() => handlePostModalOpen()} className={styles.buttonPublicar}>New Post</button>
 
         {isPostModalOpen && (
-          <div>
+          <div className={styles.nuevaPublicacion}>
             <h2>{isEditing ? "Editar Publicación" : "Nueva Publicación"}</h2>
-            <textarea
+            <textarea className={styles.descripcion}
               placeholder="Escribe una descripción (opcional)"
               value={currentPost.description || ''}
               onChange={(e) => setCurrentPost({ ...currentPost, description: e.target.value })}
-            />
-            <button onClick={handlePostSubmit}>{isEditing ? "Guardar cambios" : "Publicar"}</button>
-            <button onClick={handlePostModalClose}>Cancelar</button>
+            /><br/>
+            <input className={styles.mediaUrl} type="text" placeholder="Ingresa la URL de la imagen"
+             value={imageInputUrl} 
+             onChange={(e) => setImageInputUrl(e.target.value)} />
+            <button className={styles.buttonSubir} onClick={handlePostSubmit}>{isEditing ? "Guardar cambios" : "Publicar"}</button>
+            <button className={styles.buttonCancelar} onClick={handlePostModalClose}>Cancelar</button>
           </div>
         )}
 
-        <section id="posts-section">
+        <section id="posts-section" className={styles.publicaciones}>
           {posts.map(post => (
-            <div key={post.id} className="post-item">
+            <div key={post.id} className={styles.publicacion}>
               <img src={post.mediaUrls[0]} alt="Post" onClick={() => handlePostModalOpen(post)} />
               <p>{post.content.text}</p>
-              <button onClick={() => handlePostModalOpen(post)}>Editar</button>
-              <button onClick={async () => {
+              <button className={styles.editarPostButton} onClick={() => handlePostModalOpen(post)}>Editar</button>
+              <button className={styles.eliminarPostButton} onClick={async () => {
                 await deleteDoc(doc(db, "posts", post.id));
                 alert("Publicación eliminada");
                 loadUserPosts(userUid);
