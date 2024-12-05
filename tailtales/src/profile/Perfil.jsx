@@ -144,9 +144,12 @@ export const Perfil = () => {
             <a href="/editar-perfil">Editar perfil</a>
           </button>
           <p className={styles.bio}>{userData.bio}</p>
+          <img src={apariencia} className={`${styles.icon} ${styles.aparienciaIcon}`}/>
           <p className={styles.especie}>{userData.species}</p>
           <p className={styles.raza}>{userData.breed}</p>
+          <img src={nacimiento} className={`${styles.icon} ${styles.nacimientoIcon}`}/>
           <p className={styles.nacimiento}>{userData.age} años</p>
+          <img src={ubicacion} className={`${styles.icon} ${styles.ubicacionIcon}`}/>
           <p className={styles.ubicacion}>{userData.location}</p>
         </div>
         <button onClick={() => handlePostModalOpen()} className={styles.buttonPublicar}>New Post</button>
