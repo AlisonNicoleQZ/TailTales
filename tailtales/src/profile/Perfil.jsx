@@ -123,6 +123,7 @@ export const Perfil = () => {
 
   return (
     <div>
+      <title>Perfil - @{userData.username}</title>
       <header>
         <a href="/feed"><img src={logo} className={styles.logo} alt="logo" /></a>
         <nav className={styles.menuNav}>
@@ -130,7 +131,7 @@ export const Perfil = () => {
           <a href="/buscar"><img src={buscar} className={styles.buscar} alt="Buscar" /></a>
           <a href="/notificaciones"><img src={notif} className={styles.notif} alt="Notificaciones" /></a>
           <a href="/solicitudes"><img src={amistades} className={styles.amistades} alt="Amistades y Seguimientos" /></a>
-          <a href="/publicar"><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
+          <a href="/perfil"><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
           <a href="/perfil"><img src={perfil} className={styles.perfil} alt="Perfil" /></a>
         </nav>
       </header>
