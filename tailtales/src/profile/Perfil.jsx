@@ -14,6 +14,7 @@ import ubicacion from '../img/ubicacion.svg';
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -40,6 +41,7 @@ export const Perfil = () => {
   const [currentPost, setCurrentPost] = useState({});
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [imageInputUrl, setImageInputUrl] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -89,23 +91,30 @@ export const Perfil = () => {
   };
 
   const handlePostSubmit = async () => {
-    const updatedMediaUrls = [...mediaUrls];
+    if (!userUid) return alert("Debes iniciar sesión para publicar.");
     
-    if (imageInputUrl) {
-      updatedMediaUrls.push(imageInputUrl);
-    }
-  
-    const postData = {
-      petId: userUid,
-      content: { text: currentPost.description || '' },
-      mediaUrls: updatedMediaUrls,
-      createdAt: new Date(), // Cambiar a serverTimestamp si usas Firebase
-      visibility: 1,
-      likesCount: 0,
-      sharesCount: 0,
-    };
+    const storage = getStorage();
+    const updatedMediaUrls = [...mediaUrls];
   
     try {
+      // Subir el archivo si se seleccionó uno
+      if (selectedFile) {
+        const fileRef = ref(storage, `posts/${userUid}/${Date.now()}_${selectedFile.name}`);
+        await uploadBytes(fileRef, selectedFile);
+        const fileUrl = await getDownloadURL(fileRef);
+        updatedMediaUrls.push(fileUrl);
+      }
+  
+      const postData = {
+        petId: userUid,
+        content: { text: currentPost.description || '' },
+        mediaUrls: updatedMediaUrls,
+        createdAt: new Date(),
+        visibility: 1,
+        likesCount: 0,
+        sharesCount: 0,
+      };
+  
       if (isEditing) {
         await updateDoc(doc(db, "posts", currentEditPostId), postData);
         alert("Publicación actualizada exitosamente.");
@@ -113,13 +122,17 @@ export const Perfil = () => {
         await addDoc(collection(db, "posts"), postData);
         alert("Publicación creada exitosamente.");
       }
+  
+      // Limpia el estado y cierra el modal
+      setSelectedFile(null);
+      setImageInputUrl(""); 
       handlePostModalClose();
       loadUserPosts(userUid);
-      setImageInputUrl(""); // Limpia el campo de entrada después de publicar
     } catch (error) {
       console.error("Error al publicar:", error);
+      alert("Hubo un error al subir la publicación.");
     }
-  };
+  };  
 
   return (
     <div>
@@ -163,9 +176,10 @@ export const Perfil = () => {
               value={currentPost.description || ''}
               onChange={(e) => setCurrentPost({ ...currentPost, description: e.target.value })}
             /><br/>
-            <input className={styles.mediaUrl} type="text" placeholder="Ingresa la URL de la imagen"
-             value={imageInputUrl} 
-             onChange={(e) => setImageInputUrl(e.target.value)} />
+            <input 
+            type="file" 
+            accept="image/*" 
+            onChange={(e) => setSelectedFile(e.target.files[0])} />
             <button className={styles.buttonSubir} onClick={handlePostSubmit}>{isEditing ? "Guardar cambios" : "Publicar"}</button>
             <button className={styles.buttonCancelar} onClick={handlePostModalClose}>Cancelar</button>
           </div>
