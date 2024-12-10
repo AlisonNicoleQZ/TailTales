@@ -10,6 +10,7 @@ import perfil from '../img/perfil.svg';
 import nacimiento from '../img/nacimiento.svg';
 import apariencia from '../img/especie-y-raza.svg';
 import ubicacion from '../img/ubicacion.svg';
+import ViewPostModal from "./ViewPostModal";
 
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
@@ -41,7 +42,7 @@ export const Perfil = () => {
   const [currentPost, setCurrentPost] = useState({});
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [imageInputUrl, setImageInputUrl] = useState("");
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -92,17 +93,19 @@ export const Perfil = () => {
 
   const handlePostSubmit = async () => {
     if (!userUid) return alert("Debes iniciar sesión para publicar.");
-    
+  
     const storage = getStorage();
     const updatedMediaUrls = [...mediaUrls];
   
     try {
-      // Subir el archivo si se seleccionó uno
-      if (selectedFile) {
-        const fileRef = ref(storage, `posts/${userUid}/${Date.now()}_${selectedFile.name}`);
-        await uploadBytes(fileRef, selectedFile);
-        const fileUrl = await getDownloadURL(fileRef);
-        updatedMediaUrls.push(fileUrl);
+      // Subir cada archivo seleccionado
+      for (const file of selectedFiles) {
+        if (file) {
+          const fileRef = ref(storage, `posts/${userUid}/${Date.now()}_${file.name}`);
+          await uploadBytes(fileRef, file);
+          const fileUrl = await getDownloadURL(fileRef);
+          updatedMediaUrls.push(fileUrl);
+        }
       }
   
       const postData = {
@@ -123,17 +126,26 @@ export const Perfil = () => {
         alert("Publicación creada exitosamente.");
       }
   
-      // Limpia el estado y cierra el modal
-      setSelectedFile(null);
-      setImageInputUrl(""); 
+      // Limpia los estados
+      setSelectedFiles([]);
       handlePostModalClose();
       loadUserPosts(userUid);
     } catch (error) {
       console.error("Error al publicar:", error);
       alert("Hubo un error al subir la publicación.");
     }
-  };  
+  };    
 
+  const addMediaInput = () => {
+    setSelectedFiles([...selectedFiles, null]);
+  };
+  
+  const handleFileChange = (e, index) => {
+    const files = [...selectedFiles];
+    files[index] = e.target.files[0];
+    setSelectedFiles(files);
+  };
+  
   return (
     <div>
       <title>Perfil - @{userData.username}</title>
@@ -170,16 +182,26 @@ export const Perfil = () => {
 
         {isPostModalOpen && (
           <div className={styles.nuevaPublicacion}>
-            <h2>{isEditing ? "Editar Publicación" : "Nueva Publicación"}</h2>
+            <h3>{isEditing ? "Editar Publicación" : "Nueva Publicación"}</h3>
             <textarea className={styles.descripcion}
               placeholder="Escribe una descripción (opcional)"
               value={currentPost.description || ''}
               onChange={(e) => setCurrentPost({ ...currentPost, description: e.target.value })}
             /><br/>
-            <input 
-            type="file" 
-            accept="image/*" 
-            onChange={(e) => setSelectedFile(e.target.files[0])} />
+            <div id="media-inputs">
+  {selectedFiles.map((file, index) => (
+    <div key={index}>
+      <input 
+        type="file" 
+        accept="image/*"  className={styles.inputFile}
+        onChange={(e) => handleFileChange(e, index)} 
+      />
+    </div>
+  ))}
+</div>
+<button id="add-media-url" className={styles.addMedia} onClick={() => addMediaInput()}>
+  + Agregar otra imagen
+</button>
             <button className={styles.buttonSubir} onClick={handlePostSubmit}>{isEditing ? "Guardar cambios" : "Publicar"}</button>
             <button className={styles.buttonCancelar} onClick={handlePostModalClose}>Cancelar</button>
           </div>
@@ -188,7 +210,9 @@ export const Perfil = () => {
         <section id="posts-section" className={styles.publicaciones}>
           {posts.map(post => (
             <div key={post.id} className={styles.publicacion}>
-              <img src={post.mediaUrls[0]} alt="Post" onClick={() => handlePostModalOpen(post)} />
+              <img src={post.mediaUrls[0]}
+              alt="Post"
+              onClick={() => handleViewPost(post)} />
               <p>{post.content.text}</p>
               <button className={styles.editarPostButton} onClick={() => handlePostModalOpen(post)}>Editar</button>
               <button className={styles.eliminarPostButton} onClick={async () => {
@@ -199,6 +223,7 @@ export const Perfil = () => {
             </div>
           ))}
         </section>
+        <ViewPostModal isOpen={isModalOpen} postData={selectedPost} onClose={closeModal} />
       </main>
     </div>
   );

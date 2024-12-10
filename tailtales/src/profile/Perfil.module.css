@@ -164,7 +164,7 @@ color: #fff;
 .publicaciones{
     position: absolute;
     margin-left: 15rem;
-    margin-top: 19rem;
+    margin-top: 22rem;
     margin-bottom: 1rem;
     display: flex;
     justify-content: space-around; /* Espacio alrededor de cada imagen */
@@ -180,6 +180,7 @@ color: #fff;
 }
 
 .descripcion{
+    margin-top: -1rem;
     padding: 7px 4px;
 }
 
@@ -187,9 +188,13 @@ color: #fff;
     margin-top: 0.75rem;
 }
 
+.inputFile, .addMedia{
+    margin-top: 0.5rem;
+}
+
 .buttonPublicar{
     position: absolute;
-    margin-top: 5rem;
+    margin-top: 2.5rem;
     margin-left: 53rem;
     font-weight: 400;
     font-style: normal;
@@ -214,6 +219,10 @@ color: #fff;
 
 .nuevaPublicacion{
     position: absolute;
-    margin-top: 7rem;
+    margin-top: 4.5rem;
     margin-left: 53rem;
+}
+
+.nuevaPublicacion h3{
+    margin-top: 0.5rem;
 }
