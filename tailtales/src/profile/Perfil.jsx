@@ -43,6 +43,7 @@ export const Perfil = () => {
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [imageInputUrl, setImageInputUrl] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -146,6 +147,16 @@ export const Perfil = () => {
     setSelectedFiles(files);
   };
   
+  const openModal = (post) => {
+    setCurrentPost(post);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setCurrentPost(null);
+  };
+
   return (
     <div>
       <title>Perfil - @{userData.username}</title>
@@ -212,7 +223,7 @@ export const Perfil = () => {
             <div key={post.id} className={styles.publicacion}>
               <img src={post.mediaUrls[0]}
               alt="Post"
-              onClick={() => handleViewPost(post)} />
+              onClick={() => openModal(post)} />
               <p>{post.content.text}</p>
               <button className={styles.editarPostButton} onClick={() => handlePostModalOpen(post)}>Editar</button>
               <button className={styles.eliminarPostButton} onClick={async () => {
@@ -223,7 +234,7 @@ export const Perfil = () => {
             </div>
           ))}
         </section>
-        <ViewPostModal isOpen={isModalOpen} postData={selectedPost} onClose={closeModal} />
+        <ViewPostModal isOpen={isModalOpen} postData={currentPost} onClose={closeModal} />
       </main>
     </div>
   );
