@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styles from './Perfil.module.css';
 
 const ViewPostModal = ({ isOpen, postData, onClose }) => {
   const [currentImages, setCurrentImages] = useState([]);
@@ -34,10 +35,10 @@ const ViewPostModal = ({ isOpen, postData, onClose }) => {
   if (!isOpen || !postData) return null;
 
   return (
-    <div id="view-post-modal" style={{ display: isOpen ? "flex" : "none" }}>
-      <div id="view-post-content">
+    <div id="view-post-modal" className={styles.viewPostModal} style={{ display: isOpen ? "flex" : "none" }}>
+      <div id="view-post-content" className={styles.viewPostContent}>
         <span
-          className="carousel-control prev"
+          className={`${styles.carouselControl} ${styles.prev}`}
           id="prev"
           style={{ display: currentImages.length > 1 ? "block" : "none" }}
           onClick={handlePrev}
@@ -50,7 +51,7 @@ const ViewPostModal = ({ isOpen, postData, onClose }) => {
           alt="Imagen de la publicación"
         />
         <span
-          className="carousel-control next"
+          className={`${styles.carouselControl} ${styles.next}`}
           id="next"
           style={{ display: currentImages.length > 1 ? "block" : "none" }}
           onClick={handleNext}
