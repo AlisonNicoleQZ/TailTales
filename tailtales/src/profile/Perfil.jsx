@@ -35,6 +35,7 @@ const db = getFirestore(app);
 export const Perfil = () => {
   const [userUid, setUserUid] = useState(null);
   const [userData, setUserData] = useState({});
+  const [numFriends, setNumFriends] = useState(0);
   const [mediaUrls, setMediaUrls] = useState([]);
   const [posts, setPosts] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
@@ -50,6 +51,7 @@ export const Perfil = () => {
       if (user) {
         setUserUid(user.uid);
         loadUserProfile(user.uid);
+        loadFriendsInfo(user.uid);
         loadUserPosts(user.uid);
       } else {
         alert("Debe iniciar sesión para ver su perfil.");
@@ -59,6 +61,22 @@ export const Perfil = () => {
     return () => unsubscribe();
   }, []);
 
+  const loadFriendsInfo = async (uid) => {
+    try {
+      const friendsListDoc = await getDoc(doc(db, "friendsList", uid));
+
+      if (friendsListDoc.exists()) {
+        const friendsData = friendsListDoc.data();
+        const friendsCount = friendsData.friends ? friendsData.friends.length : 0;
+        setNumFriends(friendsCount);
+      } else {
+        setNumFriends(0);
+      }
+    } catch (error) {
+      console.error("Error al cargar la lista de amigos:", error);
+    }
+  };
+  
   const loadUserProfile = async (uid) => {
     const userDoc = await getDoc(doc(db, "users", uid));
     if (userDoc.exists()) {
@@ -180,6 +198,7 @@ export const Perfil = () => {
           <button className={styles.botonEditarPerfil}>
             <a href="/editar-perfil">Editar perfil</a>
           </button>
+          <p id="friends-info" href="/amistades" className={styles.friends}> {numFriends} amigos</p>
           <p className={styles.bio}>{userData.bio}</p>
           <img src={apariencia} className={`${styles.icon} ${styles.aparienciaIcon}`}/>
           <p className={styles.especie}>{userData.species}</p>

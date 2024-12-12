@@ -70,7 +70,7 @@
 .name{
     position: absolute;
     margin-left: 26rem;
-    margin-top: 4.7rem;
+    margin-top: 6.2rem;
     font-weight: 600;
 }
 
@@ -92,9 +92,15 @@ color: #fff;
     text-decoration: none;
 }
 
+.friends{
+    position: absolute;
+    margin-left: 26rem;
+    margin-top: 4.5rem;
+}
+
 .bio {
     margin-left: 26rem;
-    margin-top: 6.5rem;
+    margin-top: 8rem;
     position: absolute;
 }
 
@@ -109,55 +115,43 @@ color: #fff;
 
 .aparienciaIcon  {
     margin-left: 23.9rem;
-    margin-top: 8.8rem;
+    margin-top: 10.3rem;
     position: absolute;
 }
 
 .especie {
     margin-left: 26rem;
-    margin-top: 8.7rem;
+    margin-top: 10.2rem;
     position: absolute;
 }
 
 .raza {
-    margin-left: 28.5rem;
-    margin-top: 8.7rem;
+    margin-left: 28.7rem;
+    margin-top: 10.2rem;
     position: absolute;
 }
 
 .nacimientoIcon{
     margin-left: 33.1rem;
-    margin-top: 8.8rem;
+    margin-top: 10.3rem;
     position: absolute;
 }
 
 .nacimiento {
     margin-left: 35.2rem;
-    margin-top: 8.7rem;
+    margin-top: 10.2rem;
     position: absolute;
 }
 
 .ubicacionIcon{
     position: absolute;
     margin-left: 23.9rem;
-    margin-top: 11.6rem;
+    margin-top: 13.1rem;
 }
 
 .ubicacion{
     margin-left: 26rem;
-    margin-top: 11.5rem;
-    position: absolute;
-}
-
-.calendarioIcon{
-    margin-left: 23.9rem;
-    margin-top: 14.4rem;
-    position: absolute;
-}
-
-.union{
-    margin-left: 26rem;
-    margin-top: 14.3rem;
+    margin-top: 13rem;
     position: absolute;
 }
 
