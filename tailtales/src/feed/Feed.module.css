@@ -86,6 +86,7 @@ body::-webkit-scrollbar-thumb {
 
 .fotoPerfil{
     height: 5rem;
+    border-radius: 50rem;
 }
 
 .username{
@@ -134,6 +135,7 @@ body::-webkit-scrollbar-thumb {
 .fotoPost{
     height: 23rem;
     margin-top: 1rem;
+    width: 95%;
     margin-left: 1rem;
 }
 

@@ -8,25 +8,11 @@ import amistades from '../img/amistades.svg';
 import publicar from '../img/camara.svg';
 import perfil from '../img/perfil.svg';
 import fotoPerfil from '../img/profile-pic.png';
-import fotoPublicacion from '../img/publicacion_feed.png';
 import iconLike from '../img/paw-like.svg';
 import iconComentarios from '../img/icon-comentarios.svg';
-import {
-  initializeApp
-} from "firebase/app";
-import {
-  getAuth,
-  onAuthStateChanged
-} from "firebase/auth";
-import {
-  getFirestore,
-  collection,
-  doc,
-  getDoc,
-  query,
-  where,
-  getDocs
-} from "firebase/firestore";
+import {initializeApp} from "firebase/app";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
+import {getFirestore, collection, doc, getDoc, query, where, getDocs} from "firebase/firestore";
 export const Feed = () => {
 
 // Configuración de Firebase
@@ -46,6 +32,7 @@ const db = getFirestore(app);
 
 const [posts, setPosts] = useState([]);
 const [userUid, setUserUid] = useState(null);
+const [userData, setUserData] = useState({});
 
 useEffect(() => {
   const fetchPosts = async () => {
@@ -83,6 +70,7 @@ useEffect(() => {
   const unsubscribe = onAuthStateChanged(auth, (user) => {
     if (user) {
       setUserUid(user.uid);
+      loadUserProfile(user.uid);
     } else {
       alert("Debe iniciar sesión para ver el feed.");
       window.location.href = "/login-register";
@@ -123,6 +111,13 @@ const getFriendsList = async (userId) => {
   }
 };
 
+const loadUserProfile = async (uid) => {
+    const userDoc = await getDoc(doc(db, "users", uid));
+    if (userDoc.exists()) {
+      setUserData(userDoc.data());
+    }
+  };
+
   return (
     <>
     <title>Feed - TailTales</title>
@@ -151,7 +146,7 @@ const getFriendsList = async (userId) => {
                     <img className={styles.story} src={fotoPerfil} alt="Imagen de perfil"/><br/>
                     <p className={styles.storyUsername}>@hcocoa</p>
                     </div>
-                    {/**
+                    
                     <div className={styles.storyIndividual}>
                     <img className={styles.story} src={fotoPerfil} alt="Imagen de perfil"/><br/>
                     <p className={styles.storyUsername}>@hcocoa</p>
@@ -160,13 +155,12 @@ const getFriendsList = async (userId) => {
                     <img className={styles.story} src={fotoPerfil} alt="Imagen de perfil"/><br/>
                     <p className={styles.storyUsername}>@hcocoa</p>
                     </div>
-                   */}
                  </div>
             </section>
             <div className={styles.perfilContainer}>
             <a href='/perfil'>
-            <img className={styles.fotoPerfil} src={fotoPerfil} alt="Imagen de perfil"/>
-            <h3 className={styles.username}>@tigritothecat</h3>
+            <img className={styles.fotoPerfil} src={userData.profilePic || "../img/default-profile-image.jpg"} alt="Imagen de perfil"/>
+            <h3 className={styles.username}>@{userData.username}</h3>
             </a>
             </div>
             <section id="posts-feed" className={styles.postsFeed}>
