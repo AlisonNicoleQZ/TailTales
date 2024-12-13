@@ -1,0 +1,92 @@
+* {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+body::-webkit-scrollbar {
+  width: 10px;
+}
+
+body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #9f86c0;
+  border-radius: 6px;
+}
+
+.notificationsFeed {
+  margin-top: 6.5rem;
+  position: absolute;
+  margin-left: 15rem;
+}
+
+.titleNotifications {
+  font-size: 1.5rem;
+  color: #9f86c0;
+  font-weight: bold;
+}
+
+.notificationItem {
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.notificationItem p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #333;
+}
+
+.notificationItem span {
+  font-size: 0.75rem;
+  color: #666;
+  align-self: flex-end;
+}
+
+.notificationsContainer {
+  max-height: 24.5rem;
+  overflow-y: auto;
+  padding-right: 10rem;
+}
+
+.notificationsContainer::-webkit-scrollbar {
+  width: 0.5rem;
+  background: transparent;
+}
+
+.notificationsContainer:hover::-webkit-scrollbar {
+  background: #f1f1f1;
+}
+
+/* Media Query for 1920x1080 Screens */
+@media screen and (min-width: 1920px) {
+  .notificationsFeed {
+    margin-top: 12rem;
+    margin-left: 20rem;
+  }
+
+  .notificationItem {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .notificationItem p {
+    font-size: 1rem;
+  }
+
+  .notificationItem span {
+    font-size: 0.875rem;
+  }
+}
