@@ -14,7 +14,7 @@ export const Landing = () => {
     const images = [imagen1, imagen2, imagen3, imagen4];
 
     const navigate = useNavigate();
-    
+
   // Función para redirigir a la página de registro
     const handleRegisterClick = () => {
       navigate('/login-register?register=true');
