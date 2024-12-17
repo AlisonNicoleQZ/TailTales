@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from './Follow.module.css'
 import logo from '../img/logo.svg';
 import feed from '../img/casa.svg';
@@ -30,65 +32,48 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Selecciona el contenedor donde se mostrarán los perfiles
-const profilesContainer = document.getElementById('profiles-container');
+const [profiles, setProfiles] = useState([]);
+  const navigate = useNavigate();
 
-// Cargar los perfiles de la base de datos
-/**
-async function loadProfiles() {
-    const currentUser = auth.currentUser; // Obtén el usuario actual
-    const querySnapshot = await getDocs(collection(db, "users"));
-    profilesContainer.innerHTML = ''; // Limpia el contenedor antes de agregar nuevos perfiles
-    querySnapshot.forEach((doc) => {
+  useEffect(() => {
+    // Verificar si el usuario está autenticado
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        await loadProfiles(user.uid);
+      } else {
+        navigate("/login-register"); // Redirigir si no está autenticado
+      }
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
+
+  // Cargar perfiles de la base de datos
+  const loadProfiles = async (currentUserId) => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "users"));
+      const loadedProfiles = [];
+
+      querySnapshot.forEach((doc) => {
         const userData = doc.data();
 
-        // Excluir el perfil del usuario que está logueado
-        if (currentUser && doc.id === currentUser.uid) {
-            return; // Si el usuario actual es el mismo que el perfil, no lo agregues
+        // Excluir el perfil del usuario actual
+        if (doc.id !== currentUserId) {
+          loadedProfiles.push({
+            id: doc.id,
+            name: userData.name,
+            profilePic: userData.profilePic || "../img/default-profile-image.jpg",
+          });
         }
+      });
 
-        const profileCard = document.createElement('div');
-        profileCard.classList.add('profile-card');
-
-        // Crea la imagen de perfil
-        const profileImg = document.createElement('img');
-        profileImg.src = userData.profilePic || '../img/default-profile-image.jpg'; 
-
-        // Asegúrate de que la imagen se esté cargando correctamente
-        profileImg.onload = () => {
-            console.log('Imagen de perfil cargada:', profileImg.src);
-        };
-        profileImg.onerror = () => {
-            console.error('Error al cargar la imagen de perfil:', profileImg.src);
-            profileImg.src = '../img/default-profile-image.jpg'; // Cambia a la imagen por defecto si hay un error
-        };
-
-        // Crea el nombre de perfil
-        const profileName = document.createElement('h3');
-        profileName.textContent = userData.name;
-
-        // Añade el evento para redirigir al perfil de la otra mascota
-        profileCard.addEventListener('click', () => {
-            window.location.href = `otherProfile.html?userId=${doc.id}`; // Redirige a otherProfile.html con el userId en la URL
-        });
-
-        // Agrega la imagen y el nombre al contenedor del perfil
-        profileCard.appendChild(profileImg);
-        profileCard.appendChild(profileName);
-        profilesContainer.appendChild(profileCard);
-    });
-}
- */
-// Ejecuta la función para cargar los perfiles al iniciar la página
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-     //   loadProfiles(); // Solo carga los perfiles si hay un usuario autenticado
-    } else {
-        // Si no hay un usuario autenticado, puedes manejarlo aquí (por ejemplo, redirigir a la página de inicio de sesión)
-        window.location.href = '/login-register'; 
+      setProfiles(loadedProfiles);
+    } catch (error) {
+      console.error("Error al cargar los perfiles:", error);
     }
-});
-  return (
+  };
+
+return (
     <>
     <header>
     <title>Follow - TailTales</title>
@@ -104,7 +89,45 @@ onAuthStateChanged(auth, (user) => {
     </header>
     <main>
     <section>
-            <h2 className={styles.tituloSolicitudes}>Solicitudes de seguimiento</h2>
+    <div id="profiles-container" style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
+      {profiles.length === 0 ? (
+        <p>Cargando perfiles...</p>
+      ) : (
+        profiles.map((profile) => (
+          <div
+            key={profile.id}
+            className="profile-card"
+            style={{
+              border: "1px solid #ccc",
+              borderRadius: "8px",
+              padding: "16px",
+              textAlign: "center",
+              cursor: "pointer",
+            }}
+            onClick={() => navigate(`/otherProfile?userId=${profile.id}`)}
+          >
+            <img
+              src={profile.profilePic}
+              alt={`${profile.name}'s profile`}
+              style={{
+                width: "100px",
+                height: "100px",
+                borderRadius: "50%",
+                objectFit: "cover",
+                marginBottom: "8px",
+              }}
+              onError={(e) => {
+                e.target.onerror = null; // Evitar loops
+                e.target.src = "../img/default-profile-image.jpg";
+              }}
+            />
+            <h3>{profile.name}</h3>
+          </div>
+        ))
+      )}
+    </div>
+        {/** 
+          <h2 className={styles.tituloSolicitudes}>Solicitudes de seguimiento</h2>
             <div id="profiles-request-container">
                 <div className={styles.request}>
                     <img className={styles.profilePic} src={fotoPerfil} alt="Imagen de perfil"/>
@@ -121,6 +144,7 @@ onAuthStateChanged(auth, (user) => {
             <p className={styles.usernameRecomendado}>@nara0802</p><br/>
             <button className={styles.buttonSeguir}>Seguir</button>
             </div>
+        */}
         </section>
     </main>
     </>
