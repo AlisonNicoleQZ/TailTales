@@ -60,6 +60,7 @@ body::-webkit-scrollbar-thumb {
     margin-left: 30rem;
     margin-top: 2.6rem;
     position: absolute;
+    border-radius: 50rem;
     width: 10.5%;
     height: 8rem;
 }
@@ -88,7 +89,7 @@ button:hover{
     margin-top: 13rem;
 }
 
-input, textarea{
+input, textarea, select{
     border: solid 1px #000;
     border-radius: 5px;
     padding: 5px 3px;
@@ -99,7 +100,7 @@ input, textarea{
 }
 
 .btnActualizar{
-    margin-top: 37rem;
+    margin-top: 42rem;
     margin-left: 36rem;
     margin-bottom: 1rem;
     font-weight: 400;
@@ -109,4 +110,19 @@ input, textarea{
     border-radius: 5px;
     border:none;
     color: #fff;
+}
+
+.cambiarContrasenia{
+    color: #000;
+    margin-top: -1rem;
+    position: absolute;
+    margin-left: 35rem;
+}
+
+.disableAccount{
+    color: red; 
+    cursor: pointer;
+    margin-top: 1.5rem;
+    position: absolute;
+    margin-left: 35rem;
 }
