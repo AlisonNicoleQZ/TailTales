@@ -32,7 +32,136 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+  const [pendingRequests, setPendingRequests] = useState([]);
+  const [profiles, setProfiles] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUser(user);
+        loadPendingRequests(user.uid);
+        loadProfiles(user.uid);
+      } else {
+        window.location.href = "/login-register";
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const createNotification = async (petId, type, message, status = 2) => {
+    try {
+      const notificationData = {
+        petId,
+        type,
+        message,
+        status,
+        createdAt: new Date(),
+      };
+      await addDoc(collection(db, "notifications"), notificationData);
+    } catch (error) {
+      console.error("Error al crear la notificación:", error);
+    }
+  };
+
+  const acceptRequest = async (requestId, senderId) => {
+    if (!currentUser) return;
+
+    try {
+      // Actualizar estado de la solicitud
+      const requestDoc = doc(db, "friendRequest", requestId);
+      await updateDoc(requestDoc, { status: 2 });
+
+      const currentUserDoc = doc(db, "friendsList", currentUser.uid);
+      const senderUserDoc = doc(db, "friendsList", senderId);
+
+      const currentUserSnapshot = await getDoc(currentUserDoc);
+      const senderUserSnapshot = await getDoc(senderUserDoc);
+
+      if (currentUserSnapshot.exists()) {
+        await updateDoc(currentUserDoc, { friends: arrayUnion(senderId) });
+      } else {
+        await setDoc(currentUserDoc, { friends: [senderId], blocked: [] });
+      }
+
+      if (senderUserSnapshot.exists()) {
+        await updateDoc(senderUserDoc, { friends: arrayUnion(currentUser.uid) });
+      } else {
+        await setDoc(senderUserDoc, { friends: [currentUser.uid], blocked: [] });
+      }
+
+      alert("Has aceptado la follow request");
+      loadPendingRequests(currentUser.uid);
+    } catch (error) {
+      console.error("Error al aceptar la solicitud:", error);
+      alert("Ocurrió un error al aceptar la solicitud.");
+    }
+  };
+
+  const denyRequest = async (requestId) => {
+    try {
+      const requestDoc = doc(db, "friendRequest", requestId);
+      await updateDoc(requestDoc, { status: 3 });
+
+      alert("Has denegado la follow request");
+      loadPendingRequests(currentUser.uid);
+    } catch (error) {
+      console.error("Error al denegar la solicitud:", error);
+      alert("Ocurrió un error al denegar la solicitud.");
+    }
+  };
+
+  const loadPendingRequests = async (uid) => {
+    try {
+      const querySnapshot = await getDocs(
+        query(
+          collection(db, "friendRequest"),
+          where("receiverId", "==", uid),
+          where("status", "==", 1),
+          orderBy("createdAt", "desc")
+        )
+      );
+
+      const requests = await Promise.all(
+        querySnapshot.docs.map(async (docSnapshot) => {
+          const requestId = docSnapshot.id;
+          const requestData = docSnapshot.data();
+
+          const senderDoc = await getDoc(doc(db, "users", requestData.senderId));
+          if (senderDoc.exists()) {
+            return {
+              ...requestData,
+              id: requestId,
+              senderData: senderDoc.data(),
+            };
+          }
+          return null;
+        })
+      );
+
+      setPendingRequests(requests.filter((r) => r !== null));
+    } catch (error) {
+      console.error("Error al cargar solicitudes pendientes:", error);
+    }
+  };
+
+  const loadProfiles = async (uid) => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "users"));
+
+      const profiles = querySnapshot.docs
+        .filter((doc) => doc.id !== uid)
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+      setProfiles(profiles);
+    } catch (error) {
+      console.error("Error al cargar perfiles recomendados:", error);
+    }
+  };
 return (
     <>
     <header>
@@ -43,50 +172,51 @@ return (
           <a href='/buscar'><img src={buscar} className={styles.buscar} alt="Buscar" /></a>
           <a href='/notificaciones'><img src={notif} className={styles.notif} alt="Notificaciones" /></a>
           <a href='/solicitudes'><img src={amistades} className={styles.amistades} alt="Amistades y Seguimientos" /></a>
-          <a href='/publicar'><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
+          <a href='/perfil'><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
           <a href='/perfil'><img src={perfil} className={styles.perfil} alt="Perfil" /></a>
         </nav>
     </header>
     <main>
     <section>
     <h2 className={styles.tituloSolicitudes}>Solicitudes de seguimiento</h2>
-    <div id="profiles-container" style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
-      {profiles.length === 0 ? (
-        <p>Cargando perfiles...</p>
-      ) : (
-        profiles.map((profile) => (
+    <div id="profiles-request-container">
+        {pendingRequests.map((request) => (
+          <div key={request.id} className={styles.request}>
+            <img className={styles.profilePic}
+              src={
+                request.senderData.profilePic || "../img/default-profile-image.jpg"
+              }
+              alt="Profile"
+            />
+            <p>@{request.senderData.username} te mandó solicitud de seguimiento</p><br />
+            <button className={styles.buttonAceptar} onClick={() => acceptRequest(request.id, request.senderId)}>
+              Aceptar
+            </button>
+            <button className={styles.buttonRechazar} onClick={() => denyRequest(request.id)}>
+              Denegar
+            </button>
+          </div>
+        ))}
+      </div>
+      <h3 className={styles.tituloRecomendados}>Recomendados</h3>
+      <div>
+        {profiles.map((profile) => (
           <div
             key={profile.id}
             className="profile-card"
-            style={{
-              border: "1px solid #ccc",
-              borderRadius: "8px",
-              padding: "16px",
-              textAlign: "center",
-              cursor: "pointer",
-            }}
-            onClick={() => navigate(`/otherProfile?userId=${profile.id}`)}
+            onClick={() =>
+              (window.location.href = `otherProfile.html?userId=${profile.id}`)
+            }
           >
-            <img
-              src={profile.profilePic}
-              alt={`${profile.name}'s profile`}
-              style={{
-                width: "100px",
-                height: "100px",
-                borderRadius: "50%",
-                objectFit: "cover",
-                marginBottom: "8px",
-              }}
-              onError={(e) => {
-                e.target.onerror = null; // Evitar loops
-                e.target.src = "../img/default-profile-image.jpg";
-              }}
+            <img className={styles.profilePicRecomendados}
+              src={profile.profilePic || "../img/default-profile-image.jpg"}
+              alt="Profile"
             />
-            <h3>{profile.name}</h3>
+            <p className={styles.usernameRecomendado}>{profile.name}</p><br />
+            <button className={styles.buttonSeguir}>Seguir</button>
           </div>
-        ))
-      )}
-    </div>
+        ))}
+      </div>
         {/** 
           <h2 className={styles.tituloSolicitudes}>Solicitudes de seguimiento</h2>
             <div id="profiles-request-container">

@@ -28,7 +28,6 @@ root.render(
         <Route path="/solicitudes" element={<Follow/>} />
         <Route path="/solicitudes-publicas" element={<PublicFollow/>} />
         <Route path="/notificaciones" element={<PublicFollow/>} />
-
       </Routes>
     </Router>
   </React.StrictMode>

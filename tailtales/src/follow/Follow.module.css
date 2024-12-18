@@ -122,6 +122,7 @@ body::-webkit-scrollbar-thumb {
     height: 4rem;
     margin-left: 64rem;
     margin-top: 4.5rem;
+    border-radius: 50rem;
     position: absolute;
 }
 
