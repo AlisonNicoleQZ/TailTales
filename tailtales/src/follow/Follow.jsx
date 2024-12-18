@@ -32,46 +32,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const [profiles, setProfiles] = useState([]);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // Verificar si el usuario está autenticado
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        await loadProfiles(user.uid);
-      } else {
-        navigate("/login-register"); // Redirigir si no está autenticado
-      }
-    });
-
-    return () => unsubscribe();
-  }, [navigate]);
-
-  // Cargar perfiles de la base de datos
-  const loadProfiles = async (currentUserId) => {
-    try {
-      const querySnapshot = await getDocs(collection(db, "users"));
-      const loadedProfiles = [];
-
-      querySnapshot.forEach((doc) => {
-        const userData = doc.data();
-
-        // Excluir el perfil del usuario actual
-        if (doc.id !== currentUserId) {
-          loadedProfiles.push({
-            id: doc.id,
-            name: userData.name,
-            profilePic: userData.profilePic || "../img/default-profile-image.jpg",
-          });
-        }
-      });
-
-      setProfiles(loadedProfiles);
-    } catch (error) {
-      console.error("Error al cargar los perfiles:", error);
-    }
-  };
 
 return (
     <>
@@ -89,6 +49,7 @@ return (
     </header>
     <main>
     <section>
+    <h2 className={styles.tituloSolicitudes}>Solicitudes de seguimiento</h2>
     <div id="profiles-container" style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
       {profiles.length === 0 ? (
         <p>Cargando perfiles...</p>

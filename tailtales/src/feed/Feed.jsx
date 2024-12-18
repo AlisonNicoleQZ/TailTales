@@ -89,6 +89,7 @@ const loadUserPosts = async (uid) => {
     const postData = postDoc.data();
     postData.id = postDoc.id;
     loadedPosts.push(postData);
+    
   });
 
   return loadedPosts;

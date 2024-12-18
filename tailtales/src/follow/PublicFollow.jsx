@@ -8,15 +8,6 @@ import publicar from '../img/camara.svg';
 import perfil from '../img/perfil.svg';
 import fotoPerfil from '../img/profile-pic.png';
 import fotoAria from '../img/aria10.png';
-import fotoTaco from '../img/tacotaco.png';
-import fotoHallie from '../img/hcoca.png';
-import fotoGalleta from '../img/galletitas_felices.png';
-import fotoChispita from '../img/chispita34.png';
-import fotoPinkWaffle from '../img/pink_waffle.png';
-import fotoPelusacute from '../img/pelusacute.png';
-import fotoPublicacion from '../img/publicacion_feed.png';
-import iconLike from '../img/paw-like.svg';
-import iconComentarios from '../img/icon-comentarios.svg';
 
 export const PublicFollow = () => {
   return (

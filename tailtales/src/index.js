@@ -26,6 +26,7 @@ root.render(
         <Route path="/editar-perfil" element={<EditarPerfil/>} />
         <Route path="/feed" element={<Feed/>} />
         <Route path="/solicitudes" element={<Follow/>} />
+        <Route path="/solicitudes-publicas" element={<PublicFollow/>} />
         <Route path="/notificaciones" element={<PublicFollow/>} />
 
       </Routes>
