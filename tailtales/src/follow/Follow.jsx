@@ -8,14 +8,10 @@ import notif from '../img/campana.svg';
 import amistades from '../img/amistades.svg';
 import publicar from '../img/camara.svg';
 import perfil from '../img/perfil.svg';
-import fotoPerfil from '../img/profile-pic.png';
-import fotoPublicacion from '../img/publicacion_feed.png';
-import iconLike from '../img/paw-like.svg';
-import iconComentarios from '../img/icon-comentarios.svg';
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+import { getFirestore, collection, query, where, orderBy, getDocs, updateDoc,arrayUnion, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 export const Follow = () => {
 // Configuración de Firebase
 const firebaseConfig = {
@@ -35,6 +31,7 @@ const db = getFirestore(app);
   const [pendingRequests, setPendingRequests] = useState([]);
   const [profiles, setProfiles] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
+  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -112,7 +109,7 @@ const db = getFirestore(app);
     }
   };
 
-  const loadPendingRequests = async (uid) => {
+  const loadPendingRequests = async (uid) => { 
     try {
       const querySnapshot = await getDocs(
         query(
@@ -122,12 +119,12 @@ const db = getFirestore(app);
           orderBy("createdAt", "desc")
         )
       );
-
+  
       const requests = await Promise.all(
         querySnapshot.docs.map(async (docSnapshot) => {
           const requestId = docSnapshot.id;
           const requestData = docSnapshot.data();
-
+  
           const senderDoc = await getDoc(doc(db, "users", requestData.senderId));
           if (senderDoc.exists()) {
             return {
@@ -139,7 +136,7 @@ const db = getFirestore(app);
           return null;
         })
       );
-
+  
       setPendingRequests(requests.filter((r) => r !== null));
     } catch (error) {
       console.error("Error al cargar solicitudes pendientes:", error);
@@ -172,14 +169,38 @@ return (
           <a href='/buscar'><img src={buscar} className={styles.buscar} alt="Buscar" /></a>
           <a href='/notificaciones'><img src={notif} className={styles.notif} alt="Notificaciones" /></a>
           <a href='/solicitudes'><img src={amistades} className={styles.amistades} alt="Amistades y Seguimientos" /></a>
-          <a href='/perfil'><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
+          <a href='/stories'><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
           <a href='/perfil'><img src={perfil} className={styles.perfil} alt="Perfil" /></a>
         </nav>
     </header>
     <main>
     <section>
     <h2 className={styles.tituloSolicitudes}>Solicitudes de seguimiento</h2>
-    <div id="profiles-request-container">
+    {pendingRequests.length === 0 ? (
+      <p className={styles.solicitudesPendientes}>No tienes solicitudes pendientes</p>
+    ) : (
+      <div id="profiles-request-container">
+        {pendingRequests.map((request) => (
+          <div key={request.id} className={styles.request}>
+            <img className={styles.profilePic}
+              src={
+                request.senderData.profilePic || "../img/default-profile-image.jpg"
+              }
+              alt="Profile"
+            />
+            <p className={styles.textoSolicitud}>@{request.senderData.username} te mandó solicitud de seguimiento</p><br />
+            <button className={styles.buttonAceptar} onClick={() => acceptRequest(request.id, request.senderId)}>
+              Aceptar
+            </button>
+            <button className={styles.buttonRechazar} onClick={() => denyRequest(request.id)}>
+              Denegar
+            </button>
+          </div>
+        ))}
+      </div>
+    )}
+    {/**
+      <div id="profiles-request-container">
         {pendingRequests.map((request) => (
           <div key={request.id} className={styles.request}>
             <img className={styles.profilePic}
@@ -198,6 +219,7 @@ return (
           </div>
         ))}
       </div>
+     */}
       <h3 className={styles.tituloRecomendados}>Recomendados</h3>
       <div>
         {profiles.map((profile) => (
@@ -205,7 +227,7 @@ return (
             key={profile.id}
             className="profile-card"
             onClick={() =>
-              (window.location.href = `otherProfile.html?userId=${profile.id}`)
+              (window.location.href = `/perfil/:=${profile.id}`)
             }
           >
             <img className={styles.profilePicRecomendados}

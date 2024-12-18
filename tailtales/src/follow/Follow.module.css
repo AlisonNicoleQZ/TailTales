@@ -64,6 +64,12 @@ body::-webkit-scrollbar-thumb {
     font-size: 1.45rem;
 }
 
+.solicitudesPendientes{
+    position: absolute;
+    margin-left: 33.5rem;
+    margin-top: 8rem;
+}
+
 .request{
     margin-top: 2rem;
 }
@@ -72,6 +78,7 @@ body::-webkit-scrollbar-thumb {
     height: 6rem;
     margin-left: 26rem;
     margin-top: 8rem;
+    border-radius: 50rem;
     position: absolute;
 }
 
