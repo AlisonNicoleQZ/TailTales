@@ -73,6 +73,7 @@ body::-webkit-scrollbar-thumb {
     margin-left: 26rem;
     margin-top: 8rem;
     position: absolute;
+    border-radius: 50rem;
 }
 
 .textoSolicitud{
@@ -123,6 +124,7 @@ body::-webkit-scrollbar-thumb {
     margin-left: 64rem;
     margin-top: 4.5rem;
     position: absolute;
+    border-radius: 50rem;
 }
 
 .usernameRecomendado{
