@@ -85,7 +85,7 @@ export const Perfil = () => {
       setUserData(userDoc.data());
     }
   };
-
+  //si tocan el botón de like una vez, aumenta el contador en 1 pero si el mismo user lo vuelve a presionar, se quita ese like
   const loadUserPosts = async (uid) => {
     const postsQuery = query(collection(db, "posts"), where("petId", "==", uid));
     const postsSnapshot = await getDocs(postsQuery);
