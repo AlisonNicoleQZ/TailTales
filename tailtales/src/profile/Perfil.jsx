@@ -182,8 +182,8 @@ export const Perfil = () => {
       <title>Perfil - @{userData.username}</title>
       <header>
 
-        <NavBar/>
 
+        <NavBar/>
       </header>
 
       <main>

@@ -38,7 +38,6 @@ export const PublicFollow = () => {
       if (user) {
         setCurrentUser(user);
         loadRequests(user.uid)
-        beFriends(user.uid); // Amistad automática
         loadProfiles(user.uid);
       } else {
         window.location.href = "/login-register";
@@ -48,71 +47,76 @@ export const PublicFollow = () => {
     return () => unsubscribe();
   }, []);
 
-  const loadRequests = async (uid) => { 
-      try {
-        const querySnapshot = await getDocs(
-          query(
-            collection(db, "friendRequest"),
-            where("receiverId", "==", uid),
-            where("status", "==", 2),
-            orderBy("createdAt", "desc")
-          )
-        );
-    
-        const requests = await Promise.all(
-          querySnapshot.docs.map(async (docSnapshot) => {
-            const requestId = docSnapshot.id;
-            const requestData = docSnapshot.data();
-    
-            const senderDoc = await getDoc(doc(db, "users", requestData.senderId));
-            if (senderDoc.exists()) {
-              return {
-                ...requestData,
-                id: requestId,
-                senderData: senderDoc.data(),
-              };
-            }
-            return null;
-          })
-        );
-    
-        setPendingRequests(requests.filter((r) => r !== null));
-        beFriends(currentUser.uid);
-      } catch (error) {
-        console.error("Error al cargar solicitudes pendientes:", error);
-      }
-    };
+  const loadRequests = async (uid) => {
+    try {
+      // 1. Cargar solicitudes pendientes
+      const querySnapshot = await getDocs(
+        query(
+          collection(db, "friendRequest"),
+          where("receiverId", "==", uid),
+          where("status", "==", 2),
+          orderBy("createdAt", "desc")
+        )
+      );
   
-  // Función para enviar solicitudes
-  const beFriends = async (uid) => {
-    if (!currentUser) return;
-    
+      const pendingRequests = await Promise.all(
+        querySnapshot.docs.map(async (docSnapshot) => {
+          const requestId = docSnapshot.id;
+          const requestData = docSnapshot.data();
+  
+          const senderDoc = await getDoc(doc(db, "users", requestData.senderId));
+          if (senderDoc.exists()) {
+            return {
+              ...requestData,
+              id: requestId,
+              senderData: senderDoc.data(),
+            };
+          }
+          return null;
+        })
+      );
+  
+      const validRequests = pendingRequests.filter((r) => r !== null);
+  
+      // Actualizar estado de solicitudes pendientes
+      setPendingRequests(validRequests);
+  
+      // 2. Procesar solicitudes para hacerse amigos
+      for (const request of validRequests) {
         try {
+          const { id: requestId, senderId } = request;
+  
           // Actualizar estado de la solicitud
           const requestDoc = doc(db, "friendRequest", requestId);
           await updateDoc(requestDoc, { status: 2 });
-    
-          const currentUserDoc = doc(db, "friendsList", currentUser.uid);
+  
+          const currentUserDoc = doc(db, "friendsList", uid);
           const senderUserDoc = doc(db, "friendsList", senderId);
-    
+  
           const currentUserSnapshot = await getDoc(currentUserDoc);
           const senderUserSnapshot = await getDoc(senderUserDoc);
-    
+  
+          // Actualizar la lista de amigos del usuario actual
           if (currentUserSnapshot.exists()) {
             await updateDoc(currentUserDoc, { friends: arrayUnion(senderId) });
           } else {
             await setDoc(currentUserDoc, { friends: [senderId], blocked: [] });
           }
-    
+  
+          // Actualizar la lista de amigos del remitente
           if (senderUserSnapshot.exists()) {
-            await updateDoc(senderUserDoc, { friends: arrayUnion(currentUser.uid) });
+            await updateDoc(senderUserDoc, { friends: arrayUnion(uid) });
           } else {
-            await setDoc(senderUserDoc, { friends: [currentUser.uid], blocked: [] });
+            await setDoc(senderUserDoc, { friends: [uid], blocked: [] });
           }
         } catch (error) {
-          console.error("Error:", error);
+          console.error(`Error al procesar la solicitud de ${request.senderId}:`, error);
         }
-  };
+      }
+    } catch (error) {
+      console.error("Error al cargar o procesar solicitudes pendientes:", error);
+    }
+  };  
   
   const loadProfiles = async (uid) => {
       try {
