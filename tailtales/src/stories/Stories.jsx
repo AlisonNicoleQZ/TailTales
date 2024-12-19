@@ -103,28 +103,35 @@ export const Stories = () => {
     <>
     <title>Estados - TailTales</title>
 
-    <section id="stories-section">
-        <button id="new-story-btn">Nuevo Estado</button>
-        <div id="active-stories"></div>
-    </section>
+    <div>
+            <button onClick={createStory}>Nueva Historia</button>
+            <section id="stories-section">
+                <div id="active-stories">
+                    {stories.map((story) => (
+                        <div
+                            key={story.id}
+                            className="story-item"
+                            onClick={() => openModal(story)}
+                        >
+                            <img className="story-image" src={story.mediaUrl} alt="Estado" />
+                            <div className="story-description">
+                                <strong>{story.username}</strong>: {story.description}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </section>
 
-    <div id="story-modal" class="modal">
-        <div class="modal-content">
-            <div class="story-username" id="modal-username"></div> 
-            <div class="story-description" id="modal-description"></div>
-            <img id="modal-image" alt="Estado"/>
-            <iframe id="modal-spotify" width="300" height="80" frameborder="0" allow="encrypted-media"></iframe>
-            <button id="close-modal">Cerrar</button>
+            {modalData && (
+                <div id="story-modal" className="modal">
+                    <button id="close-modal" onClick={closeModal}>
+                        Cerrar
+                    </button>
+                    <img id="modal-image" src={modalData.mediaUrl} alt="Historia" />
+                    <p id="modal-description">{modalData.description}</p>
+                </div>
+            )}
         </div>
-    </div>
-
-    <template id="story-template">
-        <div class="story-item" data-media-url="" data-song-url="" data-username="" data-description="">
-            <img class="story-image" alt="Estado"/>
-            <div class="story-description"></div>
-            <div class="story-username"></div> 
-        </div>
-    </template>
     {/**
          <>
     <title>Estados - TailTales</title>
