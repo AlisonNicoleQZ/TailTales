@@ -47,21 +47,6 @@ const db = getFirestore(app);
     return () => unsubscribe();
   }, []);
 
-  const createNotification = async (petId, type, message, status = 2) => {
-    try {
-      const notificationData = {
-        petId,
-        type,
-        message,
-        status,
-        createdAt: new Date(),
-      };
-      await addDoc(collection(db, "notifications"), notificationData);
-    } catch (error) {
-      console.error("Error al crear la notificación:", error);
-    }
-  };
-
   const acceptRequest = async (requestId, senderId) => {
     if (!currentUser) return;
 

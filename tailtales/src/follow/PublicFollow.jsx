@@ -36,8 +36,9 @@ export const PublicFollow = () => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setCurrentUser(user);
+        loadRequests(user.uid)
+        beFriends(user.uid); // Amistad automática
         loadProfiles(user.uid);
-        sendFriendRequests(user.uid); // Enviar solicitudes automáticamente
       } else {
         window.location.href = "/login-register";
       }
@@ -45,54 +46,73 @@ export const PublicFollow = () => {
   
     return () => unsubscribe();
   }, []);
+
+  const loadRequests = async (uid) => { 
+      try {
+        const querySnapshot = await getDocs(
+          query(
+            collection(db, "friendRequest"),
+            where("receiverId", "==", uid),
+            where("status", "==", 2),
+            orderBy("createdAt", "desc")
+          )
+        );
+    
+        const requests = await Promise.all(
+          querySnapshot.docs.map(async (docSnapshot) => {
+            const requestId = docSnapshot.id;
+            const requestData = docSnapshot.data();
+    
+            const senderDoc = await getDoc(doc(db, "users", requestData.senderId));
+            if (senderDoc.exists()) {
+              return {
+                ...requestData,
+                id: requestId,
+                senderData: senderDoc.data(),
+              };
+            }
+            return null;
+          })
+        );
+    
+        setPendingRequests(requests.filter((r) => r !== null));
+        beFriends(currentUser.uid);
+      } catch (error) {
+        console.error("Error al cargar solicitudes pendientes:", error);
+      }
+    };
   
   // Función para enviar solicitudes
-  const sendFriendRequests = async (uid) => {
-    try {
-      // Consulta para obtener amigos con status = 2
-      const friendsQuery = query(
-        collection(db, "friendsList"),
-        where("status", "==", 2)
-      );
-      const querySnapshot = await getDocs(friendsQuery);
-  
-      const friendRequests = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-  
-      // Enviar notificaciones a cada amigo pendiente
-      for (const friend of friendRequests) {
-        await createNotification(
-          friend.petId,
-          "friend_request",
-          `Solicitud de amistad de ${currentUser.displayName || "un usuario"}`
-        );
-      }
-    } catch (error) {
-      console.error("Error al enviar solicitudes de amistad:", error);
-    }
+  const beFriends = async (uid) => {
+    if (!currentUser) return;
+    
+        try {
+          // Actualizar estado de la solicitud
+          const requestDoc = doc(db, "friendRequest", requestId);
+          await updateDoc(requestDoc, { status: 2 });
+    
+          const currentUserDoc = doc(db, "friendsList", currentUser.uid);
+          const senderUserDoc = doc(db, "friendsList", senderId);
+    
+          const currentUserSnapshot = await getDoc(currentUserDoc);
+          const senderUserSnapshot = await getDoc(senderUserDoc);
+    
+          if (currentUserSnapshot.exists()) {
+            await updateDoc(currentUserDoc, { friends: arrayUnion(senderId) });
+          } else {
+            await setDoc(currentUserDoc, { friends: [senderId], blocked: [] });
+          }
+    
+          if (senderUserSnapshot.exists()) {
+            await updateDoc(senderUserDoc, { friends: arrayUnion(currentUser.uid) });
+          } else {
+            await setDoc(senderUserDoc, { friends: [currentUser.uid], blocked: [] });
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
   };
   
-  // Crear notificaciones en la colección "notifications"
-  const createNotification = async (petId, type, message, status = 2) => {
-    try {
-      const notificationData = {
-        petId,
-        type,
-        message,
-        status,
-        createdAt: new Date(),
-      };
-  
-      // Agregar la notificación
-      await addDoc(collection(db, "notifications"), notificationData);
-      console.log("Notificación creada:", notificationData);
-    } catch (error) {
-      console.error("Error al crear la notificación:", error);
-    }
-  };  
-
   const loadProfiles = async (uid) => {
       try {
         const querySnapshot = await getDocs(collection(db, "users"));
@@ -137,7 +157,7 @@ export const PublicFollow = () => {
           ))}
         </ul>
       ) : (
-        <p>No tienes notificaciones pendientes.</p>
+        <p className={styles.solicitudesPendientes}>No tienes solicitudes pendientes</p>
       )}
             </div>
            {/**
