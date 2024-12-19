@@ -96,6 +96,8 @@ color: #fff;
     position: absolute;
     margin-left: 26rem;
     margin-top: 4.5rem;
+    color: #000;
+    font-weight: bold;
 }
 
 .bio {

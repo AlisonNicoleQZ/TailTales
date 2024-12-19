@@ -23,7 +23,12 @@ root.render(
         <Route path="/" element={<Landing/>} />
         <Route path="/login-register" element={<LoginRegister/>} />
         <Route path="/perfil" element={<Perfil/>} />
-        <Route path="/otro-perfil" element={<OtherProfile/>}  />
+        <Route path="/perfil/:userId" element={<OtherProfile/>} />
+        <Route path="/editar-perfil" element={<EditarPerfil/>} />
+        <Route path="/feed" element={<Feed/>} />
+        <Route path="/solicitudes" element={<Follow/>} />
+        <Route path="/solicitudes-publicas" element={<PublicFollow/>} />
+        <Route path="/notificaciones" element={<Notifications/>} />
         <Route path="/editar-perfil" element={<EditarPerfil/>} />
         <Route path="/feed" element={<Feed/>} />
         <Route path="/solicitudes" element={<Follow/>} />

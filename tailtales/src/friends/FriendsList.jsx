@@ -31,7 +31,7 @@ export const FriendsList = () => {
     const navigate = useNavigate();
 
     const userId = new URLSearchParams(location.search).get("userId");
-    const cameFromProfile = location.pathname === "/perfil";
+    const cameFromProfile = new URLSearchParams(location.search).get("fromProfile") === "true";
 
     useEffect(() => {
         if (userId) {
