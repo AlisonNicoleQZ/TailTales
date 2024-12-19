@@ -14,7 +14,7 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
 
 export const PublicFollow = () => {
   const [profiles, setProfiles] = useState([]);
-  const [notifications, setNotifications] = useState([]);
+  const [pendingRequests, setPendingRequests] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
 
   // Configuración de Firebase
@@ -147,19 +147,23 @@ export const PublicFollow = () => {
     <main>
     <section>
             <h2 className={styles.tituloSolicitudes}>Amistades</h2>
-            <div id="profiles-request-container">
-            {notifications.length > 0 ? (
-        <ul>
-          {notifications.map((notification) => (
-            <li key={notification.id}>
-              {notification.message} - {notification.createdAt.toDate().toLocaleString()}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className={styles.solicitudesPendientes}>No tienes solicitudes pendientes</p>
-      )}
-            </div>
+            {pendingRequests.length === 0 ? (
+                  <p className={styles.solicitudesPendientes}>No tienes solicitudes pendientes</p>
+                ) : (
+                  <div id="profiles-request-container">
+                    {pendingRequests.map((request) => (
+                      <div key={request.id} className={styles.request}>
+                        <img className={styles.profilePic}
+                          src={
+                            request.senderData.profilePic || "../img/default-profile-image.jpg"
+                          }
+                          alt="Profile"
+                        />
+                        <p className={styles.textoSolicitud}>@{request.senderData.username} te empezó a seguir</p><br />
+                      </div>
+                    ))}
+                  </div>
+                )}
            {/**
                        <div id="profiles-request-container">
                 <div className={styles.request}>
