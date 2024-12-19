@@ -166,6 +166,8 @@ function restrictAccess() {
     friendsCountElement.removeEventListener("click", () => {});
 }
 
+
+
 // Cargar publicaciones del usuario
 async function loadUserPosts(userId) {
     console.log("Cargando publicaciones para: " + userId);
@@ -263,7 +265,7 @@ document.getElementById("close-view-modal").addEventListener("click", () => {
 });
 
 // Función para crear una notificación
-async function createNotification(petId, type, message, status = 2) {
+async function createNotification(petId, type, message, status = 0) {
     try {
         const notificationData = {
             petId,
@@ -333,7 +335,7 @@ async function toggleFollow(userId) {
         }
 
         // Si privacySettings es 2, gestionar la relación directamente
-        if (privacySettings === 2) {
+        if (privacySettings === 0) {
             const isFriend =
                 currentUserSnapshot.exists() &&
                 currentUserSnapshot.data().friends &&
