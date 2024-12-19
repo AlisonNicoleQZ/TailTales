@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from './Follow.module.css'
 import logo from '../img/logo.svg';
 import feed from '../img/casa.svg';
@@ -6,14 +8,10 @@ import notif from '../img/campana.svg';
 import amistades from '../img/amistades.svg';
 import publicar from '../img/camara.svg';
 import perfil from '../img/perfil.svg';
-import fotoPerfil from '../img/profile-pic.png';
-import fotoPublicacion from '../img/publicacion_feed.png';
-import iconLike from '../img/paw-like.svg';
-import iconComentarios from '../img/icon-comentarios.svg';
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+import { getFirestore, collection, query, where, orderBy, getDocs, updateDoc,arrayUnion, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 export const Follow = () => {
 // Configuración de Firebase
 const firebaseConfig = {
@@ -30,65 +28,123 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Selecciona el contenedor donde se mostrarán los perfiles
-const profilesContainer = document.getElementById('profiles-container');
+  const [pendingRequests, setPendingRequests] = useState([]);
+  const [profiles, setProfiles] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
+  
 
-// Cargar los perfiles de la base de datos
-/**
-async function loadProfiles() {
-    const currentUser = auth.currentUser; // Obtén el usuario actual
-    const querySnapshot = await getDocs(collection(db, "users"));
-    profilesContainer.innerHTML = ''; // Limpia el contenedor antes de agregar nuevos perfiles
-    querySnapshot.forEach((doc) => {
-        const userData = doc.data();
-
-        // Excluir el perfil del usuario que está logueado
-        if (currentUser && doc.id === currentUser.uid) {
-            return; // Si el usuario actual es el mismo que el perfil, no lo agregues
-        }
-
-        const profileCard = document.createElement('div');
-        profileCard.classList.add('profile-card');
-
-        // Crea la imagen de perfil
-        const profileImg = document.createElement('img');
-        profileImg.src = userData.profilePic || '../img/default-profile-image.jpg'; 
-
-        // Asegúrate de que la imagen se esté cargando correctamente
-        profileImg.onload = () => {
-            console.log('Imagen de perfil cargada:', profileImg.src);
-        };
-        profileImg.onerror = () => {
-            console.error('Error al cargar la imagen de perfil:', profileImg.src);
-            profileImg.src = '../img/default-profile-image.jpg'; // Cambia a la imagen por defecto si hay un error
-        };
-
-        // Crea el nombre de perfil
-        const profileName = document.createElement('h3');
-        profileName.textContent = userData.name;
-
-        // Añade el evento para redirigir al perfil de la otra mascota
-        profileCard.addEventListener('click', () => {
-            window.location.href = `otherProfile.html?userId=${doc.id}`; // Redirige a otherProfile.html con el userId en la URL
-        });
-
-        // Agrega la imagen y el nombre al contenedor del perfil
-        profileCard.appendChild(profileImg);
-        profileCard.appendChild(profileName);
-        profilesContainer.appendChild(profileCard);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUser(user);
+        loadPendingRequests(user.uid);
+        loadProfiles(user.uid);
+      } else {
+        window.location.href = "/login-register";
+      }
     });
-}
- */
-// Ejecuta la función para cargar los perfiles al iniciar la página
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-     //   loadProfiles(); // Solo carga los perfiles si hay un usuario autenticado
-    } else {
-        // Si no hay un usuario autenticado, puedes manejarlo aquí (por ejemplo, redirigir a la página de inicio de sesión)
-        window.location.href = '/login-register'; 
+
+    return () => unsubscribe();
+  }, []);
+
+  const acceptRequest = async (requestId, senderId) => {
+    if (!currentUser) return;
+
+    try {
+      // Actualizar estado de la solicitud
+      const requestDoc = doc(db, "friendRequest", requestId);
+      await updateDoc(requestDoc, { status: 2 });
+
+      const currentUserDoc = doc(db, "friendsList", currentUser.uid);
+      const senderUserDoc = doc(db, "friendsList", senderId);
+
+      const currentUserSnapshot = await getDoc(currentUserDoc);
+      const senderUserSnapshot = await getDoc(senderUserDoc);
+
+      if (currentUserSnapshot.exists()) {
+        await updateDoc(currentUserDoc, { friends: arrayUnion(senderId) });
+      } else {
+        await setDoc(currentUserDoc, { friends: [senderId], blocked: [] });
+      }
+
+      if (senderUserSnapshot.exists()) {
+        await updateDoc(senderUserDoc, { friends: arrayUnion(currentUser.uid) });
+      } else {
+        await setDoc(senderUserDoc, { friends: [currentUser.uid], blocked: [] });
+      }
+
+      alert("Has aceptado la follow request");
+      loadPendingRequests(currentUser.uid);
+    } catch (error) {
+      console.error("Error al aceptar la solicitud:", error);
+      alert("Ocurrió un error al aceptar la solicitud.");
     }
-});
-  return (
+  };
+
+  const denyRequest = async (requestId) => {
+    try {
+      const requestDoc = doc(db, "friendRequest", requestId);
+      await updateDoc(requestDoc, { status: 3 });
+
+      alert("Has denegado la follow request");
+      loadPendingRequests(currentUser.uid);
+    } catch (error) {
+      console.error("Error al denegar la solicitud:", error);
+      alert("Ocurrió un error al denegar la solicitud.");
+    }
+  };
+
+  const loadPendingRequests = async (uid) => { 
+    try {
+      const querySnapshot = await getDocs(
+        query(
+          collection(db, "friendRequest"),
+          where("receiverId", "==", uid),
+          where("status", "==", 1),
+          orderBy("createdAt", "desc")
+        )
+      );
+  
+      const requests = await Promise.all(
+        querySnapshot.docs.map(async (docSnapshot) => {
+          const requestId = docSnapshot.id;
+          const requestData = docSnapshot.data();
+  
+          const senderDoc = await getDoc(doc(db, "users", requestData.senderId));
+          if (senderDoc.exists()) {
+            return {
+              ...requestData,
+              id: requestId,
+              senderData: senderDoc.data(),
+            };
+          }
+          return null;
+        })
+      );
+  
+      setPendingRequests(requests.filter((r) => r !== null));
+    } catch (error) {
+      console.error("Error al cargar solicitudes pendientes:", error);
+    }
+  };
+
+  const loadProfiles = async (uid) => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "users"));
+
+      const profiles = querySnapshot.docs
+        .filter((doc) => doc.id !== uid)
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+      setProfiles(profiles);
+    } catch (error) {
+      console.error("Error al cargar perfiles recomendados:", error);
+    }
+  };
+return (
     <>
     <header>
     <title>Follow - TailTales</title>
@@ -98,13 +154,78 @@ onAuthStateChanged(auth, (user) => {
           <a href='/buscar'><img src={buscar} className={styles.buscar} alt="Buscar" /></a>
           <a href='/notificaciones'><img src={notif} className={styles.notif} alt="Notificaciones" /></a>
           <a href='/solicitudes'><img src={amistades} className={styles.amistades} alt="Amistades y Seguimientos" /></a>
-          <a href='/publicar'><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
+          <a href='/stories'><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
           <a href='/perfil'><img src={perfil} className={styles.perfil} alt="Perfil" /></a>
         </nav>
     </header>
     <main>
     <section>
-            <h2 className={styles.tituloSolicitudes}>Solicitudes de seguimiento</h2>
+    <h2 className={styles.tituloSolicitudes}>Solicitudes de seguimiento</h2>
+    {pendingRequests.length === 0 ? (
+      <p className={styles.solicitudesPendientes}>No tienes solicitudes pendientes</p>
+    ) : (
+      <div id="profiles-request-container">
+        {pendingRequests.map((request) => (
+          <div key={request.id} className={styles.request}>
+            <img className={styles.profilePic}
+              src={
+                request.senderData.profilePic || "../img/default-profile-image.jpg"
+              }
+              alt="Profile"
+            />
+            <p className={styles.textoSolicitud}>@{request.senderData.username} te mandó solicitud de seguimiento</p><br />
+            <button className={styles.buttonAceptar} onClick={() => acceptRequest(request.id, request.senderId)}>
+              Aceptar
+            </button>
+            <button className={styles.buttonRechazar} onClick={() => denyRequest(request.id)}>
+              Denegar
+            </button>
+          </div>
+        ))}
+      </div>
+    )}
+    {/**
+      <div id="profiles-request-container">
+        {pendingRequests.map((request) => (
+          <div key={request.id} className={styles.request}>
+            <img className={styles.profilePic}
+              src={
+                request.senderData.profilePic || "../img/default-profile-image.jpg"
+              }
+              alt="Profile"
+            />
+            <p>@{request.senderData.username} te mandó solicitud de seguimiento</p><br />
+            <button className={styles.buttonAceptar} onClick={() => acceptRequest(request.id, request.senderId)}>
+              Aceptar
+            </button>
+            <button className={styles.buttonRechazar} onClick={() => denyRequest(request.id)}>
+              Denegar
+            </button>
+          </div>
+        ))}
+      </div>
+     */}
+      <h3 className={styles.tituloRecomendados}>Recomendados</h3>
+      <div>
+        {profiles.map((profile) => (
+          <div
+            key={profile.id}
+            className="profile-card"
+            onClick={() =>
+              (window.location.href = `/perfil/:=${profile.id}`)
+            }
+          >
+            <img className={styles.profilePicRecomendados}
+              src={profile.profilePic || "../img/default-profile-image.jpg"}
+              alt="Profile"
+            />
+            <p className={styles.usernameRecomendado}>{profile.name}</p><br />
+            <button className={styles.buttonSeguir}>Seguir</button>
+          </div>
+        ))}
+      </div>
+        {/** 
+          <h2 className={styles.tituloSolicitudes}>Solicitudes de seguimiento</h2>
             <div id="profiles-request-container">
                 <div className={styles.request}>
                     <img className={styles.profilePic} src={fotoPerfil} alt="Imagen de perfil"/>
@@ -121,6 +242,7 @@ onAuthStateChanged(auth, (user) => {
             <p className={styles.usernameRecomendado}>@nara0802</p><br/>
             <button className={styles.buttonSeguir}>Seguir</button>
             </div>
+        */}
         </section>
     </main>
     </>

@@ -89,6 +89,7 @@ const loadUserPosts = async (uid) => {
     const postData = postDoc.data();
     postData.id = postDoc.id;
     loadedPosts.push(postData);
+    
   });
 
   return loadedPosts;
@@ -128,7 +129,7 @@ const loadUserProfile = async (uid) => {
           <a href='/buscar'><img src={buscar} className={styles.buscar} alt="Buscar" /></a>
           <a href='/notificaciones'><img src={notif} className={styles.notif} alt="Notificaciones" /></a>
           <a href='/solicitudes'><img src={amistades} className={styles.amistades} alt="Amistades y Seguimientos" /></a>
-          <a href="/perfil"><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
+          <a href="/stories"><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
           <a href='/perfil'><img src={perfil} className={styles.perfil} alt="Perfil" /></a>
         </nav>
        <div className="main-feed">
@@ -180,47 +181,6 @@ const loadUserProfile = async (uid) => {
               </div>
               </div>
               ))}
-            {/** 
-            <div id="posts-container" className={styles.postsContainer}>
-                  <div className={styles.post}>
-               <p className={styles.usernamePost}>@hcocoa</p>
-               <p className={styles.textoPost}>Una foto mía durmiendo bien a gusto.</p>
-               <div className={styles.frame}>
-               <img className={styles.fotoPost} src={fotoPublicacion} alt="Foto post"/>
-               </div>
-               </div>
-                </div>
-             
-                <div id="posts-container" className={styles.postsContainer}>
-                  <div className={styles.post}>
-                  <img className={styles.fotoPerfilPublicacion} src={fotoPerfil} alt="Imagen de perfil post"/>
-               <p className={styles.usernamePost}>@hcocoa</p>
-               <p className={styles.textoPost}>Una foto mía durmiendo bien a gusto.</p>
-               <div className={styles.frame}>
-               <img className={styles.fotoPost} src={fotoPublicacion} alt="Foto post"/>
-               </div>
-               <img className={styles.iconLike} src={iconLike} alt="Icono like"/>
-               <p className={styles.numeroLikes} > 50</p>
-               <p className={styles.numeroComentarios} >30 </p>
-               <img className={styles.iconComentarios}  src={iconComentarios} alt="Icono Comentarios"/>
-               </div>
-                </div>
-                   
-                <div id="posts-container" className={styles.postsContainer}>
-                  <div className={styles.post}>
-                <img className={styles.fotoPerfilPublicacion} src={fotoPerfil} alt="Imagen de perfil post"/>
-               <p className={styles.usernamePost}>@hcocoa</p>
-               <p className={styles.textoPost}>Una foto mía durmiendo bien a gusto.</p>
-               <div className={styles.frame}>
-               <img className={styles.fotoPost} src={fotoPublicacion} alt="Foto post"/>
-               </div>
-               <img className={styles.iconLike} src={iconLike} alt="Icono like"/>
-               <p className={styles.numeroLikes} > 50</p>
-               <p className={styles.numeroComentarios} >30 </p>
-               <img className={styles.iconComentarios}  src={iconComentarios} alt="Icono Comentarios"/>
-               </div>
-                </div>
-                */}
             </section>
         </div>
     </div>
