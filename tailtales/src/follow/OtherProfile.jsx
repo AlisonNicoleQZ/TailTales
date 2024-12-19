@@ -20,6 +20,7 @@ import publicacion3 from '../img/publicacion-3.png';
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import { NavBar } from '../NavBar';
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -99,17 +100,11 @@ document.getElementById('logout-btn').addEventListener('click', function() {
 */}
   return (
     <>
-    <a href='/perfil'><img src={logo} className={styles.logo} alt="logo" /></a>
     <title>Perfil - @tigritothecat</title>
     <a className='salir' href='#'>Salir</a>
-    <div className={styles.menuNav}>
-    <a href='/feed'><img src={feed} className={styles.feed} alt="Feed" /></a>
-          <a href='/buscar'><img src={buscar} className={styles.buscar} alt="Buscar" /></a>
-          <a href='/notificaciones'><img src={notif} className={styles.notif} alt="Notificaciones" /></a>
-          <a href='/solicitudes'><img src={amistades} className={styles.amistades} alt="Amistades y Seguimientos" /></a>
-          <a href='/publicar'><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
-          <a href='/perfil'><img src={perfil} className={styles.perfil} alt="Perfil" /></a>
-    </div>
+
+    <NavBar/>
+    
     <img src={fotoDePerfil} className={styles.fotoPerfil} alt='Foto de perfil'/>
     <div className={styles.infoUser}>
     <h3 className={styles.username}>@tigritothecat</h3>
