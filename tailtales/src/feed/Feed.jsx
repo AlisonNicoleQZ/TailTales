@@ -13,6 +13,8 @@ import iconComentarios from '../img/icon-comentarios.svg';
 import {initializeApp} from "firebase/app";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {getFirestore, collection, doc, getDoc, query, where, getDocs} from "firebase/firestore";
+import ViewPostModal from "../profile/ViewPostModal";
+
 export const Feed = () => {
 
 // Configuración de Firebase
@@ -33,6 +35,8 @@ const db = getFirestore(app);
 const [posts, setPosts] = useState([]);
 const [userUid, setUserUid] = useState(null);
 const [userData, setUserData] = useState({});
+const [isModalOpen, setIsModalOpen] = useState(false);
+const [currentPost, setCurrentPost] = useState(null);
 
 useEffect(() => {
   const fetchPosts = async () => {
@@ -119,6 +123,16 @@ const loadUserProfile = async (uid) => {
     }
   };
 
+  const openViewPostModal = (post) => {
+    setCurrentPost(post);
+    setIsModalOpen(true);
+  };
+  
+  const closeModal = () => {
+    setCurrentPost(null);
+    setIsModalOpen(false);
+  };
+
   return (
     <>
     <title>Feed - TailTales</title>
@@ -182,6 +196,7 @@ const loadUserProfile = async (uid) => {
               </div>
               ))}
             </section>
+            <ViewPostModal isOpen={isModalOpen} postData={currentPost} onClose={closeModal} />
         </div>
     </div>
     </>

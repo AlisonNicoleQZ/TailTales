@@ -12,6 +12,7 @@ import { LoginRegister } from './login/LoginRegister.jsx';
 import { Notifications } from './notifications/Notifications.jsx';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Friends } from './friends/Friends.jsx';
+import { PublicFollow } from './follow/PublicFollow.jsx';
 
 //import { PublicFollow } from './follow/PublicFollow.jsx';
 
