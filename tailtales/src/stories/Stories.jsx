@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+import { getAuth, auth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 import React, { useState, useEffect } from "react";
 import { getFirestore, collection, query, where, getDocs, addDoc, serverTimestamp, deleteDoc} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-storage.js";
@@ -17,12 +17,13 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
+export const Stories = () => {
     const [stories, setStories] = useState([]);
     const [modalData, setModalData] = useState(null);
     const [userUid, setUserUid] = useState(null);
 
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged((user) => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 setUserUid(user.uid);
             } else {
@@ -97,8 +98,6 @@ const storage = getStorage(app);
     const closeModal = () => {
         setModalData(null);
     };
-
-export const Stories = () => {
   return (
     <>
     <title>Estados - TailTales</title>
