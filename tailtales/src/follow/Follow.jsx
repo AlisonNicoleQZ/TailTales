@@ -12,6 +12,8 @@ import perfil from '../img/perfil.svg';
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import { getFirestore, collection, query, where, orderBy, getDocs, updateDoc,arrayUnion, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+import { NavBar } from '../NavBar';
+
 export const Follow = () => {
 // Configuración de Firebase
 const firebaseConfig = {
@@ -148,15 +150,10 @@ return (
     <>
     <header>
     <title>Follow - TailTales</title>
+
+    <NavBar />
+  
     <a href='/feed'><img src={logo} className={styles.logo} alt="logo" /></a>
-        <nav className={styles.menuNav}>
-        <a href='/feed'><img src={feed} className={styles.feed} alt="Feed" /></a>
-          <a href='/buscar'><img src={buscar} className={styles.buscar} alt="Buscar" /></a>
-          <a href='/notificaciones'><img src={notif} className={styles.notif} alt="Notificaciones" /></a>
-          <a href='/solicitudes'><img src={amistades} className={styles.amistades} alt="Amistades y Seguimientos" /></a>
-          <a href='/stories'><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
-          <a href='/perfil'><img src={perfil} className={styles.perfil} alt="Perfil" /></a>
-        </nav>
     </header>
     <main>
     <section>

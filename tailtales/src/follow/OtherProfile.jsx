@@ -16,6 +16,7 @@ import ViewPostModal from "../profile/ViewPostModal";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import { getAuth, onAuthStateChanged,collection,query, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import { NavBar } from '../NavBar';
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -172,6 +173,26 @@ const [userUid, setUserUid] = useState(null);
     setCurrentPost(null);
   };
   return (
+
+    <>
+    <title>Perfil - @tigritothecat</title>
+    <a className='salir' href='#'>Salir</a>
+
+    <NavBar/>
+    
+    <img src={fotoDePerfil} className={styles.fotoPerfil} alt='Foto de perfil'/>
+    <div className={styles.infoUser}>
+    <h3 className={styles.username}>@tigritothecat</h3>
+      <p className={styles.bio}>Soy del 10% de gatos que hace un reguero cuando come</p>
+      <img src={apariencia} className={`${styles.icon} ${styles.aparienciaIcon}`}/>
+      <p className={styles.especieYRaza}>Gato atigrado</p>
+      <img src={nacimiento} className={`${styles.icon} ${styles.nacimientoIcon}`}/>
+      <p className={styles.nacimiento}>Agosto 2022</p>
+      <img src={ubicacion} className={`${styles.icon} ${styles.ubicacionIcon}`}/>
+      <p className={styles.ubicacion}>Heredia, Costa Rica</p>
+      <img src={calendario} className={`${styles.icon} ${styles.calendarioIcon}`}/>
+      <p className={styles.union}>Se unió en Septiembre del 2024</p>
+      
     <div>
       <title>Perfil - @{userData.username}</title>
       <header>

@@ -37,7 +37,7 @@
 .friendItem button {
     margin-left: auto;
     padding: 5px 10px;
-    background-color: #f00;
+    background-color: #9a78c7;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -45,5 +45,5 @@
 }
 
 .friendItem button:hover {
-    background-color: #c00;
+    background-color: #8858c7;
 }

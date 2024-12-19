@@ -16,6 +16,8 @@ import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { Link } from "react-router-dom";
+import { NavBar } from "../NavBar";
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -179,15 +181,9 @@ export const Perfil = () => {
     <div>
       <title>Perfil - @{userData.username}</title>
       <header>
-        <a href="/feed"><img src={logo} className={styles.logo} alt="logo" /></a>
-        <nav className={styles.menuNav}>
-          <a href="/feed"><img src={feed} className={styles.feed} alt="Feed" /></a>
-          <a href="/buscar"><img src={buscar} className={styles.buscar} alt="Buscar" /></a>
-          <a href="/notificaciones"><img src={notif} className={styles.notif} alt="Notificaciones" /></a>
-          <a href="/solicitudes"><img src={amistades} className={styles.amistades} alt="Amistades y Seguimientos" /></a>
-          <a href="/stories"><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
-          <a href="/perfil"><img src={perfil} className={styles.perfil} alt="Perfil" /></a>
-        </nav>
+
+
+        <NavBar/>
       </header>
 
       <main>
@@ -198,7 +194,7 @@ export const Perfil = () => {
           <button className={styles.botonEditarPerfil}>
             <a href="/editar-perfil">Editar perfil</a>
           </button>
-          <p id="friends-info" href="/amistades" className={styles.friends}> {numFriends} amigos</p>
+          <Link to={{pathname: "/friends", search: `?userId=${userUid}&fromProfile=true`}} className={styles.friends}> {numFriends} amigos</Link>
           <p className={styles.bio}>{userData.bio}</p>
           <img src={apariencia} className={`${styles.icon} ${styles.aparienciaIcon}`}/>
           <p className={styles.especie}>{userData.species}</p>
