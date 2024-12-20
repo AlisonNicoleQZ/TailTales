@@ -7,37 +7,40 @@ import notif from '../img/campana.svg';
 import amistades from '../img/amistades.svg';
 import publicar from '../img/camara.svg';
 import perfil from '../img/perfil.svg';
+import { NavBar } from "../NavBar";
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getFirestore, collection, addDoc, query, where, orderBy, getDocs, updateDoc,arrayUnion, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+
+// Configuración de Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyD4_VxzGYLNmkKTiMGZrttFgUmXm7UKNyc",
+  authDomain: "tailtales-78e10.firebaseapp.com",
+  projectId: "tailtales-78e10",
+  storageBucket: "tailtales-78e10.appspot.com",
+  messagingSenderId: "365635220712",
+  appId: "1:365635220712:web:38f961847c39673e93c55d"
+};
+
+// Inicializar Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 
 export const PublicFollow = () => {
   const [profiles, setProfiles] = useState([]);
-  const [pendingRequests, setPendingRequests] = useState([]);
-  const [currentUser, setCurrentUser] = useState(null);
-
-  // Configuración de Firebase
-  const firebaseConfig = {
-      apiKey: "AIzaSyD4_VxzGYLNmkKTiMGZrttFgUmXm7UKNyc",
-      authDomain: "tailtales-78e10.firebaseapp.com",
-      projectId: "tailtales-78e10",
-      storageBucket: "tailtales-78e10.appspot.com",
-      messagingSenderId: "365635220712",
-      appId: "1:365635220712:web:38f961847c39673e93c55d"
-  };
-  
-  // Inicializar Firebase
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+  const [friends, setFriends] = useState([]);
+  const [error, setError] = useState(null);
+  //const [currentUser, setCurrentUser] = useState(null);
   
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setCurrentUser(user);
-        loadRequests(user.uid)
+       // setCurrentUser(user);
+        loadFriends(user.uid)
         loadProfiles(user.uid);
       } else {
         window.location.href = "/login-register";
@@ -47,76 +50,22 @@ export const PublicFollow = () => {
     return () => unsubscribe();
   }, []);
 
-  const loadRequests = async (uid) => {
-    try {
-      // 1. Cargar solicitudes pendientes
-      const querySnapshot = await getDocs(
-        query(
-          collection(db, "friendRequest"),
-          where("receiverId", "==", uid),
-          where("status", "==", 2),
-          orderBy("createdAt", "desc")
-        )
-      );
+  const loadFriends = async (userId) => {
+          try {
+              const friendsListDoc = doc(db, "friendsList", userId);
+              const friendsListSnapshot = await getDoc(friendsListDoc);
   
-      const pendingRequests = await Promise.all(
-        querySnapshot.docs.map(async (docSnapshot) => {
-          const requestId = docSnapshot.id;
-          const requestData = docSnapshot.data();
-  
-          const senderDoc = await getDoc(doc(db, "users", requestData.senderId));
-          if (senderDoc.exists()) {
-            return {
-              ...requestData,
-              id: requestId,
-              senderData: senderDoc.data(),
-            };
+              if (friendsListSnapshot.exists()) {
+                  const friendsData = friendsListSnapshot.data();
+                  setFriends(friendsData.friends || []);
+              } else {
+               //   setError("No se encontró la lista de amigos.");
+              }
+          } catch (error) {
+              console.error("Error al cargar la lista de amigos:", error);
+        //      setError("Error al cargar los datos.");
           }
-          return null;
-        })
-      );
-  
-      const validRequests = pendingRequests.filter((r) => r !== null);
-  
-      // Actualizar estado de solicitudes pendientes
-      setPendingRequests(validRequests);
-  
-      // 2. Procesar solicitudes para hacerse amigos
-      for (const request of validRequests) {
-        try {
-          const { id: requestId, senderId } = request;
-  
-          // Actualizar estado de la solicitud
-          const requestDoc = doc(db, "friendRequest", requestId);
-          await updateDoc(requestDoc, { status: 2 });
-  
-          const currentUserDoc = doc(db, "friendsList", uid);
-          const senderUserDoc = doc(db, "friendsList", senderId);
-  
-          const currentUserSnapshot = await getDoc(currentUserDoc);
-          const senderUserSnapshot = await getDoc(senderUserDoc);
-  
-          // Actualizar la lista de amigos del usuario actual
-          if (currentUserSnapshot.exists()) {
-            await updateDoc(currentUserDoc, { friends: arrayUnion(senderId) });
-          } else {
-            await setDoc(currentUserDoc, { friends: [senderId], blocked: [] });
-          }
-  
-          // Actualizar la lista de amigos del remitente
-          if (senderUserSnapshot.exists()) {
-            await updateDoc(senderUserDoc, { friends: arrayUnion(uid) });
-          } else {
-            await setDoc(senderUserDoc, { friends: [uid], blocked: [] });
-          }
-        } catch (error) {
-          console.error(`Error al procesar la solicitud de ${request.senderId}:`, error);
-        }
-      }
-    } catch (error) {
-      console.error("Error al cargar o procesar solicitudes pendientes:", error);
-    }
-  };  
+      };
   
   const loadProfiles = async (uid) => {
       try {
@@ -146,39 +95,26 @@ export const PublicFollow = () => {
     <main>
     <section>
             <h2 className={styles.tituloSolicitudes}>Amistades</h2>
-            {pendingRequests.length === 0 ? (
-                  <p className={styles.solicitudesPendientes}>No tienes solicitudes pendientes</p>
-                ) : (
                   <div id="profiles-request-container">
-                    {pendingRequests.map((request) => (
-                      <div key={request.id} className={styles.request}>
-                        <img className={styles.profilePic}
-                          src={
-                            request.senderData.profilePic || "../img/default-profile-image.jpg"
-                          }
-                          alt="Profile"
-                        />
-                        <p className={styles.textoSolicitud}>@{request.senderData.username} te empezó a seguir</p><br />
-                      </div>
+                    {friends.map((friendId) => (
+                      <FriendItem
+                      key={friendId}
+                      friendId={friendId}
+                  />
                     ))}
                   </div>
-                )}
            {/**
                        <div id="profiles-request-container">
                 <div className={styles.request}>
                     <img className={styles.profilePic}  alt="Imagen de perfil"/>
-                    <p className={styles.textoSolicitud}>@tacotaco empezó a seguirte</p><br/>
-                    <button className={styles.buttonAceptar}>Seguir también</button>
-                    
+                    <p className={styles.textoSolicitud}>@tacotaco empezó a seguirte</p><br/>   
             </div>
             </div>
 
             <div id="profiles-request-container">
                 <div className={styles.request}>
                     <img className={styles.profilePic} alt="Imagen de perfil"/>
-                    <p className={styles.textoSolicitud}>@hcocoa empezó a seguirte</p><br/>
-                    <button className={styles.buttonAceptar}>Seguir también</button>
-                    
+                    <p className={styles.textoSolicitud}>@hcocoa empezó a seguirte</p><br/>                
             </div>
             </div>
             */}
@@ -203,27 +139,46 @@ export const PublicFollow = () => {
                       </div>
                     ))}
                   </div>
-            {/**
-            <div id="profiles-container">
-            <img className={styles.profilePicRecomendados} alt="Imagen de perfil"/>
-            <p className={styles.usernameRecomendado}>@chispita34</p><br/>
-            <button className={styles.buttonSeguir}>Seguir</button>
-            </div>
-
-            <div id="profiles-container">
-            <img className={styles.profilePicRecomendados} alt="Imagen de perfil"/>
-            <p className={styles.usernameRecomendado}>@pink_waffle</p><br/>
-            <button className={styles.buttonSeguir}>Seguir</button>
-            </div>
-
-            <div id="profiles-container">
-            <img className={styles.profilePicRecomendados} alt="Imagen de perfil"/>
-            <p className={styles.usernameRecomendado}>@pelusacute</p><br/>
-            <button className={styles.buttonSeguir}>Seguir</button>
-            </div>
-             */}
         </section>
     </main>
     </>
   )
 }
+
+const FriendItem = ({friendId}) => {
+    const [friendData, setFriendData] = useState(null);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchFriendData = async () => {
+            try {
+                const friendDoc = await getDoc(doc(db, "users", friendId));
+                if (friendDoc.exists()) {
+                    setFriendData(friendDoc.data());
+                } else {
+                    console.error("No se encontró el usuario.");
+                }
+            } catch (error) {
+                console.error("Error al cargar los datos del amigo:", error);
+            }
+        };
+
+        fetchFriendData();
+    }, [friendId]);
+
+    if (!friendData) {
+        return null;
+    }
+
+    return (
+      <div className={styles.containerAmistades}>
+        <div  onClick={() => navigate(`/otro-perfil/${friendId}`)}  id="profiles-request-container"  className={styles.friendItem}>
+            <img
+                src={friendData.profilePic || "../img/default-profile-image.jpg"}
+                alt="Foto de perfil"
+            />
+            <p>@{friendData.username || "Usuario desconocido"} empezó a seguirte</p>
+        </div>
+        </div>
+    );
+};
