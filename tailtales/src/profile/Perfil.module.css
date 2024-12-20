@@ -56,6 +56,7 @@
     margin-left: 16rem;
     margin-top: 2.6rem;
     position: absolute;
+    border-radius: 50rem;
     width: 10.5%;
     height: 8rem;
 }
@@ -64,6 +65,13 @@
     position: absolute;
     margin-left: 26rem;
     margin-top: 2.7rem;
+}
+
+.name{
+    position: absolute;
+    margin-left: 26rem;
+    margin-top: 6.2rem;
+    font-weight: 600;
 }
 
 .botonEditarPerfil{
@@ -84,9 +92,17 @@ color: #fff;
     text-decoration: none;
 }
 
+.friends{
+    position: absolute;
+    margin-left: 26rem;
+    margin-top: 4.5rem;
+    color: #000;
+    font-weight: bold;
+}
+
 .bio {
     margin-left: 26rem;
-    margin-top: 5.6rem;
+    margin-top: 8rem;
     position: absolute;
 }
 
@@ -101,56 +117,51 @@ color: #fff;
 
 .aparienciaIcon  {
     margin-left: 23.9rem;
-    margin-top: 8.8rem;
+    margin-top: 10.3rem;
     position: absolute;
 }
 
-.especieYRaza {
+.especie {
     margin-left: 26rem;
-    margin-top: 8.7rem;
+    margin-top: 10.2rem;
+    position: absolute;
+}
+
+.raza {
+    margin-left: 28.7rem;
+    margin-top: 10.2rem;
     position: absolute;
 }
 
 .nacimientoIcon{
     margin-left: 33.1rem;
-    margin-top: 8.8rem;
+    margin-top: 10.3rem;
     position: absolute;
 }
 
 .nacimiento {
     margin-left: 35.2rem;
-    margin-top: 8.7rem;
+    margin-top: 10.2rem;
     position: absolute;
 }
 
 .ubicacionIcon{
     position: absolute;
     margin-left: 23.9rem;
-    margin-top: 11.6rem;
+    margin-top: 13.1rem;
 }
 
 .ubicacion{
     margin-left: 26rem;
-    margin-top: 11.5rem;
-    position: absolute;
-}
-
-.calendarioIcon{
-    margin-left: 23.9rem;
-    margin-top: 14.4rem;
-    position: absolute;
-}
-
-.union{
-    margin-left: 26rem;
-    margin-top: 14.3rem;
+    margin-top: 13rem;
     position: absolute;
 }
 
 .publicaciones{
     position: absolute;
     margin-left: 15rem;
-    margin-top: 19rem;
+    margin-top: 22rem;
+    margin-bottom: 1rem;
     display: flex;
     justify-content: space-around; /* Espacio alrededor de cada imagen */
     align-items: center; /* Alinea verticalmente en el centro */
@@ -160,8 +171,90 @@ color: #fff;
     margin-left: 3rem;
 }
 
-
 .publicaciones img{
-    width: 40%;
     height: 16rem;
+}
+
+.descripcion{
+    margin-top: -1rem;
+    padding: 7px 4px;
+}
+
+.mediaUrl{
+    margin-top: 0.75rem;
+}
+
+.inputFile, .addMedia{
+    margin-top: 0.5rem;
+}
+
+.buttonPublicar{
+    position: absolute;
+    margin-top: 2.5rem;
+    margin-left: 53rem;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    background-color: #9F86C0;
+    padding: 6px 12px;
+    border-radius: 5px;
+    border:none;
+    color: #fff;
+}
+
+.buttonSubir, .buttonCancelar, .editarPostButton, .eliminarPostButton{
+    font-weight: 400;
+    font-style: normal;
+    margin-left: 1rem;
+    background-color: #9F86C0;
+    padding: 4px 5px;
+    border-radius: 5px;
+    border:none;
+    color: #fff;
+}
+
+.nuevaPublicacion{
+    position: absolute;
+    margin-top: 4.5rem;
+    margin-left: 53rem;
+}
+
+.nuevaPublicacion h3{
+    margin-top: 0.5rem;
+}
+
+.viewPostModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.viewPostContent {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    text-align: center;
+    position: relative;
+}
+/* Controles del carrusel */
+.carouselControl {
+    position: absolute;
+    top: 50%;
+    font-size: 2em;
+    color: black;
+    cursor: pointer;
+    user-select: none;
+}
+.prev {
+    left: 10px;
+}
+.next {
+    right: 10px;
 }

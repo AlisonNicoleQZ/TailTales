@@ -64,6 +64,12 @@ body::-webkit-scrollbar-thumb {
     font-size: 1.45rem;
 }
 
+.solicitudesPendientes{
+    position: absolute;
+    margin-left: 28.5rem;
+    margin-top: 8rem;
+}
+
 .request{
     margin-top: 2rem;
 }
@@ -73,6 +79,7 @@ body::-webkit-scrollbar-thumb {
     margin-left: 26rem;
     margin-top: 8rem;
     position: absolute;
+    border-radius: 50rem;
 }
 
 .textoSolicitud{
@@ -123,6 +130,7 @@ body::-webkit-scrollbar-thumb {
     margin-left: 64rem;
     margin-top: 4.5rem;
     position: absolute;
+    border-radius: 50rem;
 }
 
 .usernameRecomendado{

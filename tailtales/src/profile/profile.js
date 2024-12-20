@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
-import { getFirestore, doc, getDoc, collection, addDoc, deleteDoc, updateDoc, query, where, getDocs, serverTimestamp,setDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, collection, addDoc, deleteDoc, updateDoc, query, where, getDocs, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-storage.js";
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -16,6 +17,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 let userUid;
 let mediaUrls = [];
@@ -48,10 +50,15 @@ async function loadUserProfile(uid) {
         document.getElementById('profile-breed').innerText = userData.breed;
         document.getElementById('profile-bio').innerText = userData.bio;
         document.getElementById('profile-location').innerText = userData.location;
-        document.getElementById('profile-pic').src = userData.profilePic || '../img/default-profile-image.jpg';
         document.getElementById('profile-age').innerText = `${userData.age} ${userData.age_format === 'years' ? 'años' : 'meses'}`;
 
-        // Cargar el número de amigos
+        // Verificar si la URL de la imagen de perfil está disponible
+        if (userData.profilePic) {
+            document.getElementById('profile-pic').src = userData.profilePic;  // Usa la URL guardada
+        } else {
+            document.getElementById('profile-pic').src = '../img/default-profile-image.jpg';  // Imagen por defecto
+        }
+
         const friendsListDoc = doc(db, "friendsList", uid);
         const friendsListSnapshot = await getDoc(friendsListDoc);
 
@@ -62,7 +69,6 @@ async function loadUserProfile(uid) {
 
             friendsInfoElement.textContent = `Friends: ${numFriends}`;
             friendsInfoElement.addEventListener("click", () => {
-                // Redirigir a friends.html con el userId
                 window.location.href = `../friends/friends.html?userId=${uid}`;
             });
         } else {
@@ -85,6 +91,7 @@ function openPostModal(postData = null, postId = null) {
         currentEditPostId = postId;
         document.getElementById('publish-post').innerText = 'Guardar cambios';
 
+        // Cargar URLs de medios existentes
         mediaUrls.forEach((url, index) => {
             const urlContainer = document.createElement("div");
             const urlInput = document.createElement("input");
@@ -110,7 +117,7 @@ function openPostModal(postData = null, postId = null) {
         currentEditPostId = null;
         mediaUrls = [];
         document.getElementById('post-description').value = '';
-        document.getElementById('post-media-url').value = '';
+        document.getElementById('post-media-file').value = '';
         document.getElementById('publish-post').innerText = 'Publicar';
     }
 }
@@ -161,29 +168,52 @@ document.getElementById('close-view-modal').addEventListener('click', () => {
     document.getElementById('view-post-modal').style.display = 'none';
 });
 
-// Publicar o guardar cambios en la publicación
 document.getElementById('publish-post').addEventListener('click', async () => {
-    const description = document.getElementById('post-description').value;
-    const mediaUrlInput = document.getElementById('post-media-url').value.trim();
+    const description = document.getElementById('post-description').value.trim();
+    const mediaFileInput = document.getElementById('post-media-file');
 
-    // Agregar automáticamente el valor en el campo de URL al array de mediaUrls si no está vacío
-    if (mediaUrlInput && !mediaUrls.includes(mediaUrlInput)) {
-        mediaUrls.push(mediaUrlInput);
+    // Verificar si hay al menos una descripción o imagen
+    if (!description && mediaUrls.length === 0) {
+        alert("Debes agregar una imagen o una descripción.");
+        return;
     }
 
-    if (mediaUrls.length === 0) {
-        alert("Debes agregar al menos una URL de imagen.");
-        return;
+    // Cargar imágenes seleccionadas
+    if (mediaFileInput.files.length > 0) {
+        for (const file of mediaFileInput.files) {
+            if (!file.type.startsWith('image/')) {
+                alert("Por favor, selecciona solo archivos de imagen.");
+                return;
+            }
+            
+            const storageRef = ref(storage, 'posts/' + Date.now() + "_" + file.name); 
+            try {
+                const uploadResult = await uploadBytes(storageRef, file);
+                const downloadURL = await getDownloadURL(uploadResult.ref);
+                mediaUrls.push(downloadURL); 
+
+                // Mostrar vista previa de la imagen subida
+                const imgPreview = document.createElement('img');
+                imgPreview.src = downloadURL;
+                imgPreview.classList.add('uploaded-image-preview');
+                document.getElementById('media-urls-container').appendChild(imgPreview);
+            } catch (error) {
+                console.error('Error al subir la imagen:', error);
+                alert('Error al subir la imagen. Inténtalo nuevamente.');
+                return; 
+            }
+        }
+        mediaFileInput.value = ''; 
     }
 
     const postData = {
         petId: userUid,
         content: { text: description || '' },
-        mediaUrls: mediaUrls,
+        mediaUrls: mediaUrls, 
         createdAt: serverTimestamp(),
         visibility: 1,
-        likesCount: 0,
-        sharesCount: 0,
+        likes: [],              // Lista de usuarios que dieron like
+        comments: [] 
     };
 
     try {
@@ -194,18 +224,18 @@ document.getElementById('publish-post').addEventListener('click', async () => {
             await addDoc(collection(db, "posts"), postData);
             alert("Publicación creada exitosamente.");
         }
-
-        closePostModal();
-        loadUserPosts(userUid);
+        closePostModal(); 
+        loadUserPosts(userUid); 
     } catch (error) {
         console.error("Error al publicar:", error);
+        alert("Ocurrió un error al intentar publicar.");
     }
 });
 
 // Cargar publicaciones del usuario con opción de edición y eliminación
 async function loadUserPosts(uid) {
     const postsSection = document.getElementById('posts-section');
-    postsSection.innerHTML = ''; 
+    postsSection.innerHTML = '';
 
     const postsQuery = query(collection(db, "posts"), where("petId", "==", uid));
     const postsSnapshot = await getDocs(postsQuery);
@@ -259,36 +289,51 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Agregar URL de imagen adicional en el formulario de nueva publicación
-document.getElementById('add-media-url').addEventListener('click', () => {
-    const url = document.getElementById('post-media-url').value;
-    if (url) {
-        mediaUrls.push(url);
-        const urlItem = document.createElement('div');
-        urlItem.innerText = url;
-        document.getElementById('media-urls-container').appendChild(urlItem);
-        document.getElementById('post-media-url').value = '';
+// Agregar imagen adicional en el formulario de nueva publicación
+document.getElementById('add-media-file').addEventListener('click', async () => {
+    const fileInput = document.getElementById('post-media-file');
+
+    if (fileInput.files.length > 0) {
+        for (const file of fileInput.files) {
+            if (!file.type.startsWith('image/')) {
+                alert("Por favor, selecciona solo archivos de imagen.");
+                return;
+            }
+            const storageRef = ref(storage, 'posts/' + Date.now() + "_" + file.name);
+            try {
+                const uploadResult = await uploadBytes(storageRef, file);
+                const downloadURL = await getDownloadURL(uploadResult.ref);
+                mediaUrls.push(downloadURL);
+
+                const imgPreview = document.createElement('img');
+                imgPreview.src = downloadURL;
+                imgPreview.classList.add('uploaded-image-preview');
+                document.getElementById('media-urls-container').appendChild(imgPreview);
+            } catch (error) {
+                console.error('Error al subir la imagen:', error);
+                alert('Error al subir la imagen. Inténtalo nuevamente.');
+            }
+        }
+        fileInput.value = '';
+    } else {
+        alert('Por favor, selecciona una imagen para agregar.');
     }
 });
 
 // Función para verificar y crear friendsList
 async function verifyAndCreateFriendsList(uid) {
     try {
-        const friendsListDocRef = doc(db, "friendsList", uid); 
+        const friendsListDocRef = doc(db, "friendsList", uid);
         const friendsListDoc = await getDoc(friendsListDocRef);
 
         if (!friendsListDoc.exists()) {
             await setDoc(friendsListDocRef, {
-                userId: uid,    
-                friends: [],    
-                blocked: []     
+                userId: uid,
+                friends: [],
+                blocked: []
             });
-            //console.log("Colección friendsList creada para el usuario:", uid);
-        } else {
-            //console.log("La colección friendsList ya existe para el usuario:", uid);
         }
     } catch (error) {
         console.error("Error al verificar o crear friendsList:", error);
     }
 }
-

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect}from 'react'
 import styles from './Feed.module.css'
 import logo from '../img/logo.svg';
 import feed from '../img/casa.svg';
@@ -8,13 +8,12 @@ import amistades from '../img/amistades.svg';
 import publicar from '../img/camara.svg';
 import perfil from '../img/perfil.svg';
 import fotoPerfil from '../img/profile-pic.png';
-import fotoPublicacion from '../img/publicacion_feed.png';
 import iconLike from '../img/paw-like.svg';
 import iconComentarios from '../img/icon-comentarios.svg';
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
-
+import {initializeApp} from "firebase/app";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
+import {getFirestore, collection, doc, getDoc, query, where, getDocs} from "firebase/firestore";
+import { NavBar } from '../NavBar';
 export const Feed = () => {
 
 // Configuración de Firebase
@@ -32,72 +31,103 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Detectar si el usuario ha iniciado sesión
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    console.log("Usuario autenticado:", user);
-   // loadFriendStories();
-   // loadUserPosts();
-  } else {
-    alert('Debe iniciar sesión para ver el feed.');
-    window.location.href = '/login-register';
-  }
-});
-/*
-// Función para cargar los estados de los amigos
-async function loadFriendStories() {
-  const storiesContainer = document.getElementById('stories-container');
-  try {
-    const storiesSnapshot = await getDocs(collection(db, "stories")); // Colección de historias
-    storiesSnapshot.forEach(doc => {
-      const storyData = doc.data();
-      const storyDiv = document.createElement('div');
-      storyDiv.innerHTML = `
-        <img src="${storyData.profilePic}" alt="${storyData.name}" />
-        <p>${storyData.name}</p>
-      `;
-      storiesContainer.appendChild(storyDiv);
-    });
-  } catch (error) {
-    console.error("Error al cargar los estados de amigos:", error);
-    alert("Hubo un error al cargar los estados de amigos.");
-  }
-}
+const [posts, setPosts] = useState([]);
+const [userUid, setUserUid] = useState(null);
+const [userData, setUserData] = useState({});
 
-// Función para cargar las publicaciones de los usuarios
-async function loadUserPosts() {
-  const postsContainer = document.getElementById('posts-container');
+useEffect(() => {
+  const fetchPosts = async () => {
+    try {
+      if (!userUid) return;
+
+      const allPosts = [];
+      const friends = await getFriendsList(userUid);
+
+      for (const friendId of friends) {
+        const friendPosts = await loadUserPosts(friendId);
+
+        for (const post of friendPosts) {
+          const userDocRef = await getDoc(doc(db, "users", friendId));
+
+          if (userDocRef.exists()) {
+            post.username = userDocRef.data().username;
+          }
+        }
+
+        allPosts.push(...friendPosts);
+      }
+
+      allPosts.sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis());
+      setPosts(allPosts);
+    } catch (error) {
+      console.error("Error al cargar las publicaciones:", error);
+    }
+  };
+
+  fetchPosts();
+}, [userUid]);
+
+useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    if (user) {
+      setUserUid(user.uid);
+      loadUserProfile(user.uid);
+    } else {
+      alert("Debe iniciar sesión para ver el feed.");
+      window.location.href = "/login-register";
+    }
+  });
+
+  return () => unsubscribe();
+}, []);
+
+const loadUserPosts = async (uid) => {
+  const postsQuery = query(collection(db, "posts"), where("petId", "==", uid));
+  const postsSnapshot = await getDocs(postsQuery);
+
+  const loadedPosts = [];
+  postsSnapshot.forEach((postDoc) => {
+    const postData = postDoc.data();
+    postData.id = postDoc.id;
+    loadedPosts.push(postData);
+    
+  });
+
+  return loadedPosts;
+};
+
+const getFriendsList = async (userId) => {
   try {
-    const postsSnapshot = await getDocs(collection(db, "posts")); // Colección de publicaciones
-    postsSnapshot.forEach(doc => {
-      const postData = doc.data();
-      const postDiv = document.createElement('div');
-      postDiv.innerHTML = `
-        <h3>${postData.name}</h3>
-        <img src="${postData.imageUrl}" alt="Imagen de la publicación" />
-        <p>${postData.caption}</p>
-      `;
-      postsContainer.appendChild(postDiv);
-    });
+    const friendDocRef = doc(db, "friendsList", userId);
+    const friendDoc = await getDoc(friendDocRef);
+
+    if (friendDoc.exists()) {
+      return friendDoc.data().friends || [];
+    } else {
+      console.error("No se encontró el documento de amigos para el usuario:", userId);
+      return [];
+    }
   } catch (error) {
-    console.error("Error al cargar las publicaciones:", error);
-    alert("Hubo un error al cargar las publicaciones.");
+    console.error("Error al obtener la lista de amigos:", error);
+    return [];
   }
-}*/
+};
+
+const loadUserProfile = async (uid) => {
+    const userDoc = await getDoc(doc(db, "users", uid));
+    if (userDoc.exists()) {
+      setUserData(userDoc.data());
+    }
+  };
 
   return (
     <>
     <title>Feed - TailTales</title>
-    <a href='/feed'><img src={logo} className={styles.logo} alt="logo" /></a>
     <div className={styles.container}>
-        <nav className={styles.menuNav}>
-        <a href='/feed'><img src={feed} className={styles.feed} alt="Feed" /></a>
-          <a href='/buscar'><img src={buscar} className={styles.buscar} alt="Buscar" /></a>
-          <a href='/notificaciones'><img src={notif} className={styles.notif} alt="Notificaciones" /></a>
-          <a href='/solicitudes'><img src={amistades} className={styles.amistades} alt="Amistades y Seguimientos" /></a>
-          <a href='/publicar'><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
-          <a href='/perfil'><img src={perfil} className={styles.perfil} alt="Perfil" /></a>
-        </nav>
+
+    <NavBar/>
+
+
        <div className="main-feed">
             <section id="friend-stories" className={styles.friendStories}>
                 <div id="stories-container" className={styles.storiesContainer}>
@@ -113,14 +143,7 @@ async function loadUserPosts() {
                     <img className={styles.story} src={fotoPerfil} alt="Imagen de perfil"/><br/>
                     <p className={styles.storyUsername}>@hcocoa</p>
                     </div>
-                    <div className={styles.storyIndividual}>
-                    <img className={styles.story} src={fotoPerfil} alt="Imagen de perfil"/><br/>
-                    <p className={styles.storyUsername}>@hcocoa</p>
-                    </div>
-                    <div className={styles.storyIndividual}>
-                    <img className={styles.story} src={fotoPerfil} alt="Imagen de perfil"/><br/>
-                    <p className={styles.storyUsername}>@hcocoa</p>
-                    </div>
+                    
                     <div className={styles.storyIndividual}>
                     <img className={styles.story} src={fotoPerfil} alt="Imagen de perfil"/><br/>
                     <p className={styles.storyUsername}>@hcocoa</p>
@@ -133,56 +156,27 @@ async function loadUserPosts() {
             </section>
             <div className={styles.perfilContainer}>
             <a href='/perfil'>
-            <img className={styles.fotoPerfil} src={fotoPerfil} alt="Imagen de perfil"/>
-            <h3 className={styles.username}>@tigritothecat</h3>
+            <img className={styles.fotoPerfil} src={userData.profilePic || "../img/default-profile-image.jpg"} alt="Imagen de perfil"/>
+            <h3 className={styles.username}>@{userData.username}</h3>
             </a>
             </div>
             <section id="posts-feed" className={styles.postsFeed}>
+            {posts.map((post) => (
             <div id="posts-container" className={styles.postsContainer}>
-                  <div className={styles.post}>
-                  <a href='/otro-perfil'>
-                  <img className={styles.fotoPerfilPublicacion} src={fotoPerfil} alt="Imagen de perfil post"/>
-               <p className={styles.usernamePost}>@hcocoa</p></a>
-               <p className={styles.textoPost}>Una foto mía durmiendo bien a gusto.</p>
-               <div className={styles.frame}>
-               <img className={styles.fotoPost} src={fotoPublicacion} alt="Foto post"/>
-               </div>
-               <img className={styles.iconLike} src={iconLike} alt="Icono like"/>
-               <p className={styles.numeroLikes} > 50</p>
-               <p className={styles.numeroComentarios} >30 </p>
-               <img className={styles.iconComentarios}  src={iconComentarios} alt="Icono Comentarios"/>
-               </div>
+            <div key={post.id} className={styles.post}>
+            <p className={styles.usernamePost}>@{post.username}</p>
+            <p className={styles.textoPost}>{post.content.text}</p>
+            <div className={styles.frame}>
+            <img
+                  src={post.mediaUrls[0]}
+                  alt="Vista previa"
+                  className={styles.fotoPost}
+                  onClick={() => openViewPostModal(post)}
+                  />
                 </div>
-                <div id="posts-container" className={styles.postsContainer}>
-                  <div className={styles.post}>
-                  <a href='/otro-perfil'>
-                  <img className={styles.fotoPerfilPublicacion} src={fotoPerfil} alt="Imagen de perfil post"/>
-               <p className={styles.usernamePost}>@hcocoa</p></a>
-               <p className={styles.textoPost}>Una foto mía durmiendo bien a gusto.</p>
-               <div className={styles.frame}>
-               <img className={styles.fotoPost} src={fotoPublicacion} alt="Foto post"/>
-               </div>
-               <img className={styles.iconLike} src={iconLike} alt="Icono like"/>
-               <p className={styles.numeroLikes} > 50</p>
-               <p className={styles.numeroComentarios} >30 </p>
-               <img className={styles.iconComentarios}  src={iconComentarios} alt="Icono Comentarios"/>
-               </div>
-                </div>
-                <div id="posts-container" className={styles.postsContainer}>
-                  <div className={styles.post}>
-                  <a href='/otro-perfil'>
-                <img className={styles.fotoPerfilPublicacion} src={fotoPerfil} alt="Imagen de perfil post"/>
-               <p className={styles.usernamePost}>@hcocoa</p></a>
-               <p className={styles.textoPost}>Una foto mía durmiendo bien a gusto.</p>
-               <div className={styles.frame}>
-               <img className={styles.fotoPost} src={fotoPublicacion} alt="Foto post"/>
-               </div>
-               <img className={styles.iconLike} src={iconLike} alt="Icono like"/>
-               <p className={styles.numeroLikes} > 50</p>
-               <p className={styles.numeroComentarios} >30 </p>
-               <img className={styles.iconComentarios}  src={iconComentarios} alt="Icono Comentarios"/>
-               </div>
-                </div>
+              </div>
+              </div>
+              ))}
             </section>
         </div>
     </div>

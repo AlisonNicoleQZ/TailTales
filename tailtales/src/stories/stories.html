@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estados - TailTales</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #stories-section {
+            text-align: center;
+        }
+        #new-story-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        #active-stories {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .story-item {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            border-radius: 50%;
+            overflow: hidden;
+            cursor: pointer;
+            text-align: center;
+        }
+        .story-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .story-description {
+            font-size: 14px;
+            color: #555;
+            margin-top: 8px;
+        }
+        .story-username {
+            font-weight: bold;
+            color: #000;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .modal img {
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        iframe {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <section id="stories-section">
+        <button id="new-story-btn">Nuevo Estado</button>
+        <div id="active-stories"></div>
+    </section>
+
+    <!-- Estructura del modal -->
+    <div id="story-modal" class="modal">
+        <div class="modal-content">
+            <div class="story-username" id="modal-username"></div> <!-- Nombre de usuario -->
+            <div class="story-description" id="modal-description"></div> <!-- Descripción sobre la imagen -->
+            <img id="modal-image" alt="Estado">
+            <iframe id="modal-spotify" width="300" height="80" frameborder="0" allow="encrypted-media"></iframe>
+            <button id="close-modal">Cerrar</button>
+        </div>
+    </div>
+
+    <template id="story-template">
+        <div class="story-item" data-media-url="" data-song-url="" data-username="" data-description="">
+            <img class="story-image" alt="Estado">
+            <div class="story-description"></div>
+            <div class="story-username"></div> <!-- Nombre de usuario visible en la miniatura -->
+        </div>
+    </template>
+    
+    <script type="module" src="stories.js"></script>
+    <script>
+        const modal = document.getElementById('story-modal');
+        const modalImage = document.getElementById('modal-image');
+        const modalSpotify = document.getElementById('modal-spotify');
+        const closeModal = document.getElementById('close-modal');
+        const storiesContainer = document.getElementById('active-stories');
+
+        // Mostrar las historias cuando se carguen
+        function loadStories(stories) {
+            const template = document.getElementById('story-template');
+            stories.forEach(story => {
+                const storyElement = template.content.cloneNode(true);
+                const storyItem = storyElement.querySelector('.story-item');
+                storyItem.dataset.mediaUrl = story.mediaUrl;
+                storyItem.dataset.songUrl = story.songUrl;
+                storyItem.dataset.username = story.username;
+                storyItem.dataset.description = story.description;
+
+                // Actualizar los elementos de la miniatura
+                storyElement.querySelector('.story-image').src = story.mediaUrl;
+                storyElement.querySelector('.story-description').textContent = story.description;
+                storyElement.querySelector('.story-username').textContent = story.username; // Mostrar nombre de usuario
+
+                storiesContainer.appendChild(storyElement);
+            });
+        }
+
+        // Cargar las historias
+        const sampleStories = [
+            {
+                mediaUrl: 'https://via.placeholder.com/120',
+                songUrl: 'https://open.spotify.com/embed/track/1',
+                description: 'Descripción de la historia 1',
+                username: 'Usuario1',
+            },
+            {
+                mediaUrl: 'https://via.placeholder.com/120',
+                songUrl: 'https://open.spotify.com/embed/track/2',
+                description: 'Descripción de la historia 2',
+                username: 'Usuario2',
+            }
+        ];
+
+        loadStories(sampleStories);  // Llamada de ejemplo con historias
+
+        // Abrir el modal al hacer clic en una historia
+        storiesContainer.addEventListener('click', (e) => {
+            const storyItem = e.target.closest('.story-item');
+            if (storyItem) {
+                const mediaUrl = storyItem.dataset.mediaUrl;
+                const songUrl = storyItem.dataset.songUrl;
+                const description = storyItem.dataset.description;
+                const username = storyItem.dataset.username;  // Obtener el nombre de usuario
+
+                // Mostrar el nombre de usuario y la descripción en el modal
+                const modalUsername = document.getElementById('modal-username');
+                const modalDescription = document.getElementById('modal-description');
+                modalUsername.textContent = username;  // Mostrar nombre de usuario
+                modalDescription.textContent = description;
+
+                // Mostrar la imagen y la canción
+                modalImage.src = mediaUrl;
+                modalSpotify.src = songUrl;
+
+                modal.style.display = 'flex';
+            }
+        });
+
+        // Cerrar el modal
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+            modalSpotify.src = ''; // Detener la canción al cerrar el modal
+        });
+    </script>
+</body>
+</html>
