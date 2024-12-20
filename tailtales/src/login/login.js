@@ -2,6 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-storage.js";
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -17,6 +18,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ 'prompt': 'select_account' });
 
@@ -116,6 +118,13 @@ document.getElementById('go-to-login').addEventListener('click', function(event)
   document.getElementById('login-container').style.display = 'block';
 });
 
+async function uploadProfilePic(userId, file) {
+  const storageRef = ref(storage, `profile_pictures/${userId}/${file.name}`);
+  const snapshot = await uploadBytes(storageRef, file);
+  const downloadURL = await getDownloadURL(snapshot.ref);
+  return downloadURL; 
+}
+
 // Manejar el registro de usuarios con verificación de username único
 document.getElementById('register-form').addEventListener('submit', async function(event) {
   event.preventDefault();
@@ -128,7 +137,7 @@ document.getElementById('register-form').addEventListener('submit', async functi
   const breed = document.getElementById('breed').value;
   const age = document.getElementById('age').value;
   const ageFormat = document.getElementById('age_format').value;
-  const profilePic = document.getElementById('profilePic').value;
+  const profilePicFile = document.getElementById('profilePic').files[0];
   const bio = document.getElementById('bio').value;
   const location = document.getElementById('location').value;
   const privacySettings = document.getElementById('privacySettings').value;
@@ -148,11 +157,17 @@ document.getElementById('register-form').addEventListener('submit', async functi
       return;
     }
 
-    // Crear el documento del usuario en Firestore
+    // Registrar el usuario
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-  // Generar un petId aleatorio
+    // Subir la imagen de perfil a Firebase Storage si existe
+    let profilePicURL = "";
+    if (profilePicFile) {
+      profilePicURL = await uploadProfilePic(user.uid, profilePicFile);
+    }    
+
+    // Generar un petId aleatorio
     const petId = Math.floor(Math.random() * 1000000);
 
     // Crear el documento del usuario en Firestore
@@ -165,10 +180,10 @@ document.getElementById('register-form').addEventListener('submit', async functi
       breed: breed,
       age: parseInt(age),
       age_format: ageFormat,
-      profilePic: profilePic,
+      profilePic: profilePicURL,
       bio: bio,
       location: location,
-      privacySettings: parseInt(privacySettings),
+      privacySettings: parseInt(privacySettings),  // Manejo como 0 o 1
       status: true,
       createdAt: new Date().toLocaleString()
     });
@@ -181,6 +196,7 @@ document.getElementById('register-form').addEventListener('submit', async functi
   }
 });
 
+
 // Manejar el envío del formulario "Completa tu registro"
 document.getElementById('complete-registration-form').addEventListener('submit', async function(event) {
   event.preventDefault();
@@ -192,13 +208,18 @@ document.getElementById('complete-registration-form').addEventListener('submit',
   const breed = document.getElementById('complete-breed').value;
   const age = document.getElementById('complete-age').value;
   const ageFormat = document.getElementById('complete-age_format').value;
-  const profilePic = document.getElementById('complete-profilePic').value;
+  const profilePicFile = document.getElementById('complete-profilePic').files[0];
   const bio = document.getElementById('complete-bio').value;
   const location = document.getElementById('complete-location').value;
   const privacySettings = document.getElementById('complete-privacySettings').value;
 
   try {
     const userId = auth.currentUser.uid;
+    let profilePicURL = "";
+    if (profilePicFile) {
+      profilePicURL = await uploadProfilePic(user.uid, profilePicFile);
+    }    
+
     await setDoc(doc(db, "users", userId), {
       mail: email,
       username: username,
@@ -207,10 +228,10 @@ document.getElementById('complete-registration-form').addEventListener('submit',
       breed: breed,
       age: parseInt(age),
       age_format: ageFormat,
-      profilePic: profilePic,
+      profilePic: profilePicURL,
       bio: bio,
       location: location,
-      privacySettings: parseInt(privacySettings),
+      privacySettings: parseInt(privacySettings), // Aquí también se maneja el valor como 0 o 1
       status: true,
       createdAt: new Date().toLocaleString()
     });
