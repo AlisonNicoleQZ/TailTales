@@ -17,7 +17,7 @@ export const NavBar = () => {
             <a href='/buscar'><img src={buscar} className={styles.buscar} alt="Buscar" /></a>
             <a href='/notificaciones'><img src={notif} className={styles.notif} alt="Notificaciones" /></a>
             <a href='/solicitudes'><img src={amistades} className={styles.amistades} alt="Amistades y Seguimientos" /></a>
-            <a href='/publicar'><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
+            <a href='/stories'><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
             <a href='/perfil'><img src={perfil} className={styles.perfil} alt="Perfil" /></a>
         </nav>
     </>

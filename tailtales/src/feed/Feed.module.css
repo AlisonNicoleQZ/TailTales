@@ -69,6 +69,7 @@ body::-webkit-scrollbar-thumb {
     border: 0.2rem solid #BE95C4;
     border-radius: 50rem;
     margin-left: 1.25rem;
+    width: 4rem;
 }
 
 .storyUsername{
