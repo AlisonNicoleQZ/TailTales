@@ -4,7 +4,6 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { Landing } from './landing/Landing.jsx';
 import { Perfil } from './profile/Perfil';
-import { OtherProfile } from './follow/OtherProfile.jsx';
 import { EditarPerfil } from './profile/EditarPerfil';
 import { Feed } from './feed/Feed.jsx';
 import { Follow } from './follow/Follow.jsx';
@@ -26,7 +25,6 @@ root.render(
         <Route path="/" element={<Landing/>} />
         <Route path="/login-register" element={<LoginRegister/>} />
         <Route path="/perfil" element={<Perfil/>} />
-        <Route path="/perfil/:userId" element={<OtherProfile/>} />
         <Route path="/editar-perfil" element={<EditarPerfil/>} />
         <Route path="/feed" element={<Feed/>} />
         <Route path="/solicitudes" element={<Follow/>} />
