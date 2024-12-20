@@ -12,6 +12,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/fireba
 import { getFirestore, collection, addDoc, query, where, orderBy, getDocs, updateDoc,arrayUnion, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 
+
 export const PublicFollow = () => {
   const [profiles, setProfiles] = useState([]);
   const [pendingRequests, setPendingRequests] = useState([]);
@@ -138,15 +139,9 @@ export const PublicFollow = () => {
     <>
     <header>
     <title>Public Follow - TailTales</title>
-    <a href='/feed'><img src={logo} className={styles.logo} alt="logo" /></a>
-        <nav className={styles.menuNav}>
-        <a href='/feed'><img src={feed} className={styles.feed} alt="Feed" /></a>
-          <a href='/buscar'><img src={buscar} className={styles.buscar} alt="Buscar" /></a>
-          <a href='/notificaciones'><img src={notif} className={styles.notif} alt="Notificaciones" /></a>
-          <a href='/solicitudes'><img src={amistades} className={styles.amistades} alt="Amistades y Seguimientos" /></a>
-          <a href='/publicar'><img src={publicar} className={styles.publicar} alt="Publicar" /></a>
-          <a href='/perfil'><img src={perfil} className={styles.perfil} alt="Perfil" /></a>
-        </nav>
+    
+    <NavBar/>
+
     </header>
     <main>
     <section>
