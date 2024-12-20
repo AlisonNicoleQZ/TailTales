@@ -60,6 +60,30 @@
             margin-bottom: 15px;
         }
 
+        #carousel-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #prev-image-btn, #next-image-btn {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 50%;
+            font-size: 1.5em;
+        }
+
+        #prev-image-btn {
+            margin-right: 10px;
+        }
+
+        #next-image-btn {
+            margin-left: 10px;
+        }
+
         #close-modal-btn {
             margin-top: 10px;
             padding: 8px 16px;
@@ -133,51 +157,7 @@
         import { loadHeader } from '../headerLoader.js';
         loadHeader("Feed");
     </script>
-    <script type="module" src="feed.js"></script>
-
-    <script>
-        let currentImageIndex = 0; // Índice de la imagen actual en el modal
-        let postImages = []; // Array para almacenar las imágenes de la publicación
     
-        // Función para mostrar la publicación en el modal
-        function openViewPostModal(postData) {
-            const modal = document.getElementById('post-modal');
-            const modalImage = document.getElementById('modal-image');
-            const modalText = document.getElementById('modal-text');
-    
-            // Almacenamos las imágenes de la publicación
-            postImages = postData.mediaUrls;
-    
-            // Mostramos la primera imagen
-            modalImage.src = postImages[currentImageIndex];
-            modalText.textContent = postData.content.text || 'Sin descripción';
-    
-            modal.style.display = 'flex';
-        }
-    
-        // Función para navegar a la siguiente imagen
-        function showNextImage() {
-            if (postImages.length > 1) {
-                currentImageIndex = (currentImageIndex + 1) % postImages.length; // Avanza al siguiente índice
-                const modalImage = document.getElementById('modal-image');
-                modalImage.src = postImages[currentImageIndex]; // Actualiza la imagen mostrada
-            }
-        }
-    
-        // Función para navegar a la imagen anterior
-        function showPreviousImage() {
-            if (postImages.length > 1) {
-                currentImageIndex = (currentImageIndex - 1 + postImages.length) % postImages.length; // Retrocede al índice anterior
-                const modalImage = document.getElementById('modal-image');
-                modalImage.src = postImages[currentImageIndex]; // Actualiza la imagen mostrada
-            }
-        }
-    
-        // Cerrar el modal
-        document.getElementById('close-modal-btn').addEventListener('click', () => {
-            document.getElementById('post-modal').style.display = 'none';
-        });
-    </script>
-    
+    <script type="module" src="feed.js"></script>  <!-- Se asegura de cargar el feed.js -->
 </body>
 </html>

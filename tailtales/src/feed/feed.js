@@ -46,7 +46,10 @@ async function getUsername(userId) {
   }
 }
 
-// Mostrar modal con detalles de la publicación
+let currentImageIndex = 0; // Índice de la imagen actual en el modal
+let postImages = []; // Array para almacenar las imágenes de la publicación
+
+// Función para mostrar la publicación en el modal
 function openViewPostModal(postData) {
   const modal = document.getElementById('post-modal');
   const modalImage = document.getElementById('modal-image');
@@ -54,17 +57,22 @@ function openViewPostModal(postData) {
   const likeBtn = document.getElementById('like-btn');
   const likeCount = document.getElementById('like-count');
   const commentsList = document.getElementById('comments-list');
+  const prevImageBtn = document.getElementById('prev-image-btn');
+  const nextImageBtn = document.getElementById('next-image-btn');
+
+  // Almacenamos las imágenes de la publicación
+  postImages = postData.mediaUrls || []; // Asegúrate de que postData tenga la propiedad mediaUrls
 
   // Cargar datos de la publicación
-  modalImage.src = postData.mediaUrls[0];
+  modalImage.src = postImages[currentImageIndex];
   modalText.textContent = postData.content.text || 'Sin descripción';
   likeCount.textContent = postData.likes || 0;
 
   // Actualizar interacción de "Me gusta"
   likeBtn.onclick = async () => {
-      await toggleLike(postData.id);
-      const updatedPost = await getPostData(postData.id);
-      likeCount.textContent = updatedPost.likes || 0;
+    await toggleLike(postData.id);
+    const updatedPost = await getPostData(postData.id);
+    likeCount.textContent = updatedPost.likes || 0;
   };
 
   // Cargar comentarios
@@ -72,15 +80,37 @@ function openViewPostModal(postData) {
 
   // Enviar comentario
   document.getElementById('comment-btn').onclick = async () => {
-      const commentInput = document.getElementById('comment-input').value.trim();
-      if (commentInput) {
-          await addComment(postData.id, commentInput);
-          document.getElementById('comment-input').value = '';
-          loadComments(postData.id);
-      }
+    const commentInput = document.getElementById('comment-input').value.trim();
+    if (commentInput) {
+      await addComment(postData.id, commentInput);
+      document.getElementById('comment-input').value = '';
+      loadComments(postData.id);
+    }
   };
 
+  // Mostrar/ocultar los botones de navegación según la cantidad de imágenes
+  prevImageBtn.style.display = postImages.length > 1 ? 'inline-block' : 'none';
+  nextImageBtn.style.display = postImages.length > 1 ? 'inline-block' : 'none';
+
   modal.style.display = 'flex';
+}
+
+// Función para navegar a la siguiente imagen
+window.showNextImage = function() {
+  if (postImages.length > 1) {
+    currentImageIndex = (currentImageIndex + 1) % postImages.length; // Avanza al siguiente índice
+    const modalImage = document.getElementById('modal-image');
+    modalImage.src = postImages[currentImageIndex]; // Actualiza la imagen mostrada
+  }
+}
+
+// Función para navegar a la imagen anterior
+window.showPreviousImage = function() {
+  if (postImages.length > 1) {
+    currentImageIndex = (currentImageIndex - 1 + postImages.length) % postImages.length; // Retrocede al índice anterior
+    const modalImage = document.getElementById('modal-image');
+    modalImage.src = postImages[currentImageIndex]; // Actualiza la imagen mostrada
+  }
 }
 
 // Cerrar modal
@@ -133,8 +163,18 @@ async function getFriendsList(userId) {
   }
 }
 
-// Función de búsqueda de publicaciones
+// Función de búsqueda de publicaciones filtrando amigos y usuario actual
 async function searchPosts(queryText) {
+  const user = auth.currentUser;
+  if (!user) {
+    alert("Debes iniciar sesión para realizar la búsqueda.");
+    return [];
+  }
+
+  // Obtener lista de amigos y agregar al propio usuario
+  const friends = await getFriendsList(user.uid);
+  const allowedUsers = [user.uid, ...friends];
+
   const postsQuery = query(collection(db, "posts"));
   const postsSnapshot = await getDocs(postsQuery);
 
@@ -144,10 +184,15 @@ async function searchPosts(queryText) {
     const postData = postDoc.data();
     postData.id = postDoc.id;
 
+    // Verificar si el autor está en la lista permitida
+    if (!allowedUsers.includes(postData.petId)) {
+      continue;
+    }
+
     const username = await getUsername(postData.petId);
     postData.username = username;
 
-    const postText = postData.content?.text || '';
+    const postText = postData.content?.text || "";
 
     if (
       postText.toLowerCase().includes(queryText.toLowerCase()) ||
@@ -237,57 +282,59 @@ async function addComment(postId, commentText) {
   }
 }
 
+// Cargar publicaciones de amigos y del usuario actual
+async function loadFriendsPosts() {
+  const user = auth.currentUser;
+  if (!user) {
+    alert("Debes iniciar sesión para ver el feed.");
+    window.location.href = '../login/login.html';
+    return;
+  }
+
+  const allPosts = [];
+
+  // Cargar publicaciones del usuario actual
+  const userPosts = await loadUserPosts(user.uid);
+  for (const post of userPosts) {
+    const username = await getUsername(user.uid);
+    post.username = username;
+  }
+  allPosts.push(...userPosts);
+
+  // Cargar publicaciones de amigos
+  const friends = await getFriendsList(user.uid);
+  for (const friendId of friends) {
+    const friendPosts = await loadUserPosts(friendId);
+
+    for (const post of friendPosts) {
+      const username = await getUsername(friendId);
+      post.username = username;
+    }
+
+    allPosts.push(...friendPosts);
+  }
+
+  // Ordenar publicaciones por fecha de creación
+  allPosts.sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis());
+  renderPosts(allPosts);
+}
+
 // Agregar el evento de búsqueda
 document.getElementById('search-input').addEventListener('input', async () => {
-  const queryText = document.getElementById('search-input').value;
-  if (queryText.trim()) {
+  const queryText = document.getElementById('search-input').value.trim();
+  if (queryText) {
     const searchResults = await searchPosts(queryText);
     renderPosts(searchResults);
   } else {
-    loadAllPosts();
+    await loadFriendsPosts();  // Cargar publicaciones cuando no hay texto en la barra de búsqueda
   }
 });
-
-// Función para cargar todas las publicaciones
-async function loadAllPosts() {
-  const allPosts = [];
-  const user = auth.currentUser;
-  if (user) {
-    // Cargar publicaciones del propio usuario
-    const userPosts = await loadUserPosts(user.uid);
-    for (const post of userPosts) {
-      const username = await getUsername(user.uid);
-      post.username = username;
-    }
-    allPosts.push(...userPosts);
-
-    // Cargar publicaciones de los amigos
-    const friends = await getFriendsList(user.uid);
-    for (const friendId of friends) {
-      const friendPosts = await loadUserPosts(friendId);
-
-      for (const post of friendPosts) {
-        const username = await getUsername(friendId);
-        post.username = username;
-      }
-
-      allPosts.push(...friendPosts);
-    }
-
-    // Ordenar publicaciones por fecha
-    allPosts.sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis());
-    renderPosts(allPosts);
-  } else {
-    alert('Debe iniciar sesión para ver el feed.');
-    window.location.href = '../login/login.html';
-  }
-}
 
 // Detectar si el usuario ha iniciado sesión
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     console.log("Usuario autenticado:", user.uid);
-    loadAllPosts();
+    loadFriendsPosts();
   } else {
     alert('Debe iniciar sesión para ver el feed.');
     window.location.href = '../login/login.html';
