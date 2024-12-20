@@ -242,8 +242,8 @@ export const EditarPerfil = () => {
                 <label htmlFor="privacySettings">Configuración de Privacidad:</label>
                 <select id="privacySettings" value={profile.privacySettings}
               onChange={(e) => setProfile({ ...profile, privacySettings: e.target.value })} required>
-                    <option value="1">Público</option>
-                    <option value="2">Privado</option>
+                    <option value="0">Público</option>
+                    <option value="1">Privado</option>
                 </select>
             </div>
           </div>

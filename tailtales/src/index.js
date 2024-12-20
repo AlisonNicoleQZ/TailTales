@@ -4,7 +4,6 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { Landing } from './landing/Landing.jsx';
 import { Perfil } from './profile/Perfil';
-import { OtherProfile } from './follow/OtherProfile.jsx';
 import { EditarPerfil } from './profile/EditarPerfil';
 import { Feed } from './feed/Feed.jsx';
 import { Follow } from './follow/Follow.jsx';
@@ -12,6 +11,9 @@ import { LoginRegister } from './login/LoginRegister.jsx';
 import { Notifications } from './notifications/Notifications.jsx';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Friends } from './friends/Friends.jsx';
+import { PublicFollow } from './follow/PublicFollow.jsx';
+import { Stories } from './stories/Stories.jsx';
+import { Search } from './search/Search.jsx';
 
 //import { PublicFollow } from './follow/PublicFollow.jsx';
 
@@ -23,16 +25,13 @@ root.render(
         <Route path="/" element={<Landing/>} />
         <Route path="/login-register" element={<LoginRegister/>} />
         <Route path="/perfil" element={<Perfil/>} />
-        <Route path="/perfil/:userId" element={<OtherProfile/>} />
         <Route path="/editar-perfil" element={<EditarPerfil/>} />
         <Route path="/feed" element={<Feed/>} />
         <Route path="/solicitudes" element={<Follow/>} />
         <Route path="/solicitudes-publicas" element={<PublicFollow/>} />
         <Route path="/notificaciones" element={<Notifications/>} />
-        <Route path="/editar-perfil" element={<EditarPerfil/>} />
-        <Route path="/feed" element={<Feed/>} />
-        <Route path="/solicitudes" element={<Follow/>} />
-        <Route path="/notificaciones" element={<Notifications/>} />
+        <Route path="/stories" element={<Stories/>} />
+        <Route path="/buscar" element={<Search/>} />
         <Route path="/friends" element={<Friends/>} />
       </Routes>
     </Router>
