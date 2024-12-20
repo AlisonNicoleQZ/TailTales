@@ -13,9 +13,7 @@ import iconComentarios from '../img/icon-comentarios.svg';
 import {initializeApp} from "firebase/app";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {getFirestore, collection, doc, getDoc, query, where, getDocs} from "firebase/firestore";
-
 import ViewPostModal from "../profile/ViewPostModal";
-
 import { NavBar } from '../NavBar';
 
 export const Feed = () => {
@@ -140,10 +138,7 @@ const loadUserProfile = async (uid) => {
     <>
     <title>Feed - TailTales</title>
     <div className={styles.container}>
-
     <NavBar/>
-
-
        <div className="main-feed">
             <section id="friend-stories" className={styles.friendStories}>
                 <div id="stories-container" className={styles.storiesContainer}>

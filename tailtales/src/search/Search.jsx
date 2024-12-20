@@ -51,7 +51,7 @@ export const Search = () => {
     };
 
     const handleProfileClick = (userId) => {
-        window.location.href = `../follow/otherProfile.html?userId=${userId}`;
+        window.location.href = `/otro-perfil?userId=${userId}`;
     };
   return (
     <>

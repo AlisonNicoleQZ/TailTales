@@ -88,9 +88,7 @@ export const PublicFollow = () => {
     <>
     <header>
     <title>Public Follow - TailTales</title>
-    
     <NavBar/>
-
     </header>
     <main>
     <section>
