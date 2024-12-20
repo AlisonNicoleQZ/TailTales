@@ -101,7 +101,7 @@ async function initializePage() {
         friendsListSnapshot.data().friends &&
         friendsListSnapshot.data().friends.includes(currentUserId);
 
-    if (privacySettings === 1 && !isFriend) {
+    if (privacySettings === 0 && !isFriend) {
         // Restringir acceso a publicaciones y lista de amigos
         restrictAccess();
     } else {
@@ -263,7 +263,7 @@ document.getElementById("close-view-modal").addEventListener("click", () => {
 });
 
 // Función para crear una notificación
-async function createNotification(petId, type, message, status = 2) {
+async function createNotification(petId, type, message, status = 1) {
     try {
         const notificationData = {
             petId,
@@ -305,12 +305,12 @@ async function toggleFollow(userId) {
         const targetUserSnapshot = await getDoc(targetUserDoc);
 
         // Si privacySettings es 1, crea una solicitud en la colección friendRequest
-        if (privacySettings === 1) {
+        if (privacySettings === 0) {
             console.log(`Creando solicitud de amistad para el usuario con ID: ${userId}`);
             const friendRequestData = {
                 senderId: currentUserId,
                 receiverId: userId,
-                status: 1, // Estado: pendiente
+                status: 0, // Estado: pendiente
                 createdAt: new Date() // Marca de tiempo
             };
 
@@ -323,7 +323,7 @@ async function toggleFollow(userId) {
 
             await createNotification(
                 userId,
-                1, // Tipo: Solicitud de amistad
+                0, // Tipo: Solicitud de amistad
                 `@${currentUsername} te envió una solicitud de seguimiento`
             );
 
@@ -333,7 +333,8 @@ async function toggleFollow(userId) {
         }
 
         // Si privacySettings es 2, gestionar la relación directamente
-        if (privacySettings === 2) {
+
+        if (privacySettings === 1) {
             const isFriend =
                 currentUserSnapshot.exists() &&
                 currentUserSnapshot.data().friends &&
@@ -383,7 +384,7 @@ async function toggleFollow(userId) {
 
                 await createNotification(
                     userId,
-                    1, // Tipo: Seguimiento directo
+                    0, // Tipo: Seguimiento directo
                     `@${currentUsername} comenzó a seguirte`
                 );
 
@@ -447,7 +448,7 @@ async function checkFriendStatus(userId) {
             collection(db, "friendRequest"),
             where("senderId", "==", currentUserId),
             where("receiverId", "==", userId),
-            where("status", "==", 1) // Estado pendiente
+            where("status", "==", 0) // Estado pendiente
         );
         const friendRequestSnapshot = await getDocs(friendRequestQuery);
 
