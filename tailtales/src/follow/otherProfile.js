@@ -333,7 +333,7 @@ async function toggleFollow(userId) {
         }
 
         // Si privacySettings es 2, gestionar la relación directamente
-        if (privacySettings === 2) {
+        if (privacySettings === 0) {
             const isFriend =
                 currentUserSnapshot.exists() &&
                 currentUserSnapshot.data().friends &&

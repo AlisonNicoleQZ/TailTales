@@ -45,7 +45,7 @@ const ViewPostModal = ({ isOpen, postData, onClose }) => {
         >
           &lt;
         </span>
-        <img
+        <img className={styles.photo}
           id="view-post-image"
           src={updateCarouselImage()}
           alt="Imagen de la publicación"

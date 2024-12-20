@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-storage.js";
 import logo from '../img/logo.svg';
 import styles from './LoginRegister.module.css';
 
@@ -21,6 +22,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
+const storage = getStorage(app);
 provider.setCustomParameters({ 'prompt': 'select_account' });
 
 export const LoginRegister = () => {
@@ -39,7 +41,7 @@ export const LoginRegister = () => {
   const [age, setAge] = useState(1);
   const [ageFormat, setAgeFormat] = useState("years");
   const [ageError, setAgeError] = useState(false);
-  const [profilePic, setProfilePic] = useState('');
+  const [profilePicFile, setProfilePicFile] = useState(null);
   const [bio, setBio] = useState('');
   const [locationField, setLocationField] = useState('');
   const [privacySettings, setPrivacySettings] = useState('1');
@@ -84,6 +86,10 @@ export const LoginRegister = () => {
 
   const handleAgeFormatChange = (event) => {
     setAgeFormat(event.target.value);
+  };
+
+  const handleFileChange = (event) => {
+    setProfilePicFile(event.target.files[0]);
   };
 
   // Función para limpiar el formulario de inicio de sesión
@@ -174,7 +180,11 @@ export const LoginRegister = () => {
     } else {
       setPasswordError("");
     }
-  
+    
+    if (!profilePicFile) {
+      alert("Por favor, selecciona una foto de perfil.");
+      return;
+    }
     try {
       const usersCollection = collection(db, "users");
       const usernameQuery = query(usersCollection, where("username", "==", username));
@@ -184,6 +194,11 @@ export const LoginRegister = () => {
         alert("El nombre de usuario ya está en uso. Por favor, elige otro.");
         return;
       }
+
+      // Subir la foto de perfil a Firebase Storage
+      const storageRef = ref(storage, `profilePics/${profilePicFile.name}`);
+      await uploadBytes(storageRef, profilePicFile);
+      const profilePicUrl = await getDownloadURL(storageRef);
   
       // Crear el documento del usuario en Firestore
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -202,7 +217,7 @@ export const LoginRegister = () => {
         breed: breed,
         age: parseInt(age),
         age_format: ageFormat,
-        profilePic: profilePic,
+        profilePic: profilePicUrl,
         bio: bio,
         location: locationField,
         privacySettings: parseInt(privacySettings),
@@ -407,14 +422,13 @@ export const LoginRegister = () => {
               </select>
             </div>
             <div className={styles.inputsRegistro}>
-              <label className={styles.registroLabel} htmlFor="profilePic">URL de la Foto de Perfil</label>
+              <label className={styles.registroLabel} htmlFor="profilePic">Foto de Perfil</label>
               <input
-                type="text"
-                id="profilePic"
-                value={profilePic}
-                onChange={(e) => setProfilePic(e.target.value)}
-                placeholder="Ingresa la URL de la foto de perfil"
-                required
+                 type="file"
+                 id="profilePic"
+                 accept="image/*"
+                 onChange={handleFileChange}
+                 required
               />
             </div>
             <div className={styles.inputsRegistro}>
@@ -451,8 +465,8 @@ export const LoginRegister = () => {
                 onChange={(e) => setPrivacySettings(e.target.value)}
                 required
               >
-                <option value="1">Público</option>
-                <option value="2">Privado</option>
+                <option value="0">Público</option>
+                <option value="1">Privado</option>
               </select>
             </div>
             <button type="submit" className={styles.registroButton}>
