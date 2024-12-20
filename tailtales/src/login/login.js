@@ -66,7 +66,7 @@ document.getElementById('login-form').addEventListener('submit', function(event)
       if (error.code === 'auth/user-not-found') {
         alert('Usuario no registrado. Por favor, verifique sus credenciales.');
       } else {
-        alert('Usuario o contraseña inválidos, por favor inténtelo de nuevo');
+        alert('Usuario o contraseña inválido, por favor inténtelo de nuevo');
       }
       resetLoginForm();
     });
@@ -95,7 +95,7 @@ document.getElementById('forgot-password').addEventListener('click', function(ev
       .then(() => alert('Se ha enviado un correo para restablecer su contraseña. Verifique su bandeja de entrada.'))
       .catch((error) => {
         if (error.code === 'auth/user-not-found') {
-          alert('Email no registrado en la plataforma, por favor inténtelo de nuevo');
+          alert('Email no registrado en plataforma, por favor inténtelo de nuevo');
         } else {
           alert('Ocurrió un error al intentar restablecer la contraseña: ' + error.message);
         }
@@ -118,20 +118,12 @@ document.getElementById('go-to-login').addEventListener('click', function(event)
   document.getElementById('login-container').style.display = 'block';
 });
 
-// Función para cargar la imagen de perfil a Firebase Storage
-async function uploadProfilePic(file) {
-  if (!auth.currentUser) {
-    alert('Debe estar autenticado para cargar una imagen de perfil.');
-    return null;
-  }
-
-  const userId = auth.currentUser.uid;
+async function uploadProfilePic(userId, file) {
   const storageRef = ref(storage, `profile_pictures/${userId}/${file.name}`);
   const snapshot = await uploadBytes(storageRef, file);
   const downloadURL = await getDownloadURL(snapshot.ref);
-  return downloadURL; // Retorna la URL de descarga
+  return downloadURL; 
 }
-
 
 // Manejar el registro de usuarios con verificación de username único
 document.getElementById('register-form').addEventListener('submit', async function(event) {
@@ -165,15 +157,15 @@ document.getElementById('register-form').addEventListener('submit', async functi
       return;
     }
 
+    // Registrar el usuario
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
     // Subir la imagen de perfil a Firebase Storage si existe
     let profilePicURL = "";
     if (profilePicFile) {
-      profilePicURL = await uploadProfilePic(profilePicFile);
-    }
-
-    // Crear el documento del usuario en Firestore
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
+      profilePicURL = await uploadProfilePic(user.uid, profilePicFile);
+    }    
 
     // Generar un petId aleatorio
     const petId = Math.floor(Math.random() * 1000000);
@@ -191,7 +183,7 @@ document.getElementById('register-form').addEventListener('submit', async functi
       profilePic: profilePicURL,
       bio: bio,
       location: location,
-      privacySettings: parseInt(privacySettings),
+      privacySettings: parseInt(privacySettings),  // Manejo como 0 o 1
       status: true,
       createdAt: new Date().toLocaleString()
     });
@@ -203,6 +195,7 @@ document.getElementById('register-form').addEventListener('submit', async functi
     alert("Error al registrar el usuario: " + error.message);
   }
 });
+
 
 // Manejar el envío del formulario "Completa tu registro"
 document.getElementById('complete-registration-form').addEventListener('submit', async function(event) {
@@ -224,8 +217,8 @@ document.getElementById('complete-registration-form').addEventListener('submit',
     const userId = auth.currentUser.uid;
     let profilePicURL = "";
     if (profilePicFile) {
-      profilePicURL = await uploadProfilePic(profilePicFile);
-    }
+      profilePicURL = await uploadProfilePic(user.uid, profilePicFile);
+    }    
 
     await setDoc(doc(db, "users", userId), {
       mail: email,
@@ -238,7 +231,7 @@ document.getElementById('complete-registration-form').addEventListener('submit',
       profilePic: profilePicURL,
       bio: bio,
       location: location,
-      privacySettings: parseInt(privacySettings),
+      privacySettings: parseInt(privacySettings), // Aquí también se maneja el valor como 0 o 1
       status: true,
       createdAt: new Date().toLocaleString()
     });
