@@ -50,8 +50,14 @@ async function loadUserProfile(uid) {
         document.getElementById('profile-breed').innerText = userData.breed;
         document.getElementById('profile-bio').innerText = userData.bio;
         document.getElementById('profile-location').innerText = userData.location;
-        document.getElementById('profile-pic').src = userData.profilePic || '../img/default-profile-image.jpg';
         document.getElementById('profile-age').innerText = `${userData.age} ${userData.age_format === 'years' ? 'años' : 'meses'}`;
+
+        // Verificar si la URL de la imagen de perfil está disponible
+        if (userData.profilePic) {
+            document.getElementById('profile-pic').src = userData.profilePic;  // Usa la URL guardada
+        } else {
+            document.getElementById('profile-pic').src = '../img/default-profile-image.jpg';  // Imagen por defecto
+        }
 
         const friendsListDoc = doc(db, "friendsList", uid);
         const friendsListSnapshot = await getDoc(friendsListDoc);
@@ -70,6 +76,7 @@ async function loadUserProfile(uid) {
         }
     }
 }
+
 
 // Abrir el modal para crear o editar una publicación
 function openPostModal(postData = null, postId = null) {

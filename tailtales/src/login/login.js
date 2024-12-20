@@ -2,6 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-storage.js";
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -17,6 +18,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ 'prompt': 'select_account' });
 
@@ -64,7 +66,7 @@ document.getElementById('login-form').addEventListener('submit', function(event)
       if (error.code === 'auth/user-not-found') {
         alert('Usuario no registrado. Por favor, verifique sus credenciales.');
       } else {
-        alert('Usuario o contraseña inválido, por favor inténtelo de nuevo');
+        alert('Usuario o contraseña inválidos, por favor inténtelo de nuevo');
       }
       resetLoginForm();
     });
@@ -93,7 +95,7 @@ document.getElementById('forgot-password').addEventListener('click', function(ev
       .then(() => alert('Se ha enviado un correo para restablecer su contraseña. Verifique su bandeja de entrada.'))
       .catch((error) => {
         if (error.code === 'auth/user-not-found') {
-          alert('Email no registrado en plataforma, por favor inténtelo de nuevo');
+          alert('Email no registrado en la plataforma, por favor inténtelo de nuevo');
         } else {
           alert('Ocurrió un error al intentar restablecer la contraseña: ' + error.message);
         }
@@ -116,6 +118,21 @@ document.getElementById('go-to-login').addEventListener('click', function(event)
   document.getElementById('login-container').style.display = 'block';
 });
 
+// Función para cargar la imagen de perfil a Firebase Storage
+async function uploadProfilePic(file) {
+  if (!auth.currentUser) {
+    alert('Debe estar autenticado para cargar una imagen de perfil.');
+    return null;
+  }
+
+  const userId = auth.currentUser.uid;
+  const storageRef = ref(storage, `profile_pictures/${userId}/${file.name}`);
+  const snapshot = await uploadBytes(storageRef, file);
+  const downloadURL = await getDownloadURL(snapshot.ref);
+  return downloadURL; // Retorna la URL de descarga
+}
+
+
 // Manejar el registro de usuarios con verificación de username único
 document.getElementById('register-form').addEventListener('submit', async function(event) {
   event.preventDefault();
@@ -128,7 +145,7 @@ document.getElementById('register-form').addEventListener('submit', async functi
   const breed = document.getElementById('breed').value;
   const age = document.getElementById('age').value;
   const ageFormat = document.getElementById('age_format').value;
-  const profilePic = document.getElementById('profilePic').value;
+  const profilePicFile = document.getElementById('profilePic').files[0];
   const bio = document.getElementById('bio').value;
   const location = document.getElementById('location').value;
   const privacySettings = document.getElementById('privacySettings').value;
@@ -148,11 +165,17 @@ document.getElementById('register-form').addEventListener('submit', async functi
       return;
     }
 
+    // Subir la imagen de perfil a Firebase Storage si existe
+    let profilePicURL = "";
+    if (profilePicFile) {
+      profilePicURL = await uploadProfilePic(profilePicFile);
+    }
+
     // Crear el documento del usuario en Firestore
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-  // Generar un petId aleatorio
+    // Generar un petId aleatorio
     const petId = Math.floor(Math.random() * 1000000);
 
     // Crear el documento del usuario en Firestore
@@ -165,7 +188,7 @@ document.getElementById('register-form').addEventListener('submit', async functi
       breed: breed,
       age: parseInt(age),
       age_format: ageFormat,
-      profilePic: profilePic,
+      profilePic: profilePicURL,
       bio: bio,
       location: location,
       privacySettings: parseInt(privacySettings),
@@ -192,13 +215,18 @@ document.getElementById('complete-registration-form').addEventListener('submit',
   const breed = document.getElementById('complete-breed').value;
   const age = document.getElementById('complete-age').value;
   const ageFormat = document.getElementById('complete-age_format').value;
-  const profilePic = document.getElementById('complete-profilePic').value;
+  const profilePicFile = document.getElementById('complete-profilePic').files[0];
   const bio = document.getElementById('complete-bio').value;
   const location = document.getElementById('complete-location').value;
   const privacySettings = document.getElementById('complete-privacySettings').value;
 
   try {
     const userId = auth.currentUser.uid;
+    let profilePicURL = "";
+    if (profilePicFile) {
+      profilePicURL = await uploadProfilePic(profilePicFile);
+    }
+
     await setDoc(doc(db, "users", userId), {
       mail: email,
       username: username,
@@ -207,7 +235,7 @@ document.getElementById('complete-registration-form').addEventListener('submit',
       breed: breed,
       age: parseInt(age),
       age_format: ageFormat,
-      profilePic: profilePic,
+      profilePic: profilePicURL,
       bio: bio,
       location: location,
       privacySettings: parseInt(privacySettings),

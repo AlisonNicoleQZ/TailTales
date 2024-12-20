@@ -82,8 +82,9 @@
                     </select>
                 </div>
                 <div class="input-group">
-                    <label for="profilePic">URL de la Foto de Perfil</label>
-                    <input type="text" id="profilePic" placeholder="Ingresa la URL de la foto de perfil" required>
+                    <label for="profilePic">Foto de Perfil</label>
+                    <input type="file" id="profilePic" accept="image/*" required>
+                    <img id="profilePicPreview" style="display:none; max-width: 100px; margin-top: 10px;" />
                 </div>
                 <div class="input-group">
                     <label for="bio">Biografía</label>
@@ -175,8 +176,9 @@
                     </select>
                 </div>
                 <div class="input-group">
-                    <label for="complete-profilePic">URL de la Foto de Perfil</label>
-                    <input type="text" id="complete-profilePic" placeholder="Ingresa la URL de la foto de perfil" required>
+                    <label for="complete-profilePic">Foto de Perfil</label>
+                    <input type="file" id="complete-profilePic" accept="image/*" required>
+                    <img id="complete-profilePicPreview" style="display:none; max-width: 100px; margin-top: 10px;" />
                 </div>
                 <div class="input-group">
                     <label for="complete-bio">Biografía</label>
