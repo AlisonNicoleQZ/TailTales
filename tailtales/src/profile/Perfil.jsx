@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
 import styles from './Perfil.module.css';
-import logo from '../img/logo.svg';
-import feed from '../img/casa.svg';
-import buscar from '../img/lupa.svg';
-import notif from '../img/campana.svg';
-import amistades from '../img/amistades.svg';
-import publicar from '../img/camara.svg';
-import perfil from '../img/perfil.svg';
 import nacimiento from '../img/nacimiento.svg';
 import apariencia from '../img/especie-y-raza.svg';
 import ubicacion from '../img/ubicacion.svg';
@@ -200,7 +193,7 @@ export const Perfil = () => {
           <p className={styles.especie}>{userData.species}</p>
           <p className={styles.raza}>{userData.breed}</p>
           <img src={nacimiento} className={`${styles.icon} ${styles.nacimientoIcon}`}/>
-          <p className={styles.nacimiento}>{userData.age} años</p>
+          <p className={styles.nacimiento}>{`${userData.age} ${userData.age_format === "years" ? "años" : "meses"}`}</p>
           <img src={ubicacion} className={`${styles.icon} ${styles.ubicacionIcon}`}/>
           <p className={styles.ubicacion}>{userData.location}</p>
         </div>

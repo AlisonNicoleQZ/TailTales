@@ -196,7 +196,7 @@ export const LoginRegister = () => {
       }
 
       // Subir la foto de perfil a Firebase Storage
-      const storageRef = ref(storage, `profilePics/${profilePicFile.name}`);
+      const storageRef = ref(storage, `profile_pictures/${profilePicFile.name}`);
       await uploadBytes(storageRef, profilePicFile);
       const profilePicUrl = await getDownloadURL(storageRef);
   

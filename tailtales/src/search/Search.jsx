@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const firebaseConfig = {
     apiKey: "AIzaSyD4_VxzGYLNmkKTiMGZrttFgUmXm7UKNyc",
@@ -64,10 +65,10 @@ export const Search = () => {
         </div>
         <div id="results-container">
                 {results.map((user) => (
+                    <Link to={{pathname: "/otro-perfil", search: `?userId=${user.id}`}}>
                     <div
                         key={user.id}
                         className="profile-card"
-                        onClick={() => navigate(`/otro-perfil/${user.id}`)}
                         style={{ cursor: "pointer" }}
                     >
                         <img
@@ -78,6 +79,7 @@ export const Search = () => {
                         <h3>{user.name}</h3>
                         <p>@{user.username}</p>
                     </div>
+                    </Link>
                 ))}
             </div>
     </>

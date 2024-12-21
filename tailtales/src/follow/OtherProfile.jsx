@@ -3,6 +3,11 @@ import { initializeApp} from "https://www.gstatic.com/firebasejs/10.13.2/firebas
 import { getFirestore, doc, getDoc, collection, query, where, getDocs, updateDoc, arrayUnion, arrayRemove, setDoc, addDoc
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+import styles from './OtherProfile.module.css';
+import { NavBar } from "../NavBar";
+import nacimiento from '../img/nacimiento.svg';
+import apariencia from '../img/especie-y-raza.svg';
+import ubicacion from '../img/ubicacion.svg';
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -307,18 +312,28 @@ export const OtherProfile = () => {
 
   return (
     <div>
+              <NavBar/>
+     
+       <title>Perfil</title> 
       {userData && (
         <div>
-          <img src={userData.profilePic || "../img/default-profile-image.jpg"} alt="Profile" />
-          <h2>{userData.name || "Nombre no disponible"}</h2>
-          <p>{userData.username ? `@${userData.username}` : "@usuario_no_disponible"}</p>
-          <p>{userData.bio || "Biografía no disponible"}</p>
-          <p>{userData.location || "Ubicación no disponible"}</p>
-          <p>{`${userData.age} ${userData.age_format === "years" ? "años" : "meses"}`}</p>
+          <img className={styles.fotoPerfil} src={userData.profilePic || "../img/default-profile-image.jpg"} alt="Profile" />
+           <div className={styles.infoUser}>
+          <h3 className={styles.username}>{userData.username ? `@${userData.username}` : "@usuario_no_disponible"}</h3>
+          <h4 className={styles.name}>{userData.name || "Nombre no disponible"}</h4>
+          <p className={styles.bio}>{userData.bio || "Biografía no disponible"}</p>
+          <img src={apariencia} className={`${styles.icon} ${styles.aparienciaIcon}`}/>
+          <p className={styles.especie}>{userData.species}</p>
+          <p className={styles.raza}>{userData.breed}</p>
+          <img src={nacimiento} className={`${styles.icon} ${styles.nacimientoIcon}`}/>
+          <p className={styles.nacimiento}>{`${userData.age} ${userData.age_format === "years" ? "años" : "meses"}`}</p>
+           <img src={ubicacion} className={`${styles.icon} ${styles.ubicacionIcon}`}/>
+          <p className={styles.ubicacion}>{userData.location || "Ubicación no disponible"}</p>
+          </div>
         </div>
       )}
-      <button onClick={() => handleFollowToggle(userData.id)}>Follow/Unfollow</button>
-      <button onClick={() => handleBlockToggle(userData.id)}>Block/Unblock</button>
+      <button className={styles.followButton} onClick={() => handleFollowToggle(userData.id)}>Follow/Unfollow</button>
+      <button className={styles.blockButton} onClick={() => handleBlockToggle(userData.id)}>Block/Unblock</button>
       <h3>Friends: {friendsCount}</h3>
       <div>
         {posts.map((post, index) => (

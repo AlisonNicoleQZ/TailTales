@@ -134,10 +134,7 @@ const FriendItem = ({ friendId, onUnfollow, showUnfollowButton }) => {
     return (
         <>
         <Link to={{pathname: "/otro-perfil", search: `?userId=${friendId}`}}>
-        <div
-            className={styles.friendItem}
-            onClick={() => navigate(`/otro-perfil/${friendId}`)}
-        >
+        <div className={styles.friendItem}>
             <img
                 src={friendData.profilePic || "../img/default-profile-image.jpg"}
                 alt="Foto de perfil"

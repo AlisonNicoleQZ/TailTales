@@ -66,7 +66,7 @@ export const NavBar = () => {
         <a href='/feed'><img src={feed} className={styles.feed} alt="Feed" /></a>
         <a href='/buscar'><img src={buscar} className={styles.buscar} alt="Buscar" /></a>
         <a href='/notificaciones'><img src={notif} className={styles.notif} alt="Notificaciones" /></a>
-        {profile.privacySettings === 0 ? (
+        {profile.privacySettings === 1 ? (
           <a href='/solicitudes-publicas'>
             <img src={amistades} className={styles.amistades} alt="Amistades y Seguimientos" />
           </a>
