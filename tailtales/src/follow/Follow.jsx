@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from './Follow.module.css'
 import logo from '../img/logo.svg';
 import feed from '../img/casa.svg';
@@ -163,6 +163,7 @@ return (
       <div id="profiles-request-container">
         {pendingRequests.map((request) => (
           <div key={request.id} className={styles.request}>
+            
             <img className={styles.profilePic}
               src={
                 request.senderData.profilePic || "../img/default-profile-image.jpg"
@@ -207,16 +208,15 @@ return (
           <div
             key={profile.id}
             className="profile-card"
-            onClick={() =>
-              (window.location.href = `/perfil/:=${profile.id}`)
-            }
           >
+             <Link to={{pathname: "/otro-perfil", search: `?userId=${profile.id}`}}>
             <img className={styles.profilePicRecomendados}
               src={profile.profilePic || "../img/default-profile-image.jpg"}
               alt="Profile"
             />
             <p className={styles.usernameRecomendado}>{profile.name}</p><br />
             <button className={styles.buttonSeguir}>Seguir</button>
+            </Link>
           </div>
         ))}
       </div>
