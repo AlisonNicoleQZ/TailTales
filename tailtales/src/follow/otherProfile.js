@@ -420,9 +420,6 @@ async function getUsernameById(userId) {
     }
 }
 
-
-
-
 // Verifica si el usuario ya está en la lista de amigos o tiene una solicitud pendiente
 async function checkFriendStatus(userId) {
     try {

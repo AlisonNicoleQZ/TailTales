@@ -1,6 +1,8 @@
+
 import React, { useState } from "react";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import { useNavigate } from "react-router-dom";
 
 const firebaseConfig = {
     apiKey: "AIzaSyD4_VxzGYLNmkKTiMGZrttFgUmXm7UKNyc",
@@ -14,7 +16,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+
 export const Search = () => {
+    const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState("");
     const [results, setResults] = useState([]);
 
@@ -50,9 +54,6 @@ export const Search = () => {
         }
     };
 
-    const handleProfileClick = (userId) => {
-        window.location.href = `/otro-perfil?userId=${userId}`;
-    };
   return (
     <>
     <div id="header-container">
@@ -66,7 +67,7 @@ export const Search = () => {
                     <div
                         key={user.id}
                         className="profile-card"
-                        onClick={() => handleProfileClick(user.id)}
+                        onClick={() => navigate(`/otro-perfil/${user.id}`)}
                         style={{ cursor: "pointer" }}
                     >
                         <img
