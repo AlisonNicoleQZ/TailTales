@@ -108,7 +108,7 @@ export const Perfil = () => {
   };
 
   const handleLogout = () => {
-        navigate('/'); // Navega al login
+        navigate('/login-register'); // Navega al login
   };
 
   const handlePostSubmit = async () => {
