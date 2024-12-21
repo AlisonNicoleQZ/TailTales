@@ -11,6 +11,7 @@ import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs, a
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { Link } from "react-router-dom";
 import { NavBar } from "../NavBar";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -28,6 +29,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 export const Perfil = () => {
+  const navigate = useNavigate();
   const [userUid, setUserUid] = useState(null);
   const [userData, setUserData] = useState({});
   const [numFriends, setNumFriends] = useState(0);
@@ -105,6 +107,10 @@ export const Perfil = () => {
     setIsPostModalOpen(false);
   };
 
+  const handleLogout = () => {
+        navigate('/'); // Navega al login
+  };
+
   const handlePostSubmit = async () => {
     if (!userUid) return alert("Debes iniciar sesión para publicar.");
   
@@ -170,6 +176,7 @@ export const Perfil = () => {
     setCurrentPost(null);
   };
 
+
   return (
     <div>
       <title>Perfil - @{userData.username}</title>
@@ -197,6 +204,7 @@ export const Perfil = () => {
           <img src={ubicacion} className={`${styles.icon} ${styles.ubicacionIcon}`}/>
           <p className={styles.ubicacion}>{userData.location}</p>
         </div>
+        <button onClick={() => handleLogout()} className={styles.signOut}>Salir</button>
         <button onClick={() => handlePostModalOpen()} className={styles.buttonPublicar}>New Post</button>
 
         {isPostModalOpen && (
