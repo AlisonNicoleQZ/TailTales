@@ -29,6 +29,7 @@ export const OtherProfile = () => {
   const [friendsCount, setFriendsCount] = useState(0);
   const [posts, setPosts] = useState([]);
   const [isFriend, setIsFriend] = useState(false);
+  const [isBlocked, setIsBlocked] = useState(false);
   const [privacySettings, setPrivacySettings] = useState(null);
 
   useEffect(() => {
@@ -309,11 +310,9 @@ export const OtherProfile = () => {
           followBtn.style.display = "inline-block";
       }
   }
-
   return (
     <div>
-              <NavBar/>
-     
+             <NavBar/>   
        <title>Perfil</title> 
       {userData && (
         <div>
@@ -332,18 +331,26 @@ export const OtherProfile = () => {
           </div>
         </div>
       )}
-      <button className={styles.followButton} onClick={() => handleFollowToggle(userData.id)}>Follow/Unfollow</button>
-      <button className={styles.blockButton} onClick={() => handleBlockToggle(userData.id)}>Block/Unblock</button>
-      <h3>Friends: {friendsCount}</h3>
-      <div>
-        {posts.map((post, index) => (
-          <div key={index}>
-            <p>{post.content.text}</p>
-            {post.mediaUrls && post.mediaUrls.map((url, i) => (
-              <img key={i} src={url} alt={`Post Media ${i}`} />
-            ))}
-          </div>
-        ))}
+      {isFriend ? (
+                 <button className={styles.followButton} onClick={() => handleFollowToggle(userData.id)}>Follow</button>
+              ) : (
+                  <button className={styles.followButton} onClick={() => handleFollowToggle(userData.id)}>Unfollow</button>
+              )}
+     {isBlocked ? (
+                 <button className={styles.blockButton} onClick={() => handleBlockToggle(userData.id)}>Block</button>
+              ) : (
+                  <button className={styles.blockButton} onClick={() => handleBlockToggle(userData.id)}>Unblock</button>
+              )}
+      <h3 className={styles.friends}>{friendsCount} amigos</h3>
+      <div className={styles.publicaciones}>
+        {posts.map(post => (
+                    <div key={post.id} className={styles.publicacion}>
+                      <img src={post.mediaUrls[0]}
+                      alt="Post"
+                      />
+                      <p>{post.content.text}</p>
+                    </div>
+                  ))}
       </div>
     </div>
   );
