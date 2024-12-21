@@ -1,0 +1,282 @@
+* {
+    font-family: "IBM Plex Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+  body::-webkit-scrollbar {
+    width: 10px; /* Width of the scrollbar */
+  }
+  
+  body::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Color of the track */
+  }
+  
+  body::-webkit-scrollbar-thumb {
+    background: #9f86c0; /* Color of the thumb */
+    border-radius: 6px; /* Rounded corners for the thumb */
+  }
+  
+  /* Contenedor principal para layout responsivo */
+  .mainContainer {
+    max-width: 1200px;
+    margin: 4rem auto 0 auto;
+    padding: 0 2rem;
+    padding-left: 6rem;
+  }
+  
+  @media (max-width: 768px) {
+    .mainContainer {
+      margin-top: 3rem;
+      padding: 0 1rem;
+      padding-left: 6rem;
+    }
+    .menuNav img {
+      width: 6%;
+      height: 2rem;
+    }
+    .logo {
+      width: 25%;
+      height: auto;
+      margin-left: 1rem;
+    }
+  }
+  
+  /* Ajustes específicos para versiones muy pequeñas */
+  @media (max-width: 480px) {
+    .mainContainer {
+      margin-top: 2rem;
+      padding: 0 0.5rem;
+      padding-left: 5rem;
+    }
+    .menuNav img {
+      width: 8%;
+      height: 1.5rem;
+    }
+    .logo {
+      width: 35%;
+    }
+  }
+  
+  .logo {
+    position: fixed;
+    margin-left: 3rem;
+    width: 15%;
+    height: 10rem;
+  }
+  
+  .menuNav img {
+    position: fixed;
+    margin-left: 2rem;
+    width: 8%;
+    height: 2rem;
+  }
+  
+  .feed {
+    margin-top: 11rem;
+  }
+  
+  .buscar {
+    margin-top: 15rem;
+  }
+  
+  .notif {
+    margin-top: 19rem;
+  }
+  
+  .amistades {
+    margin-top: 23rem;
+  }
+  
+  .publicar {
+    margin-top: 27rem;
+    left: 0.1rem;
+  }
+  
+  .perfil {
+    margin-top: 31rem;
+  }
+  
+  .tituloSolicitudes {
+    margin-left: 32rem;
+    margin-top: 4rem;
+    position: absolute;
+    color: #9f86c0;
+    font-size: 1.45rem;
+  }
+  
+  .request {
+    margin-top: 2rem;
+  }
+  
+  .profilePic {
+    height: 6rem;
+    margin-left: 26rem;
+    margin-top: 8rem;
+    position: absolute;
+  }
+  
+  .textoSolicitud {
+    margin-left: 33rem;
+    margin-top: 10rem;
+    position: absolute;
+    font-size: 1.1rem;
+  }
+  
+  .buttonAceptar {
+    margin-left: 38.5rem;
+    margin-top: 11rem;
+    position: absolute;
+    background-color: #be95c4;
+    color: #fff;
+    border: none;
+    padding: 3.5px 7px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+  }
+  
+  .buttonRechazar {
+    margin-left: 44rem;
+    margin-top: 11rem;
+    position: absolute;
+    background-color: #637b93;
+    color: #fff;
+    border: none;
+    padding: 3.5px 7px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+  }
+  
+  .tituloRecomendados {
+    margin-left: 67rem;
+    margin-top: 2rem;
+    position: absolute;
+    color: #9f86c0;
+  }
+  
+  .profilesContainer {
+    margin-bottom: 2rem;
+    position: absolute;
+  }
+  
+  .profilePicRecomendados {
+    height: 4rem;
+    margin-left: 64rem;
+    margin-top: 4.5rem;
+    position: absolute;
+  }
+  
+  .usernameRecomendado {
+    margin-left: 69.3rem;
+    margin-top: 5rem;
+    position: absolute;
+  }
+  
+  .buttonSeguir {
+    margin-left: 68.5rem;
+    margin-top: 6rem;
+    position: absolute;
+    background-color: #9f86c0;
+    color: #fff;
+    border: none;
+    padding: 5px 40px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+  }
+  .search-bar-container {
+    margin: 20px;
+    text-align: center;
+  }
+  
+  .search-input {
+    padding: 10px;
+    width: 300px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .search-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .results-container {
+    margin-top: 20px;
+  }
+  
+  .profile-card {
+    display: inline-block;
+    width: 200px;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .profile-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+  
+  /* Estilos para la barra de búsqueda */
+  .searchBar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+  
+  /* Estilos para el botón de búsqueda */
+  .searchButton {
+    background-color: #9f86c0 !important;
+    color: white !important;
+    padding: 8px 24px !important;
+    margin-left: 1em !important;
+    border-radius: 8px !important;
+    text-transform: none !important;
+    font-size: 1rem !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    height: 40px !important; /* Altura fija */
+  }
+  
+  .searchButton:hover {
+    background-color: #be95c4 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+  }
+  
+  /* Estilos para el campo de búsqueda y el filtro */
+  .formControl {
+    min-width: 150px !important;
+    height: 40px !important; /* Altura fija */
+  }
+  
+  .textField {
+    height: 40px !important; /* Altura fija */
+  }
+  
+  .textField div {
+    height: 40px !important; /* Altura fija para el contenedor del input */
+  }
+  
+  .textField input {
+    height: 40px !important; /* Altura fija para el input */
+    border-radius: 8px;
+    padding: 0 14px !important;
+  }
