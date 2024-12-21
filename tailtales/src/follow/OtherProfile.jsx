@@ -35,6 +35,8 @@ export const OtherProfile = () => {
   const [privacySettings, setPrivacySettings] = useState(null);
   const [isFollowBtnVisible, setFollowBtnVisible] = useState(true);
   const [isOn, setIsOn] = useState(false);
+  const [isPrivate, setIsPrivate] = useState(false);
+  const [isBlockked, setIsBlockk] = useState(false);
 
   useEffect(() => {
     const checkCurrentUser = () => {
@@ -318,17 +320,17 @@ const checkBlockStatus = async (userId) => {
 
 const toggleFollow = () => {
   setIsOn(!isOn); // Alternar entre "Encendido" y "Apagado"
-  alert(isOn ? 'Ha empezado a seguir a este usuario' : 'Ha dejado de seguir a este usuario');
+ // alert(isOn ? 'Ha empezado a seguir a este usuario' : 'Ha dejado de seguir a este usuario');
 };
 
 const toggleRequest = () => {
-  setIsOn(!isOn); // Alternar entre "Encendido" y "Apagado"
-  alert(isOn ? 'Le has enviado solicitud a este usuario' : 'Ha dejado de seguir a este usuario');
+setIsPrivate(!isPrivate); // Alternar entre "Encendido" y "Apagado"
+ // alert(isOn ? 'Ha dejado de seguir a este usuario ' : 'Le has enviado solicitud a este usuario');
 };
 
 const toggleBlockk = () => {
-  setIsOn(!isOn); // Alternar entre "Encendido" y "Apagado"
-  alert(isOn ? 'Has bloqueado a este usuario' : 'Has desbloqueado a este usuario');
+  setIsBlockk(!isBlockked); // Alternar entre "Encendido" y "Apagado"
+ // alert(isOn ? 'Has desbloqueado a este usuario' : 'Has bloqueado a este usuario');
 };
 
   return (
@@ -350,19 +352,19 @@ const toggleBlockk = () => {
            <img src={ubicacion} className={`${styles.icon} ${styles.ubicacionIcon}`}/>
           <p className={styles.ubicacion}>{userData.location || "Ubicación no disponible"}</p>
           </div>
-          {userData.privacySettings === 0 ? (
+          {userData.privacySettings === 1 ? (
               <button className={styles.followButton} onClick={toggleFollow}>
-              {isOn ? 'Follow' : 'Unfollow'}
+              {isOn ? 'Unfollow' : 'Follow'}
             </button>
             ) : (
               <button className={styles.followButton} onClick={toggleRequest}>
-              {isOn ? 'Follow' : 'Request'}
+              {isPrivate ? 'Waiting' : 'Follow'}
             </button>
             )}
         </div>
       )}
       <button className={styles.blockButton} onClick={toggleBlockk}>
-      {isOn ? 'Block' : 'Unblock'}
+      {isBlockked ? 'Unblock' : 'Block'}
       </button>
       <h3 className={styles.friends}>{friendsCount} amigos</h3>
       <div className={styles.publicaciones}>

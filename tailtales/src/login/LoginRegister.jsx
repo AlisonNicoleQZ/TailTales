@@ -44,7 +44,7 @@ export const LoginRegister = () => {
   const [profilePicFile, setProfilePicFile] = useState(null);
   const [bio, setBio] = useState('');
   const [locationField, setLocationField] = useState('');
-  const [privacySettings, setPrivacySettings] = useState('1');
+  const [privacySettings, setPrivacySettings] = useState('');
 
   const breeds = {
     Perro: [
@@ -468,8 +468,8 @@ export const LoginRegister = () => {
                 onChange={(e) => setPrivacySettings(e.target.value)}
                 required
               >
-                <option value="0">Público</option>
-                <option value="1">Privado</option>
+                <option value="0">Privado</option>
+                <option value="1">Público</option>
               </select>
             </div>
             <button type="submit" className={styles.registroButton}>

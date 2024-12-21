@@ -180,7 +180,7 @@ export const NavBar = () => {
         <a href="/notificaciones">
           <img src={notif} className={styles.notif} alt="Notificaciones" />
         </a>
-        {profile.privacySettings === 0 ? (
+        {profile.privacySettings === 1 ? (
           <a href="/solicitudes-publicas">
             <img src={amistades} className={styles.amistades} alt="Amistades y Seguimientos" />
           </a>
