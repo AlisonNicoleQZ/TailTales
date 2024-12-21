@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styles from "./Search.module.css";
+import styles from "./search.module.css";
 import logo from "../img/logo.svg";
 import feed from "../img/casa.svg";
 import buscar from "../img/lupa.svg";
