@@ -31,111 +31,42 @@ export const Feed = () => {
   const [currentUserStories, setCurrentUserStories] = useState([]);
   const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      if (!userUid) return;
+  const fetchPosts = async () => {
+    if (!userUid) return;
 
-      try {
-        const allPosts = [];
-        const friends = await getFriendsList(userUid);
+    try {
+      const allPosts = [];
+      const friends = await getFriendsList(userUid);
 
-        for (const friendId of friends) {
-          const friendPosts = await loadUserPosts(friendId);
+      for (const friendId of friends) {
+        const friendPosts = await loadUserPosts(friendId);
 
-          for (const post of friendPosts) {
-            const userDocRef = await getDoc(doc(db, "users", friendId));
+        for (const post of friendPosts) {
+          const userDocRef = await getDoc(doc(db, "users", friendId));
 
-            if (userDocRef.exists()) {
-              post.username = userDocRef.data().username;
-            }
+          if (userDocRef.exists()) {
+            post.username = userDocRef.data().username;
           }
-
-          allPosts.push(...friendPosts);
         }
 
-        allPosts.sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis());
-        setPosts(allPosts);
-      } catch (error) {
-        console.error("Error al cargar las publicaciones:", error);
+        allPosts.push(...friendPosts);
       }
-    };
 
-    fetchPosts();
-  }, [userUid]);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUserUid(user.uid);
-        loadUserProfile(user.uid);
-      } else {
-        alert("Debe iniciar sesión para ver el feed.");
-        window.location.href = "/login-register";
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    const loadStories = async () => {
-      try {
-        const storiesSnapshot = await getDocs(collection(db, "stories"));
-        const userStoriesMap = {};
-  
-        for (const docSnap of storiesSnapshot.docs) {
-          const storyData = docSnap.data();
-          const userId = storyData.userId;
-          
-          const userDoc = await getDoc(doc(db, "users", userId));
-          const username = userDoc.exists() ? userDoc.data().username : "Unknown";
-  
-          if (!userStoriesMap[userId]) {
-            userStoriesMap[userId] = {
-              username,
-              stories: [],
-            };
-          }
-  
-          userStoriesMap[userId].stories.push({
-            id: docSnap.id,
-            mediaUrl: storyData.mediaUrl,
-            description: storyData.description,
-            createdAt: storyData.createdAt,
-          });
-        }
-  
-        const preparedStories = Object.entries(userStoriesMap).map(([userId, { username, stories }]) => {
-          const sortedStories = stories.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
-          return {
-            userId,
-            username,
-            latestStory: sortedStories[0],
-            allStories: sortedStories,
-          };
-        });
-  
-        setStories(preparedStories);
-      } catch (error) {
-        console.error("Error loading stories:", error);
-      }
-    };
-  
-    loadStories();
-  }, []);
+      allPosts.sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis());
+      setPosts(allPosts);
+    } catch (error) {
+      console.error("Error al cargar las publicaciones:", error);
+    }
+  };
 
   const loadUserPosts = async (uid) => {
     const postsQuery = query(collection(db, "posts"), where("petId", "==", uid));
     const postsSnapshot = await getDocs(postsQuery);
 
-    const loadedPosts = [];
-    postsSnapshot.forEach((postDoc) => {
-      const postData = postDoc.data();
-      postData.id = postDoc.id;
-      loadedPosts.push(postData);
-    });
-
-    return loadedPosts;
+    return postsSnapshot.docs.map((postDoc) => ({
+      ...postDoc.data(),
+      id: postDoc.id,
+    }));
   };
 
   const getFriendsList = async (userId) => {
@@ -143,11 +74,7 @@ export const Feed = () => {
       const friendDocRef = doc(db, "friendsList", userId);
       const friendDoc = await getDoc(friendDocRef);
 
-      if (friendDoc.exists()) {
-        return friendDoc.data().friends || [];
-      } else {
-        return [];
-      }
+      return friendDoc.exists() ? friendDoc.data().friends || [] : [];
     } catch (error) {
       console.error("Error al obtener la lista de amigos:", error);
       return [];
@@ -193,6 +120,75 @@ export const Feed = () => {
       setCurrentStoryIndex(currentStoryIndex - 1);
     }
   };
+
+  useEffect(() => {
+    fetchPosts();
+  }, [userUid]);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserUid(user.uid);
+        loadUserProfile(user.uid);
+      } else {
+        alert("Debe iniciar sesión para ver el feed.");
+        window.location.href = "/login-register";
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const loadStories = async () => {
+      try {
+        const storiesSnapshot = await getDocs(collection(db, "stories"));
+        const userStoriesMap = {};
+
+        for (const docSnap of storiesSnapshot.docs) {
+          const storyData = docSnap.data();
+          const userId = storyData.userId;
+
+          const userDoc = await getDoc(doc(db, "users", userId));
+          const username = userDoc.exists() ? userDoc.data().username : "Unknown";
+
+          if (!userStoriesMap[userId]) {
+            userStoriesMap[userId] = {
+              username,
+              stories: [],
+            };
+          }
+
+          userStoriesMap[userId].stories.push({
+            id: docSnap.id,
+            mediaUrl: storyData.mediaUrl,
+            description: storyData.description,
+            createdAt: storyData.createdAt,
+          });
+        }
+
+        const preparedStories = Object.entries(userStoriesMap).map(
+          ([userId, { username, stories }]) => {
+            const sortedStories = stories.sort(
+              (a, b) => b.createdAt.seconds - a.createdAt.seconds
+            );
+            return {
+              userId,
+              username,
+              latestStory: sortedStories[0],
+              allStories: sortedStories,
+            };
+          }
+        );
+
+        setStories(preparedStories);
+      } catch (error) {
+        console.error("Error loading stories:", error);
+      }
+    };
+
+    loadStories();
+  }, []);
 
   return (
     <>
@@ -243,7 +239,9 @@ export const Feed = () => {
               </div>
             ))}
           </section>
+
           <ViewPostModal isOpen={isModalOpen} postData={currentPost} onClose={closeModal} />
+
           {isStoryModalOpen && (
             <div className={styles.storyModal} onClick={closeStoryModal}>
               <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
