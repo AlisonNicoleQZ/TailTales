@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styles from "./search.module.css";
+import styles from "./Search.module.css";
 import logo from "../img/logo.svg";
 import feed from "../img/casa.svg";
 import buscar from "../img/lupa.svg";
@@ -35,6 +35,7 @@ import {
   Modal,
   Box,
 } from "@mui/material";
+import {  useNavigate } from "react-router-dom";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD4_VxzGYLNmkKTiMGZrttFgUmXm7UKNyc",
@@ -55,6 +56,7 @@ export const Search = () => {
   const [foundUsers, setFoundUsers] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const navigate = useNavigate();
 
   async function handleSearch() {
     try {
@@ -172,10 +174,7 @@ export const Search = () => {
                   <Button
                     variant="outlined"
                     style={{ marginTop: "1rem" }}
-                    onClick={() => {
-                      setSelectedUser(user);
-                      setOpenModal(true);
-                    }}>
+                    onClick={() => navigate(`/otro-perfil?userId=${user.id}`)}>
                     Ver más
                   </Button>
                 </CardContent>

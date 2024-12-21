@@ -185,7 +185,9 @@ export const Feed = () => {
     <>
       <title>Feed - TailTales</title>
       <div className={styles.container}>
+
         <NavBar />
+        
         <div className="main-feed">
         <section id="friend-stories" className={styles.friendStories}>
           <div id="stories-container" className={styles.storiesContainer}>
