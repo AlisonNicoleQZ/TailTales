@@ -88,14 +88,12 @@ export const PublicFollow = () => {
     <>
     <header>
     <title>Public Follow - TailTales</title>
-    
     <NavBar/>
-
     </header>
     <main>
     <section>
             <h2 className={styles.tituloSolicitudes}>Amistades</h2>
-                  <div id="profiles-request-container">
+                  <div id="profiles-request-container" className={styles.profilesRequestContainer}>
                     {friends.map((friendId) => (
                       <FriendItem
                       key={friendId}

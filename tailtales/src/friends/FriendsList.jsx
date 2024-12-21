@@ -9,6 +9,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from './Friends.module.css';
+import { Link } from "react-router-dom";
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -131,10 +132,9 @@ const FriendItem = ({ friendId, onUnfollow, showUnfollowButton }) => {
     }
 
     return (
-        <div
-            className={styles.friendItem}
-            onClick={() => navigate(`/otro-perfil/${friendId}`)}
-        >
+        <>
+        <Link to={{pathname: "/otro-perfil", search: `?userId=${friendId}`}}>
+        <div className={styles.friendItem}>
             <img
                 src={friendData.profilePic || "../img/default-profile-image.jpg"}
                 alt="Foto de perfil"
@@ -151,5 +151,7 @@ const FriendItem = ({ friendId, onUnfollow, showUnfollowButton }) => {
                 </button>
             )}
         </div>
+        </Link>
+        </>
     );
 };

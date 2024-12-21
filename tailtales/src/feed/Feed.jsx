@@ -1,9 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import styles from './Feed.module.css';
-import { initializeApp } from "firebase/app";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import React, {useState, useEffect}from 'react'
+import styles from './Feed.module.css'
+import logo from '../img/logo.svg';
+import feed from '../img/casa.svg';
+import buscar from '../img/lupa.svg';
+import notif from '../img/campana.svg';
+import amistades from '../img/amistades.svg';
+import publicar from '../img/camara.svg';
+import perfil from '../img/perfil.svg';
+import fotoPerfil from '../img/profile-pic.png';
+import iconLike from '../img/paw-like.svg';
+import iconComentarios from '../img/icon-comentarios.svg';
+import {initializeApp} from "firebase/app";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
 import { getFirestore, collection, doc, getDoc, query, where, getDocs, onSnapshot } from "firebase/firestore";
-
 import ViewPostModal from "../profile/ViewPostModal";
 import { NavBar } from '../NavBar';
 

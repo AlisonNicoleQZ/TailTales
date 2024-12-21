@@ -173,18 +173,20 @@ export const LoginRegister = () => {
   // Manejar el registro de usuarios con verificación de username único
   const handleRegisterSubmit = async (event) => {
     event.preventDefault();
-
+  
     // Validación de la contraseña
     if (password.length < 6) {
       setPasswordError("La contraseña debe tener al menos 6 caracteres.");
+      return;
     } else {
       setPasswordError("");
     }
-    
+  
     if (!profilePicFile) {
       alert("Por favor, selecciona una foto de perfil.");
       return;
     }
+  
     try {
       const usersCollection = collection(db, "users");
       const usernameQuery = query(usersCollection, where("username", "==", username));
@@ -194,15 +196,15 @@ export const LoginRegister = () => {
         alert("El nombre de usuario ya está en uso. Por favor, elige otro.");
         return;
       }
-
-      // Subir la foto de perfil a Firebase Storage
-      const storageRef = ref(storage, `profilePics/${profilePicFile.name}`);
-      await uploadBytes(storageRef, profilePicFile);
-      const profilePicUrl = await getDownloadURL(storageRef);
   
-      // Crear el documento del usuario en Firestore
+      // Crear la cuenta del usuario
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+  
+      // Subir la foto de perfil a Firebase Storage
+      const storageRef = ref(storage, `profile_pictures/${user.uid}/${profilePicFile.name}`);
+      await uploadBytes(storageRef, profilePicFile);
+      const profilePicUrl = await getDownloadURL(storageRef);
   
       // Generar un petId aleatorio
       const petId = Math.floor(Math.random() * 1000000);
@@ -222,10 +224,11 @@ export const LoginRegister = () => {
         location: locationField,
         privacySettings: parseInt(privacySettings),
         status: true,
-        createdAt: new Date().toLocaleString()
+        createdAt: new Date().toISOString(),
       });
+  
       alert("Usuario registrado exitosamente y datos guardados en Firestore.");
-      navigate('/login-register?register=false');
+      navigate("/login-register?register=false");
       setIsLogin(true); // Redirigir al inicio de sesión
     } catch (error) {
       console.error("Error al registrar el usuario: ", error);

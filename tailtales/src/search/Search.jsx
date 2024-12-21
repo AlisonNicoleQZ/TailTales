@@ -1,6 +1,9 @@
+
 import React, { useState } from "react";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const firebaseConfig = {
     apiKey: "AIzaSyD4_VxzGYLNmkKTiMGZrttFgUmXm7UKNyc",
@@ -14,7 +17,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+
 export const Search = () => {
+    const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState("");
     const [results, setResults] = useState([]);
 
@@ -50,9 +55,6 @@ export const Search = () => {
         }
     };
 
-    const handleProfileClick = (userId) => {
-        window.location.href = `../follow/otherProfile.html?userId=${userId}`;
-    };
   return (
     <>
     <div id="header-container">
@@ -63,10 +65,10 @@ export const Search = () => {
         </div>
         <div id="results-container">
                 {results.map((user) => (
+                    <Link to={{pathname: "/otro-perfil", search: `?userId=${user.id}`}}>
                     <div
                         key={user.id}
                         className="profile-card"
-                        onClick={() => handleProfileClick(user.id)}
                         style={{ cursor: "pointer" }}
                     >
                         <img
@@ -77,6 +79,7 @@ export const Search = () => {
                         <h3>{user.name}</h3>
                         <p>@{user.username}</p>
                     </div>
+                    </Link>
                 ))}
             </div>
     </>

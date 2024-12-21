@@ -56,14 +56,6 @@ body::-webkit-scrollbar-thumb {
     margin-top: 31rem;
 }
 
-.tituloSolicitudes{
-    margin-left: 32rem;
-    margin-top: 4rem;
-    position: fixed;
-    color: #9F86C0;
-    font-size: 1.45rem;
-}
-
 .solicitudesPendientes{
     position: absolute;
     margin-left: 28.5rem;
@@ -113,13 +105,6 @@ body::-webkit-scrollbar-thumb {
     font-size: 0.9rem;
 }
 
-.tituloRecomendados{
-    margin-left: 67rem;
-    margin-top: 5rem;
-    position: absolute;  
-    color: #9F86C0;
-}
-
 .profilesContainer{
     margin-bottom: 2rem;
     position: absolute;
@@ -127,60 +112,67 @@ body::-webkit-scrollbar-thumb {
 
 .profilePicRecomendados{
     height: 4rem;
-    margin-left: 64rem;
+    margin-left: 38rem;
     margin-top: 5.3rem;
     border-radius: 50rem;
 }
 
 .usernameRecomendado{
-    margin-left: 71.3rem;
-    margin-top: 4rem;
+    margin-left: 45.5rem;
+    margin-top: -3rem;
     position: absolute;
 }
 
-.buttonSeguir{
-    margin-left: 68.5rem;
-    margin-top: 6rem;
-    position: absolute; 
-    background-color: #9F86C0;
-    color: #fff;
-    border: none;
-    padding: 5px 40px;
-    border-radius: 5px;
-    font-size: 0.9rem;
-}
-
-.friendItem {
+.tituloSolicitudes {
+    margin-top: 4rem;
+    font-size: 1.5rem;
+    text-align: center;
+    color: #9F86C0;
+  }
+  
+.tituloRecomendados {
+    margin-top: 5rem;
+    text-align: center;
+    color: #9F86C0;
+  }
+  
+.profilesRequestContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+  }
+  
+.friendItem, .profileCard {
     display: flex;
     align-items: center;
-    padding: 10px;
-    margin-left: 25rem;
-    width: 40%;
-    cursor: pointer;
-}
-
-.friendItem img {
+    background-color: #f9f9f9;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    width: calc(100% / 3 - -5rem); /* Ajusta para columnas */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+.friendItem img, .profileCard img {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    margin-right: 10px;
-}
-
-.friendItem p {
-    font-size: 16px;
-    font-weight: bold;
-}
-
-.friendItem button {
-    margin-left: auto;
-    padding: 5px 10px;
-    background-color: #9a78c7;
-    color: #fff;
+    margin-right: 1rem;
+  }
+  
+.buttonSeguir {
+    padding: 0.5rem 1rem;
+    background-color: #9f86c0;
+    color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+    margin-left: 39.5rem;
     cursor: pointer;
-}
-
-.friendItem button:hover {
-    background-color: #8858c7;
-}
+    transition: background-color 0.3s ease;
+  }
+  
+.buttonSeguir:hover {
+    background-color: #6f4ca0;
+  }
+  

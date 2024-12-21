@@ -102,7 +102,7 @@ const db = getFirestore(app);
         query(
           collection(db, "friendRequest"),
           where("receiverId", "==", uid),
-          where("status", "==", 1),
+          where("status", "==", 0),
           orderBy("createdAt", "desc")
         )
       );

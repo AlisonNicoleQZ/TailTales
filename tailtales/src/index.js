@@ -14,6 +14,7 @@ import { Friends } from './friends/Friends.jsx';
 import { PublicFollow } from './follow/PublicFollow.jsx';
 import { Stories } from './stories/Stories.jsx';
 import { Search } from './search/Search.jsx';
+import { OtherProfile } from './follow/OtherProfile.jsx';
 
 //import { PublicFollow } from './follow/PublicFollow.jsx';
 
@@ -28,6 +29,7 @@ root.render(
         <Route path="/editar-perfil" element={<EditarPerfil/>} />
         <Route path="/feed" element={<Feed/>} />
         <Route path="/solicitudes" element={<Follow/>} />
+        <Route path="/otro-perfil" element={<OtherProfile/>} />
         <Route path="/solicitudes-publicas" element={<PublicFollow/>} />
         <Route path="/notificaciones" element={<Notifications/>} />
         <Route path="/stories" element={<Stories/>} />
