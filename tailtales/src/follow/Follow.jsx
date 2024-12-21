@@ -153,7 +153,6 @@ return (
 
     <NavBar />
   
-    <a href='/feed'><img src={logo} className={styles.logo} alt="logo" /></a>
     </header>
     <main>
     <section>
