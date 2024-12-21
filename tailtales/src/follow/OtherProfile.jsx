@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { initializeApp} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import { getFirestore, doc, getDoc, collection, query, where, getDocs, updateDoc, arrayUnion, arrayRemove, setDoc, addDoc
@@ -29,8 +30,10 @@ export const OtherProfile = () => {
   const [friendsCount, setFriendsCount] = useState(0);
   const [posts, setPosts] = useState([]);
   const [isFriend, setIsFriend] = useState(false);
+  const [blockBtnText, setBlockBtnText] = useState("Block");
   const [isBlocked, setIsBlocked] = useState(false);
   const [privacySettings, setPrivacySettings] = useState(null);
+  const [isFollowBtnVisible, setFollowBtnVisible] = useState(true);
 
   useEffect(() => {
     const checkCurrentUser = () => {
@@ -226,90 +229,96 @@ export const OtherProfile = () => {
         }
   };
 
-  const handleBlockToggle = async (userId) => {
+  const toggleBlock = async (userId) => {
     try {
-            const currentUserDoc = doc(db, "friendsList", currentUserId);
-            const targetUserDoc = doc(db, "friendsList", userId);
-    
-            const currentUserSnapshot = await getDoc(currentUserDoc);
-            const targetUserSnapshot = await getDoc(targetUserDoc);
-    
-            if (currentUserSnapshot.exists()) {
-                const currentUserData = currentUserSnapshot.data();
-                const isBlocked = currentUserData.blocked && currentUserData.blocked.includes(userId);
-    
-                if (isBlocked) {
-                    // Desbloquear al usuario
+        const currentUserDoc = doc(db, "friendsList", currentUserId);
+        const targetUserDoc = doc(db, "friendsList", userId);
+
+        const currentUserSnapshot = await getDoc(currentUserDoc);
+        const targetUserSnapshot = await getDoc(targetUserDoc);
+
+        if (currentUserSnapshot.exists()) {
+            const currentUserData = currentUserSnapshot.data();
+            const isBlocked = currentUserData.blocked && Array.isArray(currentUserData.blocked) && currentUserData.blocked.includes(userId);
+
+            if (isBlocked) {
+                // Desbloquear al usuario
+                await updateDoc(currentUserDoc, {
+                    blocked: arrayRemove(userId)
+                });
+                alert("Has desbloqueado a este usuario.");
+            } else {
+                // Bloquear al usuario
+                // Eliminar de la lista de amigos del usuario actual
+                if (currentUserData.friends && Array.isArray(currentUserData.friends) && currentUserData.friends.includes(userId)) {
                     await updateDoc(currentUserDoc, {
-                        blocked: arrayRemove(userId)
+                        friends: arrayRemove(userId)
                     });
-                    alert(`Has desbloqueado a este usuario.`);
-                } else {
-                    // Bloquear al usuario
-                    // Eliminar de la lista de amigos del usuario actual
-                    if (currentUserData.friends && currentUserData.friends.includes(userId)) {
-                        await updateDoc(currentUserDoc, {
-                            friends: arrayRemove(userId)
+                }
+
+                await updateDoc(currentUserDoc, {
+                    blocked: arrayUnion(userId)
+                });
+
+                // También eliminar de la lista de amigos del usuario bloqueado
+                if (targetUserSnapshot.exists()) {
+                    const targetUserData = targetUserSnapshot.data();
+                    if (targetUserData.friends && Array.isArray(targetUserData.friends) && targetUserData.friends.includes(currentUserId)) {
+                        await updateDoc(targetUserDoc, {
+                            friends: arrayRemove(currentUserId)
                         });
                     }
-    
-                    await updateDoc(currentUserDoc, {
-                        blocked: arrayUnion(userId)
-                    });
-    
-                    // También eliminar de la lista de amigos del usuario bloqueado
-                    if (targetUserSnapshot.exists()) {
-                        const targetUserData = targetUserSnapshot.data();
-                        if (targetUserData.friends && targetUserData.friends.includes(currentUserId)) {
-                            await updateDoc(targetUserDoc, {
-                                friends: arrayRemove(currentUserId)
-                            });
-                        }
-                    }
-    
-                    alert(`Has bloqueado a este usuario.`);
                 }
-            } else {
-                // Si no existe el documento, crear uno nuevo
-                await setDoc(currentUserDoc, {
-                    blocked: [userId],
-                    friends: []
-                });
-                alert(`Has bloqueado a este usuario.`);
-            }
-    
-            // Actualiza el estado de bloqueo y amistad en la interfaz
-            await checkBlockStatus(userId);
-            await checkFriendStatus(userId); // Actualiza el botón de Follow/Unfollow
-        } catch (error) {
-            console.error("Error al bloquear/desbloquear:", error);
-            alert("Ocurrió un error. Por favor, intenta de nuevo.");
-        }
-  };
 
-  async function checkBlockStatus(userId) {
-      const friendsListDoc = doc(db, "friendsList", currentUserId);
-      const friendsListSnapshot = await getDoc(friendsListDoc);
-  
-      const blockBtn = document.getElementById("block-btn");
-      const followBtn = document.getElementById("follow-btn");
-  
-      if (friendsListSnapshot.exists()) {
-          const data = friendsListSnapshot.data();
-          const isBlocked = data.blocked && data.blocked.includes(userId);
-  
-          if (isBlocked) {
-              blockBtn.textContent = "Unblock";
-              followBtn.style.display = "none";
-          } else {
-              blockBtn.textContent = "Block";
-              followBtn.style.display = "inline-block";
-          }
-      } else {
-          blockBtn.textContent = "Block";
-          followBtn.style.display = "inline-block";
-      }
-  }
+                alert("Has bloqueado a este usuario.");
+            }
+        } else {
+            // Si no existe el documento, crear uno nuevo
+            await setDoc(currentUserDoc, {
+                blocked: [userId],
+                friends: []
+            });
+            alert("Has bloqueado a este usuario.");
+        }
+
+        // Actualiza el estado de bloqueo y amistad en la interfaz
+        await checkBlockStatus(userId);
+    } catch (error) {
+        console.error("Error al bloquear/desbloquear:", error);
+        alert("Ocurrió un error. Por favor, intenta de nuevo.");
+    }
+};
+
+
+// Función para verificar el estado de bloqueo
+const checkBlockStatus = async (userId) => {
+    const friendsListDoc = doc(db, "friendsList", currentUserId);
+    const friendsListSnapshot = await getDoc(friendsListDoc);
+
+    const blockBtn = document.getElementById("block-btn");
+    const followBtn = document.getElementById("follow-btn");
+
+    if (friendsListSnapshot.exists()) {
+        const data = friendsListSnapshot.data();
+        const isBlocked = data.blocked && data.blocked.includes(userId);
+
+        if (isBlocked) {
+            blockBtn.textContent = "Unblock";
+            followBtn.style.display = "none";
+        } else {
+            blockBtn.textContent = "Block";
+            followBtn.style.display = "inline-block";
+        }
+    } else {
+        blockBtn.textContent = "Block";
+        followBtn.style.display = "inline-block";
+    }
+};
+
+const handleClick = () => {
+  setButtonText((prevText) => (prevText === "Follow" ? "Unfollow" : "Follow"));
+};
+
   return (
     <div>
              <NavBar/>   
@@ -331,16 +340,12 @@ export const OtherProfile = () => {
           </div>
         </div>
       )}
-      {isFriend ? (
-                 <button className={styles.followButton} onClick={() => handleFollowToggle(userData.id)}>Follow</button>
-              ) : (
-                  <button className={styles.followButton} onClick={() => handleFollowToggle(userData.id)}>Unfollow</button>
-              )}
-     {isBlocked ? (
-                 <button className={styles.blockButton} onClick={() => handleBlockToggle(userData.id)}>Block</button>
-              ) : (
-                  <button className={styles.blockButton} onClick={() => handleBlockToggle(userData.id)}>Unblock</button>
-              )}
+    <button onClick={toggleFollow}>
+      {isOn ? 'Seguir' : 'Encender'}
+    </button>
+      <button className={styles.blockButton} id="block-btn">
+      Block
+      </button>
       <h3 className={styles.friends}>{friendsCount} amigos</h3>
       <div className={styles.publicaciones}>
         {posts.map(post => (
