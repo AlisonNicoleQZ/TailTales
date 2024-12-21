@@ -117,6 +117,7 @@ color: #fff;
 
 .aparienciaIcon  {
     margin-left: 23.9rem;
+
     margin-top: 10.3rem;
     position: absolute;
 }
@@ -130,6 +131,14 @@ color: #fff;
 .raza {
     margin-left: 28.7rem;
     margin-top: 10.2rem;
+
+    margin-top: 8.8rem;
+    position: absolute;
+}
+
+.especieYRaza {
+    margin-left: 26rem;
+    margin-top: 8.7rem;
     position: absolute;
 }
 
@@ -157,9 +166,22 @@ color: #fff;
     position: absolute;
 }
 
+.calendarioIcon{
+    margin-left: 23.9rem;
+    margin-top: 14.4rem;
+    position: absolute;
+}
+
+.union{
+    margin-left: 26rem;
+    margin-top: 14.3rem;
+    position: absolute;
+}
+
 .publicaciones{
     position: absolute;
     margin-left: 15rem;
+
     margin-top: 22rem;
     margin-bottom: 1rem;
     display: flex;
@@ -277,5 +299,4 @@ color: #fff;
     height: 10rem;
     object-fit: cover;
     object-position: center;
-
 }

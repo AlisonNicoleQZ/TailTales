@@ -27,10 +27,10 @@ const firebaseConfig = {
     storageBucket: "tailtales-78e10.appspot.com",
     messagingSenderId: "365635220712",
     appId: "1:365635220712:web:38f961847c39673e93c55d"
-};
 
 // Inicializar Firebase
 const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 const auth = getAuth(app);
 
@@ -495,4 +495,3 @@ export const OtherProfile = () => {
         </div>
     );
 };
-
