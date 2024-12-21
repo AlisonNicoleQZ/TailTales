@@ -57,27 +57,159 @@ body::-webkit-scrollbar-thumb {
 }
 
 
-.storiesContainer{
+.storiesContainer {
     margin-left: 17rem;
     margin-top: 1.6rem;
     position: absolute;
     display: flex;
+    gap: 1.5rem; /* Space between stories */
+    align-items: center;
+    overflow-x: auto; /* Scrollable if too many stories */
+    padding-bottom: 0.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: #9F86C0 #f1f1f1;
 }
 
-.story{
+.storiesContainer::-webkit-scrollbar {
+    height: 6px;
+}
+
+.storiesContainer::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.storiesContainer::-webkit-scrollbar-thumb {
+    background: #9F86C0;
+    border-radius: 6px;
+}
+
+.storyItem {
+    display: flex;
+    flex-direction: column; /* Align image and username vertically */
+    align-items: center; /* Center align username and image */
+    text-align: center;
+    width: 5rem; /* Ensure consistent width for each story item */
+    gap: 0.5rem; /* Space between image and username */
+}
+
+.story {
     height: 4rem;
-    border: 0.2rem solid #BE95C4;
-    border-radius: 50rem;
-    margin-left: 1.25rem;
     width: 4rem;
+    border: 0.2rem solid #BE95C4;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    cursor: pointer;
 }
 
-.storyUsername{
-    margin-top: 0rem;
-    margin-left: 1.65rem;
-    position: absolute;
-    font-size: 12px;
+.story:hover {
+    transform: scale(1.1); /* Slight zoom effect */
 }
+
+.storyUsername {
+    font-size: 0.75rem;
+    color: #555;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.storyModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .storyContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 90%;
+    max-height: 90vh;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .currentStory {
+    max-width: 80%;
+    max-height: 60vh;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    object-fit: contain;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .storyDetails {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .storyModal button {
+    background-color: #9F86C0;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .storyModal button:hover {
+    background-color: #8c68bb;
+  }
+  
+  .storyModal button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .spotifyEmbed {
+    margin-top: 10px;
+    width: 100%;
+    height: 80px;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .noSong {
+    margin-top: 10px;
+    font-style: italic;
+    color: gray;
+    text-align: center;
+  }
+  
+  .closeModal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: transparent;
+    color: white;
+    font-size: 20px;
+    border: none;
+    cursor: pointer;
+    z-index: 1100;
+  }
+  
+  .closeModal:hover {
+    color: #8c68bb;
+  }
 
 .perfilContainer{
     margin-left: 60rem;

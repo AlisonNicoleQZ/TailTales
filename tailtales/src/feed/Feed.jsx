@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from './Feed.module.css';
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, collection, doc, getDoc, query, where, getDocs } from "firebase/firestore";
+import { getFirestore, collection, doc, getDoc, query, where, getDocs, onSnapshot } from "firebase/firestore";
 
 import ViewPostModal from "../profile/ViewPostModal";
 import { NavBar } from '../NavBar';
@@ -55,7 +55,7 @@ export const Feed = () => {
       allPosts.sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis());
       setPosts(allPosts);
     } catch (error) {
-      console.error("Error al cargar las publicaciones:", error);
+      console.error("Error fetching posts:", error);
     }
   };
 
@@ -76,7 +76,7 @@ export const Feed = () => {
 
       return friendDoc.exists() ? friendDoc.data().friends || [] : [];
     } catch (error) {
-      console.error("Error al obtener la lista de amigos:", error);
+      console.error("Error fetching friends list:", error);
       return [];
     }
   };
@@ -88,15 +88,47 @@ export const Feed = () => {
     }
   };
 
+  const fetchStories = () => {
+    const storiesQuery = query(collection(db, "stories"), where("visibility", "==", 1));
+  
+    onSnapshot(storiesQuery, (storiesSnapshot) => {
+      try {
+        const groupedStories = {};
+  
+        storiesSnapshot.docs.forEach((doc) => {
+          const story = { id: doc.id, ...doc.data() };
+          const username = story.username;
+  
+          // Agrupa historias por nombre de usuario
+          if (!groupedStories[username]) {
+            groupedStories[username] = [];
+          }
+  
+          groupedStories[username].push(story);
+        });
+  
+        // Ordena las historias y agrúpalas para la vista
+        const storiesByUsername = Object.entries(groupedStories).map(([username, userStories]) => {
+          userStories.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
+  
+          return {
+            username,
+            userId: userStories[0].userUid,
+            thumbnail: userStories[0].mediaUrl,
+            stories: userStories,
+          };
+        });
+  
+        setStories(storiesByUsername);
+      } catch (error) {
+        console.error("Error actualizando historias:", error);
+      }
+    });
+  };  
+
   const openViewPostModal = (post) => {
     setCurrentPost(post);
     setIsModalOpen(true);
-  };
-
-  const openStoryModal = (allStories) => {
-    setCurrentUserStories(allStories);
-    setIsStoryModalOpen(true);
-    setCurrentStoryIndex(0);
   };
 
   const closeModal = () => {
@@ -104,18 +136,27 @@ export const Feed = () => {
     setIsModalOpen(false);
   };
 
-  const closeStoryModal = () => {
-    setCurrentUserStories([]);
-    setIsStoryModalOpen(false);
+  const openStoryModal = (userStories) => {
+    setCurrentUserStories(userStories);
+    setCurrentStoryIndex(0);
+    setIsStoryModalOpen(true);
   };
 
-  const handleNextStory = () => {
+  const closeStoryModal = () => {
+    setIsStoryModalOpen(false);
+    setCurrentUserStories([]);
+    setCurrentStoryIndex(0);
+  };
+
+  const showNextStory = () => {
     if (currentStoryIndex < currentUserStories.length - 1) {
       setCurrentStoryIndex(currentStoryIndex + 1);
+    } else {
+      closeStoryModal();
     }
   };
 
-  const handlePreviousStory = () => {
+  const showPreviousStory = () => {
     if (currentStoryIndex > 0) {
       setCurrentStoryIndex(currentStoryIndex - 1);
     }
@@ -123,6 +164,7 @@ export const Feed = () => {
 
   useEffect(() => {
     fetchPosts();
+    fetchStories();
   }, [userUid]);
 
   useEffect(() => {
@@ -139,82 +181,30 @@ export const Feed = () => {
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    const loadStories = async () => {
-      try {
-        const storiesSnapshot = await getDocs(collection(db, "stories"));
-        const userStoriesMap = {};
-
-        for (const docSnap of storiesSnapshot.docs) {
-          const storyData = docSnap.data();
-          const userId = storyData.userId;
-
-          const userDoc = await getDoc(doc(db, "users", userId));
-          const username = userDoc.exists() ? userDoc.data().username : "Unknown";
-
-          if (!userStoriesMap[userId]) {
-            userStoriesMap[userId] = {
-              username,
-              stories: [],
-            };
-          }
-
-          userStoriesMap[userId].stories.push({
-            id: docSnap.id,
-            mediaUrl: storyData.mediaUrl,
-            description: storyData.description,
-            createdAt: storyData.createdAt,
-          });
-        }
-
-        const preparedStories = Object.entries(userStoriesMap).map(
-          ([userId, { username, stories }]) => {
-            const sortedStories = stories.sort(
-              (a, b) => b.createdAt.seconds - a.createdAt.seconds
-            );
-            return {
-              userId,
-              username,
-              latestStory: sortedStories[0],
-              allStories: sortedStories,
-            };
-          }
-        );
-
-        setStories(preparedStories);
-      } catch (error) {
-        console.error("Error loading stories:", error);
-      }
-    };
-
-    loadStories();
-  }, []);
-
   return (
     <>
       <title>Feed - TailTales</title>
       <div className={styles.container}>
         <NavBar />
         <div className="main-feed">
-          <section id="friend-stories" className={styles.friendStories}>
-            <div id="stories-container" className={styles.storiesContainer}>
-              {stories.length > 0 ? (
-                stories.map((story) => (
-                  <div key={story.userId} className={styles.storyIndividual}>
-                    <img
-                      className={styles.story}
-                      src={story.latestStory.mediaUrl}
-                      alt={`Historia de ${story.username}`}
-                      onClick={() => openStoryModal(story.allStories)}
-                    /><br />
-                    <p className={styles.storyUsername}>@{story.username}</p>
-                  </div>
-                ))
-              ) : (
-                <p>No hay historias disponibles.</p>
-              )}
-            </div>
-          </section>
+        <section id="friend-stories" className={styles.friendStories}>
+          <div id="stories-container" className={styles.storiesContainer}>
+          {stories.map(({ userId, username, thumbnail, stories }, index) => (
+              <div
+                key={`${userId}-${index}`}
+                className={styles.storyItem}
+                onClick={() => openStoryModal(stories)}
+              >
+                <img
+                  className={styles.story}
+                  src={thumbnail}
+                  alt={`Story thumbnail of @${username}`}
+                />
+                <span className={styles.storyUsername}>@{username}</span>
+              </div>
+            ))}
+          </div>
+        </section>
           <div className={styles.perfilContainer}>
             <a href="/perfil">
               <img className={styles.fotoPerfil} src={userData.profilePic || "../img/default-profile-image.jpg"} alt="Imagen de perfil" />
@@ -222,85 +212,60 @@ export const Feed = () => {
             </a>
           </div>
           <section id="posts-feed" className={styles.postsFeed}>
-            {posts.map((post) => (
-              <div id="posts-container" className={styles.postsContainer} key={post.id}>
-                <div className={styles.post}>
-                  <p className={styles.usernamePost}>@{post.username}</p>
-                  <p className={styles.textoPost}>{post.content.text}</p>
-                  <div className={styles.frame}>
-                    <img
-                      src={post.mediaUrls[0]}
-                      alt="Vista previa"
-                      className={styles.fotoPost}
-                      onClick={() => openViewPostModal(post)}
-                    />
-                  </div>
+          {posts.map((post, index) => (
+            <div id="posts-container" className={styles.postsContainer} key={`${post.id}-${index}`}>
+              <div className={styles.post}>
+                <p className={styles.usernamePost}>@{post.username}</p>
+                <p className={styles.textoPost}>{post.content.text}</p>
+                <div className={styles.frame}>
+                  <img
+                    src={post.mediaUrls[0]}
+                    alt="Vista previa"
+                    className={styles.fotoPost}
+                    onClick={() => openViewPostModal(post)}
+                  />
                 </div>
               </div>
-            ))}
+            </div>
+          ))}
           </section>
 
           <ViewPostModal isOpen={isModalOpen} postData={currentPost} onClose={closeModal} />
 
           {isStoryModalOpen && (
-            <div className={styles.storyModal} onClick={closeStoryModal}>
-              <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-                <div className={styles.storyUsername}>
-                  @{currentUserStories[currentStoryIndex]?.username || 'Usuario Anónimo'}
-                </div>
-                <div className={styles.storyDescription}>
-                  {currentUserStories[currentStoryIndex]?.description || 'Sin descripción'}
-                </div>
-                <img
-                  className={styles.modalImage}
-                  src={currentUserStories[currentStoryIndex]?.mediaUrl}
-                  alt="Historia"
-                />
-                {currentUserStories[currentStoryIndex]?.songEmbedUrl && (
-                  <iframe
-                    className={styles.modalSpotify}
-                    src={currentUserStories[currentStoryIndex].songEmbedUrl.replace(
-                      'https://open.spotify.com/track/',
-                      'https://open.spotify.com/embed/track/'
+              <div className={styles.storyModal}>
+                <button className={styles.closeModal} onClick={closeStoryModal}>Cerrar</button>
+                <div className={styles.storyContent}>
+                  <button onClick={showPreviousStory} disabled={currentStoryIndex === 0}>Anterior</button>
+                  <div className={styles.storyDetails}>
+                    <img
+                      src={currentUserStories[currentStoryIndex].mediaUrl}
+                      alt="Current story"
+                      className={styles.currentStory}
+                    />
+                    {currentUserStories[currentStoryIndex].description && (
+                      <p className={styles.storyDescription}>
+                        {currentUserStories[currentStoryIndex].description}
+                      </p>
                     )}
-                    width="300"
-                    height="80"
-                    frameBorder="0"
-                    allow="encrypted-media"
-                  ></iframe>
-                )}
-                <button className={styles.closeModal} onClick={closeStoryModal}>
-                  Cerrar
-                </button>
-
-                {/* Navigation Buttons */}
-                <div className={styles.modalNavigation}>
-                  {currentStoryIndex > 0 && (
-                    <button
-                      className={styles.prevStoryBtn}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handlePreviousStory();
-                      }}
-                    >
-                      Anterior
-                    </button>
-                  )}
-                  {currentStoryIndex < currentUserStories.length - 1 && (
-                    <button
-                      className={styles.nextStoryBtn}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleNextStory();
-                      }}
-                    >
-                      Siguiente
-                    </button>
-                  )}
+                    {currentUserStories[currentStoryIndex].songEmbedUrl && (
+                      <iframe
+                        className={styles.spotifyEmbed}
+                        src={currentUserStories[currentStoryIndex].songEmbedUrl.replace(
+                          "https://open.spotify.com/track/",
+                          "https://open.spotify.com/embed/track/"
+                        )}
+                        width="300"
+                        height="80"
+                        frameBorder="0"
+                        allow="encrypted-media"
+                      ></iframe>
+                    )}
+                  </div>
+                  <button onClick={showNextStory} disabled={currentStoryIndex === currentUserStories.length - 1}>Siguiente</button>
                 </div>
               </div>
-            </div>
-          )}
+            )}
         </div>
       </div>
     </>
