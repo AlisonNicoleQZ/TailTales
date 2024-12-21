@@ -64,6 +64,12 @@ export const OtherProfile = () => {
         const urlParams = new URLSearchParams(window.location.search);
         const userId = urlParams.get("userId");
 
+        if (!userId) {
+            alert("ID de usuario no válido.");
+            window.history.back();
+            return;
+        }
+
         if (userId === currentUserId) {
             window.location.href = '../profile/profile.html';
             return;
@@ -449,6 +455,11 @@ export const OtherProfile = () => {
     };
 
     const checkBlockStatus = async (userId) => {
+        if (!currentUserId || !userId) {
+            console.error("currentUserId or userId is null");
+            return;
+        }
+
         const friendsListDoc = doc(db, "friendsList", currentUserId);
         const friendsListSnapshot = await getDoc(friendsListDoc);
 
@@ -484,3 +495,4 @@ export const OtherProfile = () => {
         </div>
     );
 };
+
